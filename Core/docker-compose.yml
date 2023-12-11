@@ -3,7 +3,7 @@ version: "3.9"
 services:
   django:
     container_name: DjangoBackendService
-    build: ./Core/WebService
+    build: ./Core/Backend
     env_file: .env
     ports:
       - "8000:8000"
@@ -18,3 +18,5 @@ networks:
 volumes:
   django-files:
     name: django-files
+  react-files:
+    name: react-files
