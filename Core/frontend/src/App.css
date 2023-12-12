@@ -1,5 +1,24 @@
-.App {
+html {
   text-align: center;
+  min-height: 100vh;
+  background: linear-gradient(0deg, rgba(16, 0, 50, 0.40) 0%, rgba(16, 0, 50, 0.40) 100%), url("img/background1.png"), lightgray 100% / cover no-repeat;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+body{
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+Box{
+  border-radius: 50px;
+  border: 2px solid var(--metallic, #FFF);
+  background: var(--radial-fill, radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%));
 }
 
 .App-logo {
@@ -28,11 +47,3 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}

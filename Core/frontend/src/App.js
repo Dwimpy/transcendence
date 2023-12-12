@@ -1,24 +1,59 @@
-import logo from './logo.svg';
+
 import './App.css';
+import "@buildo/bento-design-system/index.css";
+import "@buildo/bento-design-system/defaultTheme.css";
+import { defaultMessages } from "@buildo/bento-design-system/defaultMessages/en";
+import { BentoProvider, Title, Box, Body, Card, Inset, Stack, Inline, Actions, Button } from "@buildo/bento-design-system";
+import background from './img/background1.png';
+import React from "react";
+import Page from "./Page";
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+
+function RenderCard () {
+    return <Card elevation="medium" background={"primaryTransparentEnabledBackground"}>
+        <Inset spaceX="32" spaceY="24">
+            <Stack space="4">
+                <Title size="large" color={"primaryInverse"}>Card Title</Title>
+                <Body size="large" color="secondary">Card description</Body>
+                <Router>
+                    <Routes>
+                        <Route path="/" exact component={App} />
+                        <Route path="/page" exact component={Page} />
+                    </Routes>
+                </Router>
+                <Actions primaryAction={{label:"Button" ,onPress: function () {Page()}}} secondaryAction={{label:"cancel"}}>
+                </Actions>
+            </Stack>
+        </Inset>
+    </Card>;
+}
+
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Box  height={"full"} >
+          <BentoProvider defaultMessages={defaultMessages}>
+              <Box alignItems={"center"} height={"full"}  justifyContent={"center"} display={"flex"} flexDirection={"column"}>
+                  <Box>
+                  <Inset spaceY="8">
+                      <Inline space={{wide : 12, mobile: 12}} align="center">
+                          <RenderCard />
+                          <RenderCard />
+                      </Inline>
+                  </Inset>
+                  </Box>
+                  <Box>
+                  <Inset spaceY="8">
+                      <Inline space={{wide : 12, mobile: 12}} align="center">
+                          <RenderCard />
+                          <RenderCard />
+                      </Inline>
+                  </Inset>
+              </Box>
+              </Box>
+          </BentoProvider>
+      </Box>
   );
 }
 
