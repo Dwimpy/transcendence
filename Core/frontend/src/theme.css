@@ -1,0 +1,8 @@
+/* Import this file if you want to start from the defaultTheme and only override some variables */
+@import "@buildo/bento-design-system/defaultTheme.css";
+
+:root {
+    /* change the brand primary color */
+    --bento-fontFamily-default: Arial !important;
+    /* ... */
+}

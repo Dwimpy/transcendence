@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import "@buildo/bento-design-system/index.css";
+import "./theme.css";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
