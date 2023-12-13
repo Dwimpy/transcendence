@@ -1,0 +1,57 @@
+body {
+    background-image: url('../background.png');
+    background-size: cover;
+    background-position: center;
+    margin: 0; /* Remove default margin to ensure full coverage */
+    height: 100vh;
+    padding: 6px;
+    color: whitesmoke;
+    display: flex;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+}
+.card-body{
+    color: grey;
+}
+.row-my{
+    display: flex;
+    flex-direction: row;
+    padding: 0px 35px;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    gap: 20px;
+}
+.card-my{
+    display: flex;
+    height: 100%;
+    padding: 40px 80px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border: 2px solid var(--metallic, #FFF);
+    border-radius: 50px;
+    background: var(--radial-fill, radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%));
+}
+
+.small{
+    flex-direction: column;
+    gap: 50px;
+}
+
+.big{
+    gap: 25px;
+}

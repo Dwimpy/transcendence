@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock %}</title>
+  {% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  {% load static %}
+	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+    <body>
+        <div class="overlay"></div>
+		<div class="container">
+			<div class="row-my">
+				<div class="card-my big">
+		  			<h1>My Page</h1>
+		  			<p>Lorem ipsum text.</p>
+		  			  <div>A card.</div>
+				</div>
+				<div class="card-my small">
+					<h1>My Page</h1>
+					<p>Lorem ipsum text.</p>
+					<div>A card.</div>
+				</div>
+			</div>
+			<div class="row-my">
+				<div class="card-my big">
+					<h1>My Page</h1>
+					<p>Lorem ipsum text.</p>
+					<div>A card.</div>
+				</div>
+				<div class="card-my small">
+					<h1>My Page</h1>
+					<p>Lorem ipsum text.</p>
+					<div>A card.</div>
+				</div>
+			</div>
+		</div>
+    </body>
+</html>
