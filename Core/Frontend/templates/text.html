@@ -12,39 +12,13 @@
 </head>
     <body>
         <div class="overlay"></div>
-		<div class="container">
-			<div class="row-my">
-				<div class="card-my big">
-		  			<h1>My Page</h1>
-		  			<p>Lorem ipsum text.</p>
-		  			  <div>A card.</div>
-				</div>
-				<div class="card-my small">
-					<h1>My Page</h1>
-					<p>Lorem ipsum text.</p>
-					<div>A card.</div>
-				</div>
-			</div>
-			<div class="row-my">
-				<div class="card-my small">
-					<h1>My Page</h1>
-					<p>Lorem ipsum text.</p>
-					<div>A card.</div>
-				</div>
-				<div class="card-my big">
-					<h1>My Page</h1>
-					<p>Lorem ipsum text.</p>
-					<div>A card.</div>
-				</div>
-			</div>
-		</div>
         <div class="navbar">
 	        <div class="navbar-el">
-					<a class="icon active-icon" href="{% url 'index' %}">
+					<a class="icon" href="{% url 'index' %}">
 						<img src="{% static 'Icon.png' %}">
 					</a>
-					<a class="icon" href="{% url 'text' %}">
-						<img src="{% static 'messages-3.png' %}">
+		        <a class="icon active-icon" href="{% url 'text' %}">
+					<img src="{% static 'messages-3.png' %}">
 					</a>
 				<div class="icon">
 					<img src="{% static 'user.png' %}">

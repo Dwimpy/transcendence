@@ -17,9 +17,70 @@ body {
     background-color: rgba(0, 0, 0, 0.3);
     z-index: -1;
 }
+
 .card-body{
     color: grey;
 }
+.navbar {
+
+    position: fixed;
+    top: 25%;
+    margin: 0;
+    right: 0;
+    display: flex;
+    width: 107px;
+    height: 50vh;
+    padding: 24px 12px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: 32px;
+    border-top-left-radius: 32px;
+
+    background-color: rgba(16, 0, 50, 0.6);
+    /*background: #100032;*/
+
+}
+.navbar-el{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.icon{
+    display: flex;
+    padding: 16px;
+    align-items: flex-start;
+    border-radius: 16px;
+    border: 1px solid white;
+    background: none;
+     color: inherit;
+}
+
+button{
+    background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.active-icon{
+    border: 1px solid  #8000FF;
+}
+
+.icon:hover{
+    cursor: pointer;
+    border: 1px solid  #8000FF;
+}
+
+.icon:active{
+    border: 1px solid white;
+}
+
 .row-my{
     display: flex;
     flex-direction: row;
@@ -42,7 +103,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
-    border: 2px solid var(--metallic, #FFF);
+    border: 1px solid gray;
     border-radius: 50px;
     background: var(--radial-fill, radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%));
 }
