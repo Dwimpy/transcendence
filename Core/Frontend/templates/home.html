@@ -1,75 +1,40 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
-<head>
-	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}{% endblock %}</title>
-  {% load bootstrap5 %}
-  {% bootstrap_css %}
-  {% bootstrap_javascript %}
-  {% load static %}
-	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-    <body>
-        <div class="overlay"></div>
-		<div class="container">
-			<div class="row-my">
-				<div class="card-my big">
-		  			<div class="gif">
-						<img src="{% static 'gif2.gif' %}">
-					</div>
-		  			<div class="text">
-						<h1>Pong</h1>
-						<p class="text-inside">Play an incredible game of PONG and enjoy yourself to your fullest!
-							Compete against your friends and become the ultimate player!</p>
-						<button>Play Now!</button>
-					</div>
-				</div>
-				<div class="card-my small">
-					<h1>My Page</h1>
-					<p>Lorem ipsum text.</p>
-					<div>A card.</div>
-				</div>
-			</div>
-			<div class="row-my">
-				<div class="card-my small">
-					<h1>My Page</h1>
-					<p>Lorem ipsum text.</p>
-					<div>A card.</div>
-				</div>
-				<div class="card-my big">
-					<div class="gif">
-						<img src="{% static 'gif2.gif' %}">
-					</div>
-					<div class="text">
-						<h1>Not Pong</h1>
-						<p class="text-inside">Play an incredible game of NOT PONG and enjoy yourself to your fullest!
-							Compete against your friends and become the ultimate player!</p>
-						<button>Play Now!</button>
-					</div>
-				</div>
-			</div>
-		</div>
-        <div class="navbar">
-	        <div class="navbar-el">
-					<a class="icon active-icon" href="{% url 'index' %}">
-						<img src="{% static 'Icon.png' %}">
-					</a>
-					<a class="icon" href="{% url 'text' %}">
-						<img src="{% static 'messages-3.png' %}">
-					</a>
-				<div class="icon">
-					<img src="{% static 'user.png' %}">
-				</div>
-	        </div>
-	        <div class="navbar-el">
-				<div class="icon">
-					<img src="{% static 'question.png' %}">
-				</div>
-				<div class="icon">
-					<img src="{% static 'settings.png' %}">
-				</div>
-	        </div>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="row-my">
+        <div class="card-my big">
+            <div class="gif">
+                <img src="{% static 'gif2.gif' %}">
+            </div>
+            <div class="text">
+                <h1>Pong</h1>
+                <p class="text-inside">Play an incredible game of PONG and enjoy yourself to your fullest!
+                    Compete against your friends and become the ultimate player!</p>
+                <button>Play Now!</button>
+            </div>
         </div>
-    </body>
-</html>
+        <div class="card-my small">
+            <h1>My Page</h1>
+            <p>Lorem ipsum text.</p>
+            <div>A card.</div>
+        </div>
+    </div>
+    <div class="row-my">
+        <div class="card-my small">
+            <h1>My Page</h1>
+            <p>Lorem ipsum text.</p>
+            <div>A card.</div>
+        </div>
+        <div class="card-my big">
+            <div class="gif">
+                <img src="{% static 'gif2.gif' %}">
+            </div>
+            <div class="text">
+                <h1>Not Pong</h1>
+                <p class="text-inside">Play an incredible game of NOT PONG and enjoy yourself to your fullest!
+                    Compete against your friends and become the ultimate player!</p>
+                <button>Play Now!</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

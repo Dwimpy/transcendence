@@ -1,47 +1,12 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
-<head>
-	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}{% endblock %}</title>
-  {% load bootstrap5 %}
-  {% bootstrap_css %}
-  {% bootstrap_javascript %}
-  {% load static %}
-	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-    <body>
-        <div class="overlay"></div>
-		<div class="container">
-			<div class="row-my">
-				<div class="card-my friends">
-					Friends
-				</div>
-				<div class="card-my chat">
-					Chat
-				</div>
-			</div>
-		</div>
-        <div class="navbar">
-	        <div class="navbar-el">
-					<a class="icon" href="{% url 'index' %}">
-						<img src="{% static 'Icon.png' %}">
-					</a>
-		        <a class="icon active-icon" href="{% url 'text' %}">
-					<img src="{% static 'messages-3.png' %}">
-					</a>
-				<div class="icon">
-					<img src="{% static 'user.png' %}">
-				</div>
-	        </div>
-	        <div class="navbar-el">
-				<div class="icon">
-					<img src="{% static 'question.png' %}">
-				</div>
-				<div class="icon">
-					<img src="{% static 'settings.png' %}">
-				</div>
-	        </div>
-        </div>
-    </body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="row-my">
+	<div class="card-my friends">
+		Friends
+	</div>
+	<div class="card-my chat">
+		Chat
+	</div>
+</div>
+{% endblock %}

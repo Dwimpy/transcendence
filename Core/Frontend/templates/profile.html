@@ -1,0 +1,19 @@
+<!-- templates/profile.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row-my">
+    <div class="card-my small">
+        <h2>User Profile</h2>
+        <form  class="profile" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+            <div class="form-p">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="button">Update Profile</button>
+            <a class="icon margin button" href="{% url 'logout' %}">Logout</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

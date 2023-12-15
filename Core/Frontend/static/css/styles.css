@@ -75,9 +75,22 @@ button{
     background: rgba(92, 23, 229, 0.70);
 }
 
-button:active{
+button:hover{
     background: white;
     color:  rgba(92, 23, 229, 0.70);
+}
+button:active{
+    background: rgba(92, 23, 229, 0.70) !important;
+    color:  white !important;
+}
+
+a{
+    text-decoration: none;
+}
+
+.button{
+    width: 150px;
+    justify-content: center;
 
 }
 
@@ -87,10 +100,12 @@ button:active{
 
 .icon:hover{
     cursor: pointer;
+    color: #8000FF;
     border: 1px solid  #8000FF;
 }
 
 .icon:active{
+    color: white;
     border: 1px solid white;
 }
 
@@ -160,4 +175,39 @@ button:active{
     align-self: stretch;
     /* Elevation/Large */
     box-shadow: 0px 16px 32px 0px rgba(0, 0, 0, 0.16);
+}
+
+.margin{
+    margin: 10px;
+}
+
+.profile{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.form-p p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.form-p input{
+    color: white;
+    padding: 20px;
+    margin: 10px;
+    border: 1px solid gray;
+    border-radius: 50px;
+    background: var(--radial-fill, radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%));
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
 }
