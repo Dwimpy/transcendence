@@ -9,13 +9,13 @@ body {
     display: flex;
 }
 .overlay {
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: -1;
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: -1;
 }
 
 .card-body{
@@ -59,13 +59,26 @@ body {
 }
 
 button{
-    background: none;
 	color: inherit;
 	border: none;
-	padding: 0;
+	/*padding: 0;*/
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
+    display: flex;
+    /*width: 280px;*/
+    padding: 16px 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    border-radius: 16px;
+    background: rgba(92, 23, 229, 0.70);
+}
+
+button:active{
+    background: white;
+    color:  rgba(92, 23, 229, 0.70);
+
 }
 
 .active-icon{
@@ -115,4 +128,36 @@ button{
 
 .big{
     gap: 25px;
+}
+.gif{
+    display: flex;
+    width: 448px;
+    height: 324px;
+    padding: 57px 119px 56px 119px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+.text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.text-inside{
+    border-radius: 24px;
+    border: 1px solid rgba(154, 168, 188, 0.20);
+    background: rgba(255, 255, 255, 0.00);
+    display: flex;
+    width: 300px;
+    height: 217px;
+    padding: 10px 13px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    align-self: stretch;
+    /* Elevation/Large */
+    box-shadow: 0px 16px 32px 0px rgba(0, 0, 0, 0.16);
 }
