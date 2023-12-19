@@ -1,0 +1,12 @@
+asgiref==3.7.2
+beautifulsoup4==4.12.2
+Django==4.2.7
+django-bootstrap-v5==1.0.11
+nodejs==0.1.1
+npm==0.1.1
+npx==0.1.1
+numpy==1.26.2
+optional-django==0.1.0
+psycopg2-binary==2.9.9
+soupsieve==2.5
+sqlparse==0.4.4
