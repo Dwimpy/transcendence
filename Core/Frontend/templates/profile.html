@@ -9,6 +9,7 @@
         <form  class="profile" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
             <div class="form-p">
+	            <img src="{{ form.image.url }}" alt="Uploaded Image">
                 {{ form.as_p }}
             </div>
             <button type="submit" class="button">Update Profile</button>

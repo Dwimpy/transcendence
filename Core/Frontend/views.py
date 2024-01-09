@@ -32,7 +32,6 @@ def profile(request):
             return redirect('profile')
     else:
         form = ProfileForm(instance=user)
-
     return render(request, 'profile.html', {'form': form})
 
 

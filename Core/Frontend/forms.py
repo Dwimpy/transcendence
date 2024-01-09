@@ -10,7 +10,7 @@ from allauth.account.forms import SignupForm
 class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'bio', 'password1', 'password2']
+        fields = ['username', 'email', 'picture', 'bio', 'password1', 'password2']
 
 
 class AllAuthSignupForm(SignupForm):
@@ -32,6 +32,7 @@ class AllAuthSignupForm(SignupForm):
                             label="bio")
     password1 = forms.PasswordInput()
     password2 = forms.PasswordInput()
+    picture = forms.ImageField(required=False)
 
     def save(self, request):
         bio_value = self.cleaned_data['bio']
