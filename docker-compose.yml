@@ -39,16 +39,16 @@ networks:
 volumes:
   django-files:
     name: django-files
-#    driver: local
-#    driver_opts:
-#      device: ./Core
-#      o: bind
-#      type: none
+    driver: local
+    driver_opts:
+      device: /Users/arobu/projects/workdir/transcendence/Core/data
+      o: bind
+      type: none
 
   db-files:
     name: db-files
-#    driver: local
-#    driver_opts:
-#      device: ./Database
-#      o: bind
-#      type: none
+    driver: local
+    driver_opts:
+      device: /Users/arobu/projects/workdir/transcendence/Database/data
+      o: bind
+      type: none

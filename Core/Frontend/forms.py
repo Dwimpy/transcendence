@@ -1,17 +1,52 @@
 # forms.py
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from .models import CustomUser
+from allauth.account.forms import SignupForm
 # from .models import CustomUser
+
 
 class UserRegistrationForm(UserCreationForm):
     class Meta:
-        model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        model = CustomUser
+        fields = ['username', 'email', 'bio', 'password1', 'password2']
 
 
+class AllAuthSignupForm(SignupForm):
+
+    username = forms.CharField(max_length=255,
+                               min_length=1,
+                               widget=forms.TextInput(attrs={'placeholder': 'Username'}),
+                               required=True,
+                               label="Username")
+    email = forms.CharField(max_length=255,
+                            min_length=1,
+                            widget=forms.TextInput(attrs={'placeholder': 'Email'}),
+                            required=True,
+                            label="Email")
+    bio = forms.CharField(max_length=255,
+                            min_length=1,
+                            widget=forms.TextInput(attrs={'placeholder': 'Bio'}),
+                            required=True,
+                            label="bio")
+    password1 = forms.PasswordInput()
+    password2 = forms.PasswordInput()
+
+    def save(self, request):
+        bio_value = self.cleaned_data['bio']
+
+        user = super().save(request)
+        user.bio = bio_value
+        user.save()
+
+        return user
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].label = "Email"
 
 class ProfileForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ['username', 'email']
+        model = CustomUser
+        fields = ['username', 'bio', 'email']

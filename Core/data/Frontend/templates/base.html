@@ -1,0 +1,42 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TransWeb{% endblock %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <!-- Add your common CSS styles or links here -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+<div class="overlay"></div>
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+<div class="navbar">
+    <div class="navbar-el">
+        <a class="icon active-icon" href="{% url 'index' %}">
+            <img src="{% static 'Icon.png' %}">
+        </a>
+        <a class="icon" href="{% url 'text' %}">
+            <img src="{% static 'messages-3.png' %}">
+        </a>
+        <a href="{% url 'profile' %}" class="icon">
+            <img src="{% static 'user.png' %}">
+        </a>
+    </div>
+    <div class="navbar-el">
+        <div class="icon">
+            <img src="{% static 'question.png' %}">
+        </div>
+        <a href="{% url 'register' %}" class="icon">
+            <img src="{% static 'settings.png' %}">
+        </a>
+    </div>
+</div>
+</body>
+</html>

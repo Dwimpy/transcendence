@@ -1,0 +1,213 @@
+body {
+    background-image: url('../background.png');
+    background-size: cover;
+    background-position: center;
+    margin: 0; /* Remove default margin to ensure full coverage */
+    height: 100vh;
+    padding: 6px;
+    color: whitesmoke;
+    display: flex;
+}
+.overlay {
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.card-body{
+    color: grey;
+}
+.navbar {
+
+    position: fixed;
+    top: 25%;
+    margin: 0;
+    right: 0;
+    display: flex;
+    width: 107px;
+    height: 50vh;
+    padding: 24px 12px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: 32px;
+    border-top-left-radius: 32px;
+
+    background-color: rgba(16, 0, 50, 0.6);
+    /*background: #100032;*/
+
+}
+.navbar-el{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.icon{
+    display: flex;
+    padding: 16px;
+    align-items: flex-start;
+    border-radius: 16px;
+    border: 1px solid white;
+    background: none;
+     color: inherit;
+}
+
+button{
+	color: inherit;
+	border: none;
+	/*padding: 0;*/
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+    display: flex;
+    /*width: 280px;*/
+    padding: 16px 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    border-radius: 16px;
+    background: rgba(92, 23, 229, 0.70);
+}
+
+button:hover{
+    background: white;
+    color:  rgba(92, 23, 229, 0.70);
+}
+button:active{
+    background: rgba(92, 23, 229, 0.70) !important;
+    color:  white !important;
+}
+
+a{
+    text-decoration: none;
+}
+
+.button{
+    width: 150px;
+    justify-content: center;
+
+}
+
+.active-icon{
+    border: 1px solid  #8000FF;
+}
+
+.icon:hover{
+    cursor: pointer;
+    color: #8000FF;
+    border: 1px solid  #8000FF;
+}
+
+.icon:active{
+    color: white;
+    border: 1px solid white;
+}
+
+.row-my{
+    display: flex;
+    flex-direction: row;
+    padding: 0px 35px;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    gap: 20px;
+}
+.card-my{
+    display: flex;
+    height: 100%;
+    padding: 40px 80px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border: 1px solid gray;
+    border-radius: 50px;
+    background: var(--radial-fill, radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%));
+}
+
+.small{
+    flex-direction: column;
+    gap: 50px;
+}
+
+.big{
+    gap: 25px;
+}
+.gif{
+    display: flex;
+    width: 448px;
+    height: 324px;
+    padding: 57px 119px 56px 119px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+.text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.text-inside{
+    border-radius: 24px;
+    border: 1px solid rgba(154, 168, 188, 0.20);
+    background: rgba(255, 255, 255, 0.00);
+    display: flex;
+    width: 300px;
+    height: 217px;
+    padding: 10px 13px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    align-self: stretch;
+    /* Elevation/Large */
+    box-shadow: 0px 16px 32px 0px rgba(0, 0, 0, 0.16);
+}
+
+.margin{
+    margin: 10px;
+}
+
+.profile{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.form-p p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.form-p input{
+    color: white;
+    padding: 20px;
+    margin: 10px;
+    border: 1px solid gray;
+    border-radius: 50px;
+    background: var(--radial-fill, radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%));
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}

@@ -6,17 +6,17 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm
 from .forms import ProfileForm
-
+from .forms import AllAuthSignupForm
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = AllAuthSignupForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save(request)
             login(request, user)
             return redirect('index')  # Redirect to the home page after successful registration
     else:
-        form = UserRegistrationForm()
+        form = AllAuthSignupForm()
 
     return render(request, 'register.html', {'form': form})
 

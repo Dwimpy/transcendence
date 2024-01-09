@@ -33,6 +33,10 @@ FRONTEND = 'Frontend/'
 
 INSTALLED_APPS = [
     'Frontend',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.oauth2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +46,24 @@ INSTALLED_APPS = [
     'bootstrap5'
 ]
 
+ACCOUNT_FORMS = {
+    'signup': 'Frontend.forms.AllAuthSignupForm'
+}
+
+SOCIALACCOUNT_PROVIDERS = {
+    '42': {
+        'SCOPE': ['profile', 'email'],
+        # 'AUTH_PARAMS': {'access_type': 'online'},
+        # 'METHOD': 'oauth2',
+        # 'VERIFIED_EMAIL': False,
+        # 'CLIENT_ID': 'your-42-client-id',
+        # 'SECRET': 'your-42-client-secret',
+        # 'ACCOUNT_EMAIL_VERIFICATION': 'none',
+    }
+}
+
+SOCIALACCOUNT_AUTO_SIGNUP = True
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -50,11 +72,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
+   # 'django.contrib.auth.backends.ModelBackend',
+   'allauth.account.auth_backends.AuthenticationBackend',
 ]
+# settings.py
+AUTH_USER_MODEL = 'Frontend.CustomUser'  # Replace 'yourapp' with the actual app name
 
 LOGIN_REDIRECT_URL = 'profile'
 LOGOUT_REDIRECT_URL = '/login/'
@@ -91,13 +117,27 @@ WSGI_APPLICATION = 'Backend.wsgi.application'
 #     }
 # }
 
+# Host: localhost for working locally
+# Host: db for working with docker
+# for docker
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.environ.get("DB_NAME"),
+#         'USER': os.environ.get("DB_USER"),
+#         'PASSWORD': os.environ.get("DB_PASS"),
+#         'HOST': 'db',  # or your database host
+#         'PORT': '5432',       # or your database port
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get("DB_NAME"),
-        'USER': os.environ.get("DB_USER"),
-        'PASSWORD': os.environ.get("DB_PASS"),
-        'HOST': 'db',  # or your database host
+        'NAME': "trans_db",
+        'USER': "admin",
+        'PASSWORD': "adminpas",
+        'HOST': 'localhost',  # or your database host
         'PORT': '5432',       # or your database port
     }
 }
