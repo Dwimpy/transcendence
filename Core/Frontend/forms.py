@@ -14,7 +14,9 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class AllAuthSignupForm(SignupForm):
-
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'picture', 'bio', 'password1', 'password2']
     username = forms.CharField(max_length=255,
                                min_length=1,
                                widget=forms.TextInput(attrs={'placeholder': 'Username'}),
@@ -32,12 +34,13 @@ class AllAuthSignupForm(SignupForm):
                             label="bio")
     password1 = forms.PasswordInput()
     password2 = forms.PasswordInput()
-    picture = forms.ImageField(required=False)
+    picture = forms.ImageField()
 
     def save(self, request):
         bio_value = self.cleaned_data['bio']
-
+        picture_value = self.cleaned_data['picture']
         user = super().save(request)
+        user.picture = picture_value
         user.bio = bio_value
         user.save()
 

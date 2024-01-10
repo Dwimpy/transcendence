@@ -10,7 +10,7 @@ from .forms import AllAuthSignupForm
 
 def register(request):
     if request.method == 'POST':
-        form = AllAuthSignupForm(request.POST)
+        form = AllAuthSignupForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save(request)
             login(request, user)

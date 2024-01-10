@@ -18,6 +18,8 @@ body {
     left: 0;
 }
 
+
+
 .card-body{
     color: grey;
 }
@@ -195,6 +197,7 @@ a{
     align-items: center;
     flex-direction: column;
 }
+
 
 .form-p input{
     color: white;

@@ -5,7 +5,7 @@
 <div class="row-my">
     <div class="card-my small">
         <h2>Register</h2>
-        <form method="post" class="profile" action="{% url 'register' %}">
+        <form method="post" class="profile" enctype="multipart/form-data" action="{% url 'register' %}">
             {% csrf_token %}
             <div class="form-p">
                 {{ form.as_p }}

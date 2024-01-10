@@ -9,5 +9,5 @@ class CustomUser(AbstractUser):
         db_table = 'users'
 
     bio = models.CharField()
-    picture = models.ImageField(upload_to='images/', blank=True, null=True)
+    picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 

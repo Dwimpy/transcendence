@@ -96,6 +96,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
+                'django.template.context_processors.media',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -103,7 +104,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 
 WSGI_APPLICATION = 'Backend.wsgi.application'
@@ -181,13 +181,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, FRONTEND, 'images')
-MEDIA_URL = 'images/'
-# MEDIA_URL = 'images/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, FRONTEND, 'media')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, FRONTEND, STATIC_URL),
-    os.path.join(BASE_DIR, FRONTEND, MEDIA_URL)
+    os.path.join(BASE_DIR, FRONTEND, 'media'),
 ]
 
 # Default primary key field type
