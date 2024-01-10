@@ -4,24 +4,13 @@
 <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 {% block content %}
 
-<style>
-	.center-image {
-		width: 200px;
-		height: 200px;
-		align-items: center;
-		display: block;
-		margin-left: auto;
-		margin-right: auto;
-	}
-</style>
-
 <div class="row-my">
     <div class="card-my small">
         <h2>User Profile</h2>
         <form  class="profile" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
             <div class="form-p ">
-	            <img class=center-image src="{{ user.picture.url }}" alt="Uploaded Image">
+	            <img class="center-img-form" src="{{ user.picture.url }}" alt="Uploaded Image">
                 {{ form.as_p }}
             </div>
             <button type="submit" class="button">Update Profile</button>

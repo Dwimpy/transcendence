@@ -183,14 +183,6 @@ a{
     margin: 10px;
 }
 
-.profile{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 20px;
-}
-
 .form-p p{
     display: flex;
     justify-content: center;
@@ -213,4 +205,20 @@ form{
     flex-direction: column;
     justify-content: center;
     align-content: center;
+}
+
+form.profile{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.center-img-form {
+    height: 200px;
+    width: 200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
