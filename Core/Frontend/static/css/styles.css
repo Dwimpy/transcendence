@@ -138,6 +138,10 @@ a{
     background: var(--radial-fill, radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%));
 }
 
+.user-profile-text {
+    margin-bottom: -5px;
+}
+
 .small{
     flex-direction: column;
     gap: 50px;
@@ -160,36 +164,25 @@ a{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-}
-.text-inside{
-    border-radius: 24px;
-    border: 1px solid rgba(154, 168, 188, 0.20);
-    background: rgba(255, 255, 255, 0.00);
-    display: flex;
-    width: 300px;
-    height: 217px;
-    padding: 10px 13px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    align-self: stretch;
-    /* Elevation/Large */
-    box-shadow: 0px 16px 32px 0px rgba(0, 0, 0, 0.16);
 }
 
 .margin{
     margin: 10px;
 }
 
-.form-p p{
+form .form-p{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    gap: 5px;
 }
 
+form .text-profile{
+    font-family: "helvetica", sans-serif;
+    font-size: 18px;
+    font-weight: lighter;
+}
 
 .form-p input{
     color: white;
@@ -200,11 +193,26 @@ a{
     background: var(--radial-fill, radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%));
 }
 
+
+.profile-item {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.profile-item h3.text-profile {
+    margin-bottom: -5px; /* Adjust the value as needed */
+}
+
+
 form{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-content: center;
+
 }
 
 form.profile{
@@ -212,13 +220,15 @@ form.profile{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 20px;
+    gap: 15px;
 }
+
+
 
 .center-img-form {
     height: 200px;
     width: 200px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    display: flex;
+    align-items: center;
+    margin-bottom: 35px ;
 }

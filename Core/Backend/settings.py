@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'Frontend',
     'allauth',
     'allauth.account',
+    'widget_tweaks',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.oauth2',
     'django.contrib.admin',
