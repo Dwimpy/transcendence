@@ -4,16 +4,18 @@ from django.shortcuts import redirect
 # Create your views here.
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm
 from .forms import ProfileForm
 from .forms import AllAuthSignupForm
+from allauth.account.auth_backends import AuthenticationBackend as AllauthBackend
 
 def register(request):
+    user = request.user
+
     if request.method == 'POST':
         form = AllAuthSignupForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save(request)
-            login(request, user)
+            login(request, user, backend='allauth.account.auth_backends.AuthenticationBackend')
             return redirect('index')  # Redirect to the home page after successful registration
     else:
         form = AllAuthSignupForm()

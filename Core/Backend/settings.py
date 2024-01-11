@@ -23,6 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-z!^uae6(k--mk^dk4(*cs#1r4k5opn7!6c*1nkygm$b7lh_r(b'
 
+AUTH_USER_MODEL = 'Frontend.CustomUser'
+# AUTH_USER_MODEL = 'Frontend.allauth.account.models.CustomUser'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -77,11 +80,11 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-   # 'django.contrib.auth.backends.ModelBackend',
    'allauth.account.auth_backends.AuthenticationBackend',
+   'django.contrib.auth.backends.ModelBackend'
+
 ]
 # settings.py
-AUTH_USER_MODEL = 'Frontend.CustomUser'  # Replace 'yourapp' with the actual app name
 
 LOGIN_REDIRECT_URL = 'profile'
 LOGOUT_REDIRECT_URL = '/login/'

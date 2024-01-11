@@ -3,15 +3,17 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth.models import User
 from .models import CustomUser
+# from allauth.account.models import CustomUser
+
 from allauth.account.forms import SignupForm
 # from .models import CustomUser
 
 
-class UserRegistrationForm(UserCreationForm):
-    class Meta:
-        model = CustomUser
-        fields = ['username', 'email', 'picture', 'bio', 'password1', 'password2']
-
+# class UserRegistrationForm(UserCreationForm):
+#     class Meta:
+#         model = CustomUser
+#         fields = ['username', 'email', 'picture', 'bio', 'password1', 'password2']
+#
 
 class AllAuthSignupForm(SignupForm):
     class Meta:
@@ -36,6 +38,7 @@ class AllAuthSignupForm(SignupForm):
     password2 = forms.PasswordInput()
     picture = forms.ImageField()
 
+
     def save(self, request):
         bio_value = self.cleaned_data['bio']
         picture_value = self.cleaned_data['picture']
@@ -49,6 +52,7 @@ class AllAuthSignupForm(SignupForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['email'].label = "Email"
+
 
 class ProfileForm(forms.ModelForm):
     class Meta:

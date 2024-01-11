@@ -18,8 +18,6 @@ body {
     left: 0;
 }
 
-
-
 .card-body{
     color: grey;
 }
@@ -126,11 +124,12 @@ a{
     flex-direction: column;
     gap: 20px;
 }
+
 .card-my{
     display: flex;
     height: 100%;
-    padding: 40px 80px;
     justify-content: center;
+    padding: 60px 120px;
     align-items: center;
     flex-shrink: 0;
     border: 1px solid gray;
@@ -159,6 +158,7 @@ a{
     align-items: center;
     flex-shrink: 0;
 }
+
 .text{
     display: flex;
     flex-direction: column;
@@ -184,6 +184,24 @@ form .text-profile{
     font-weight: lighter;
 }
 
+.text-inside{
+    border-radius: 24px;
+    border: 1px solid rgba(154, 168, 188, 0.20);
+    background: rgba(255, 255, 255, 0.00);
+    display: flex;
+    width: 300px;
+    height: 217px;
+    padding: 10px 13px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    align-self: stretch;
+    /* Elevation/Large */
+    box-shadow: 0px 16px 32px 0px rgba(0, 0, 0, 0.16);
+}
+
+
 .form-p input{
     color: white;
     padding: 20px;
@@ -192,7 +210,6 @@ form .text-profile{
     border-radius: 50px;
     background: var(--radial-fill, radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%));
 }
-
 
 .profile-item {
     display: flex;
@@ -206,13 +223,11 @@ form .text-profile{
     margin-bottom: -5px; /* Adjust the value as needed */
 }
 
-
-form{
+form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-content: center;
-
 }
 
 form.profile{
@@ -223,12 +238,11 @@ form.profile{
     gap: 15px;
 }
 
-
-
 .center-img-form {
     height: 200px;
     width: 200px;
     display: flex;
     align-items: center;
-    margin-bottom: 35px ;
+    margin-bottom: 35px;
+    border-radius: 50%;
 }
