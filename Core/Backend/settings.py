@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -36,17 +35,19 @@ FRONTEND = 'Frontend/'
 
 INSTALLED_APPS = [
     'Frontend',
-    'allauth',
-    'allauth.account',
-    'widget_tweaks',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.oauth2',
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.oauth2',
+    'allauth.socialaccount.providers.google',
+    'widget_tweaks',
     'bootstrap5'
 ]
 
@@ -54,15 +55,37 @@ ACCOUNT_FORMS = {
     'signup': 'Frontend.forms.AllAuthSignupForm'
 }
 
+# OAUTH_SERVER_BASEURL = 'https://api.intra.42.fr/oauth'
+LOGIN_REDIRECT_URL = 'hello'
+ACCOUNT_LOGOUT_REDIRECT = 'hello'
+SITE_ID = 1  # Use the ID of the site you added in the admin
+
 SOCIALACCOUNT_PROVIDERS = {
     '42': {
-        'SCOPE': ['profile', 'email'],
-        # 'AUTH_PARAMS': {'access_type': 'online'},
-        # 'METHOD': 'oauth2',
-        # 'VERIFIED_EMAIL': False,
-        # 'CLIENT_ID': 'your-42-client-id',
-        # 'SECRET': 'your-42-client-secret',
-        # 'ACCOUNT_EMAIL_VERIFICATION': 'none',
+        'APP': {
+            'client_id': 'u-s4t2ud-4ca9b16084b5a8cc3d3273b6db68ffa56943bf4c7652decc31d30653c4ca1295',
+            'secret': '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',
+        },
+        'REDIRECT_URI': None,
+        'SCOPE': ['public', 'profile'],
+        'AUTH_PARAMS': {'login': 'login'},
+        'METHOD': 'oauth2',
+        'VERIFIED_EMAIL': False,
+        'ACCOUNT_EMAIL_VERIFICATION': 'none',
+    },
+    'google': {
+        'APP': {
+            'client_id': '<your-client-id>',
+            'secret': '<your-client-secret>',
+            'key': ''
+        },
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
     }
 }
 
@@ -80,9 +103,8 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-   'allauth.account.auth_backends.AuthenticationBackend',
-   'django.contrib.auth.backends.ModelBackend'
-
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend'
 ]
 # settings.py
 
@@ -109,9 +131,7 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'Backend.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -144,10 +164,9 @@ DATABASES = {
         'USER': "admin",
         'PASSWORD': "adminpas",
         'HOST': 'localhost',  # or your database host
-        'PORT': '5432',       # or your database port
+        'PORT': '5432',  # or your database port
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -167,7 +186,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -179,12 +197,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, FRONTEND, 'media')
@@ -198,4 +214,3 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
