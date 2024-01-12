@@ -55,23 +55,17 @@ ACCOUNT_FORMS = {
     'signup': 'Frontend.forms.AllAuthSignupForm'
 }
 
-# OAUTH_SERVER_BASEURL = 'https://api.intra.42.fr/oauth'
-LOGIN_REDIRECT_URL = 'hello'
-ACCOUNT_LOGOUT_REDIRECT = 'hello'
+OAUTH_SERVER_BASEURL = 'https://api.intra.42.fr/oauth'
+LOGIN_REDIRECT_URL = 'index'
+ACCOUNT_LOGOUT_REDIRECT = 'index'
 SITE_ID = 1  # Use the ID of the site you added in the admin
 
 SOCIALACCOUNT_PROVIDERS = {
     '42': {
         'APP': {
-            'client_id': 'u-s4t2ud-4ca9b16084b5a8cc3d3273b6db68ffa56943bf4c7652decc31d30653c4ca1295',
-            'secret': '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',
-        },
-        'REDIRECT_URI': None,
-        'SCOPE': ['public', 'profile'],
-        'AUTH_PARAMS': {'login': 'login'},
-        'METHOD': 'oauth2',
-        'VERIFIED_EMAIL': False,
-        'ACCOUNT_EMAIL_VERIFICATION': 'none',
+            'client_id': 'u-s4t2ud-91acc1abcdda6254c5261711bbc6bebc7d41fc64cfe2d056c349b0a8be7b42fc',
+            'secret': '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',
+        },  
     },
     'google': {
         'APP': {

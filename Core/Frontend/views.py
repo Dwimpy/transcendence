@@ -58,34 +58,17 @@ class FortyTwoOAuth2Adapter(OAuth2Adapter):
 
     access_token_url = 'https://api.intra.42.fr/oauth/token'
     authorize_url = 'https://api.intra.42.fr/oauth/authorize'
-    identity_url = 'https://api.intra.42.fr/v2/users'
-    redirect_uri_protocol = 'https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-4ca9b16084b5a8cc3d3273b6db68ffa56943bf4c7652decc31d30653c4ca1295&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000&response_type=code'
-
-    supports_state = True
+    profile_url = 'https://api.intra.42.fr/v2/me'
+    redirect_uri_protocol = 'http'  # Update this to 'https' if your site uses HTTPS
+    redirect_uri = '127.0.0.1:8000/42/login/callback'
+    # identity_url = 'https://api.intra.42.fr/v2/users'
+    # redirect_uri_protocol = 'http://127.0.0.1:8000/login/callback'
 
     def complete_login(self, request, app, token, **kwargs):
-        extra_data = self.get_data(token.token)
-        return self.get_provider().sociallogin_from_response(request,
-                                                             extra_data)
-
-    def get_data(self, token):
-        # Verify the user first
-        resp = requests.get(
-            self.identity_url,
-            params={'token': token}
-        )
-        resp = resp.json()
-
-        if not resp.get('ok'):
-            raise OAuth2Error()
-
-        # Fill in their generic info
-        info = {
-            'user': resp.get('user'),
-        }
-
-        return info
-
+        headers = {'Authorization': 'Bearer {0}'.format(token.token)}
+        resp = requests.get(self.profile_url, headers=headers)
+        extra_data = resp.json()
+        return self.get_provider().sociallogin_from_response(request, extra_data)
 
 oauth2_login = OAuth2LoginView.adapter_view(FortyTwoOAuth2Adapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(FortyTwoOAuth2Adapter)

@@ -4,15 +4,7 @@ from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 
 
 class FortyTwoAccount(ProviderAccount):
-    def get_avatar_url(self):
-        return self.account.extra_data.get('user').get('image_192', None)
-
-    def to_str(self):
-        dflt = super(FortyTwoAccount, self).to_str()
-        return '%s (%s)' % (
-            self.account.extra_data.get('name', ''),
-            dflt,
-        )
+    pass
 
 
 class FortyTwoProvider(OAuth2Provider):
@@ -21,16 +13,16 @@ class FortyTwoProvider(OAuth2Provider):
     account_class = FortyTwoAccount
 
     def extract_uid(self, data):
-        return "%s_%s" % (str(data.get('team').get('id')),
-                          str(data.get('user').get('id')))
+        return str(data['id'])
 
     def extract_common_fields(self, data):
-        return dict(name=data.get('name'),
-                    email=data.get('user').get('email', None))
+        return dict(login=data.get('login'),
+                    first_name=data.get('first_name'),
+                    email=data.get('email'))
 
     def get_default_scope(self):
-        return ['identity.basic', 'identity.email',
-                'identity.avatar', 'identity.team']
+        scope = ['public']
+        return scope
 
 
 providers.registry.register(FortyTwoProvider)
