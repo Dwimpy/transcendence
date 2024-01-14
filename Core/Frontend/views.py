@@ -61,7 +61,7 @@ class FortyTwoOAuth2Adapter(OAuth2Adapter):
     profile_url = 'https://api.intra.42.fr/v2/me'
     redirect_uri_protocol = 'http'  # Update this to 'https' if your site uses HTTPS
     redirect_uri = '127.0.0.1:8000/42/login/callback'
-    # identity_url = 'https://api.intra.42.fr/v2/users'
+    # identity_url = '127.0.0.1:8000/42/login/callback'
     # redirect_uri_protocol = 'http://127.0.0.1:8000/login/callback'
 
     def complete_login(self, request, app, token, **kwargs):

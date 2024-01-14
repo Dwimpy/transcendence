@@ -1,14 +1,14 @@
 <!-- templates/registration/register.html -->
 {% extends 'base.html' %}
 {% load static %}
-
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
 {% block content %}
 {% load widget_tweaks %}
 
 <div class="row-my">
     <div class="card-my small">
         <h2>Register</h2>
-        <form method="post" class="profile" enctype="multipart/form-data" action="{% url 'register' %}">
+        <form method="post" class="profile" enctype="multipart/form-data" action="{% url 'signup' %}">
             {% csrf_token %}
             <div class="form-p">
 	            <div class="profile-item">
