@@ -28,9 +28,9 @@ body {
     margin: 0;
     right: 0;
     display: flex;
-    width: 107px;
+    width: 7vw;
     height: 50vh;
-    padding: 24px 12px;
+    padding: 2vh 1vw;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
@@ -45,12 +45,12 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 1vh;
 }
 
 .icon{
     display: flex;
-    padding: 16px;
+    padding: 1vw;
     align-items: flex-start;
     border-radius: 16px;
     border: 1px solid white;
@@ -112,6 +112,7 @@ a{
 .row-my{
     display: flex;
     flex-direction: row;
+    max-height: 40vh;
     padding: 0px 35px;
     justify-content: center;
     align-items: center;
@@ -129,7 +130,7 @@ a{
     display: flex;
     height: 100%;
     justify-content: center;
-    padding: 60px 120px;
+    padding: 5vh 5vw;
     align-items: center;
     flex-shrink: 0;
     border: 1px solid gray;
@@ -143,17 +144,17 @@ a{
 
 .small{
     flex-direction: column;
-    gap: 50px;
+    gap: 5vh;
 }
 
 .big{
-    gap: 25px;
+    gap: 3vh;
 }
 .gif{
     display: flex;
-    width: 448px;
-    height: 324px;
-    padding: 57px 119px 56px 119px;
+    max-width: 30vw;
+    max-height: 30vh;
+    /* padding: 57px 119px 56px 119px; */
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -189,8 +190,8 @@ form .text-profile{
     border: 1px solid rgba(154, 168, 188, 0.20);
     background: rgba(255, 255, 255, 0.00);
     display: flex;
-    width: 300px;
-    height: 217px;
+    max-width: 300px;
+    max-height: 200px;
     padding: 10px 13px;
     flex-direction: column;
     align-items: center;
