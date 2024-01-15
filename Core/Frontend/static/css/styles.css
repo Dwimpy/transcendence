@@ -112,7 +112,7 @@ a{
 .row-my{
     display: flex;
     flex-direction: row;
-    max-height: 40vh;
+    max-height: min-content;
     padding: 0px 35px;
     justify-content: center;
     align-items: center;
