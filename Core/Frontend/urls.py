@@ -13,7 +13,7 @@ urlpatterns = default_urlpatterns(FortyTwoProvider)
 urlpatterns += [
     path('', HomeView.as_view(), name='index'),
     path('chat', ChatView.as_view(), name='chat'),
-    path('profile', ProfileView.as_view(), name='profile'),
+    path('navbar/<username>', ProfileView.as_view(), name='navbar'),
     path('accounts/signup', RegistrationView.as_view(), name='signup'),
     path('accounts/login', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('accounts/logout', auth_views.LogoutView.as_view(), name='logout'),

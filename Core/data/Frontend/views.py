@@ -29,11 +29,11 @@ def profile(request):
         form = ProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('profile')
+            return redirect('navbar')
     else:
         form = ProfileForm(instance=user)
 
-    return render(request, 'profile.html', {'form': form})
+    return render(request, 'navbar.html', {'form': form})
 
 
 def text(response):
