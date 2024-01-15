@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.shortcuts import redirect
-# Create your views here.
+# Create your view here.
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm
@@ -37,7 +37,7 @@ def profile(request):
 
 
 def text(response):
-    return render(response, "text.html", {})
+    return render(response, "chat.html", {})
 
 
 def home(response):

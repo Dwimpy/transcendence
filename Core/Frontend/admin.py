@@ -1,4 +1,4 @@
-from .models import CustomUser
+from .model.customuser import CustomUser
 from django.contrib import admin
 
 admin.site.register(CustomUser)
