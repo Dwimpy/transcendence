@@ -10,8 +10,8 @@ from django.contrib.auth import login
 
 
 class RegistrationView(View):
-    template_name = '../templates/register.html'
-    index_template = '../templates/home.html'
+    template_name = 'register.html'
+    index_template = 'home.html'
 
     def get(self, request, *args, **kwargs):
         form = AllAuthSignupForm()

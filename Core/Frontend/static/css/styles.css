@@ -247,3 +247,16 @@ form.profile{
     margin-bottom: 35px;
     border-radius: 50%;
 }
+
+div > a.btn-link-play {
+    text-decoration: none;
+    color: inherit;
+}
+
+.pong-game {
+    display: block;
+    width: 100vh;
+    height: 60vh;
+    margin: auto;
+    background-color: #000000;
+}

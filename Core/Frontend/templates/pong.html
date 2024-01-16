@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1> Pong Game </h1>
+
+<canvas class="pong-game" id="PongCanvas"></canvas>
+<script src="{% static 'js/pong.js' %}"></script>
+<script src="{% static 'js/websockets.js' %}"></script>
+{% endblock %}

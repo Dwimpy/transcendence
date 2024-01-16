@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):
-    template_name = '../templates/profile.html'
+    template_name = 'profile.html'
     model = CustomUser
     form_class = ProfileForm
     success_url = '/profile/'

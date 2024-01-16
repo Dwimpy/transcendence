@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 
 
 class ChatView(TemplateView):
-    template_name = '../templates/chat.html'
+    template_name = 'chat.html'
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {})

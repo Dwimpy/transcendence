@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
 {% block content %}
     <div class="row-my">
         <div class="card-my big">
@@ -10,7 +13,9 @@
                 <h1>Pong</h1>
                 <p class="text-inside">Play an incredible game of PONG and enjoy yourself to your fullest!
                     Compete against your friends and become the ultimate player!</p>
-                <button>Play Now!</button>
+                <a class="btn-link-play" href="{% url 'pong' %}">
+                    <button>Play Now!</button>
+                </a>
             </div>
         </div>
         <div class="card-my small">
@@ -33,7 +38,9 @@
                 <h1>Not Pong</h1>
                 <p class="text-inside">Play an incredible game of NOT PONG and enjoy yourself to your fullest!
                     Compete against your friends and become the ultimate player!</p>
+                <a class="btn-link-play" href = {% url 'pong' %}>    
                 <button>Play Now!</button>
+                </a>
             </div>
         </div>
     </div>
