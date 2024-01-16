@@ -9,10 +9,10 @@ from django.contrib.auth.decorators import login_required
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):
-    template_name = '../templates/navbar.html'
+    template_name = '../templates/profile.html'
     model = CustomUser
     form_class = ProfileForm
-    success_url = '/navbar/'
+    success_url = '/profile/'
 
     def get_object(self, queryset=None):
         return self.request.user
