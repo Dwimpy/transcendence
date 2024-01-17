@@ -3,7 +3,6 @@ from django.views import View
 from allauth.socialaccount.providers.oauth2.views import (OAuth2Adapter,
                                                           OAuth2LoginView,
                                                           OAuth2CallbackView)
-from ..provider import FortyTwoProvider
 from ..form.signup import AllAuthSignupForm
 from django.shortcuts import redirect
 from django.contrib.auth import login

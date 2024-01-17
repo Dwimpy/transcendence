@@ -4,7 +4,11 @@
 
 <h1> Pong Game </h1>
 
-<canvas class="pong-game" id="PongCanvas"></canvas>
+{#<canvas class="pong-game" id="PongCanvas"></canvas>#}
+<p> {{ lobby.lobby_id }} -> {{ lobby.state }} -> {{ lobby.player_count }} -> {{ lobby.lobby_full }} </p>
+{% for user in lobby.users.all %}
+    <li>{{ user.username }}</li>
+{% endfor %}
 <script src="{% static 'js/pong.js' %}"></script>
 <script src="{% static 'js/websockets.js' %}"></script>
 {% endblock %}

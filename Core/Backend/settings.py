@@ -34,72 +34,73 @@ FRONTEND = 'Frontend/'
 # Application definition
 
 INSTALLED_APPS = [
-	'daphne',  # This is for django channels
-	'Frontend',
-	'django.contrib.admin',
-	'django.contrib.auth',
-	'django.contrib.sites',
-	'django.contrib.contenttypes',
-	'django.contrib.sessions',
-	'django.contrib.messages',
-	'django.contrib.staticfiles',
-	'allauth',
-	'allauth.account',
-	'allauth.socialaccount',
-	'allauth.socialaccount.providers.oauth2',
-	'allauth.socialaccount.providers.google',
-	'widget_tweaks',
-	'bootstrap5'
+    'daphne',  # This is for django channels
+    'Frontend',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.sites',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.oauth2',
+    'fortytwo',
+    'allauth.socialaccount.providers.google',
+    'widget_tweaks',
+    'bootstrap5'
 ]
 
 ACCOUNT_FORMS = {
-	'signup': 'Frontend.forms.AllAuthSignupForm'
+    'signup': 'Frontend.forms.AllAuthSignupForm'
 }
 
 LOGIN_REDIRECT_URL = 'index'
 ACCOUNT_LOGOUT_REDIRECT = 'index'
-SITE_ID = 1  # Use the ID of the site you added in the admin
+SITE_ID = 2  # Use the ID of the site you added in the admin
 
 SOCIALACCOUNT_PROVIDERS = {
-	'42': {
-		'APP': {
-			'client_id': 'u-s4t2ud-4ca9b16084b5a8cc3d3273b6db68ffa56943bf4c7652decc31d30653c4ca1295',
-			'secret': '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',
-		},
-	},
-	'google': {
-		'APP': {
-			'client_id': '<your-client-id>',
-			'secret': '<your-client-secret>',
-			'key': ''
-		},
-		'SCOPE': [
-			'navbar',
-			'email',
-		],
-		'AUTH_PARAMS': {
-			'access_type': 'online',
-		}
-	}
+    '42': {
+        'APP': {
+            'client_id': 'u-s4t2ud-4ca9b16084b5a8cc3d3273b6db68ffa56943bf4c7652decc31d30653c4ca1295',
+            'secret': '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',
+        }
+    },
+    'google': {
+        'APP': {
+            'client_id': '<your-client-id>',
+            'secret': '<your-client-secret>',
+            'key': ''
+        },
+        'SCOPE': [
+            'navbar',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
 }
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
 MIDDLEWARE = [
-	'django.middleware.security.SecurityMiddleware',
-	'allauth.account.middleware.AccountMiddleware',
-	'django.contrib.sessions.middleware.SessionMiddleware',
-	'django.middleware.common.CommonMiddleware',
-	'django.middleware.csrf.CsrfViewMiddleware',
-	'django.contrib.auth.middleware.AuthenticationMiddleware',
-	'django.contrib.messages.middleware.MessageMiddleware',
-	'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = [
-	'allauth.account.auth_backends.AuthenticationBackend',
-	'django.contrib.auth.backends.ModelBackend'
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend'
 ]
 # settings.py
 
@@ -111,29 +112,29 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 ROOT_URLCONF = 'Backend.urls'
 
 TEMPLATES = [
-	{
-		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		'DIRS': [os.path.join(BASE_DIR, FRONTEND, 'templates/')],
-		'APP_DIRS': True,
-		'OPTIONS': {
-			'context_processors': [
-				'django.template.context_processors.debug',
-				'django.template.context_processors.media',
-				'django.template.context_processors.request',
-				'django.contrib.auth.context_processors.auth',
-				'django.contrib.messages.context_processors.messages',
-			],
-		},
-	},
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, FRONTEND, 'templates/')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.media',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
 ]
 
 # WSGI_APPLICATION = 'Backend.wsgi.application'
 ASGI_APPLICATION = 'Backend.asgi.application'
 
 CHANNEL_LAYERS = {
-	'default': {
-		'BACKEND': 'channels.layers.InMemoryChannelLayer'
-	}
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
 }
 
 # Database
@@ -161,32 +162,32 @@ CHANNEL_LAYERS = {
 # }
 
 DATABASES = {
-	'default': {
-		'ENGINE': 'django.db.backends.postgresql_psycopg2',
-		'NAME': "trans_db",
-		'USER': "admin",
-		'PASSWORD': "adminpas",
-		'HOST': 'localhost',  # or your database host
-		'PORT': '5432',  # or your database port
-	}
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': "trans_db",
+        'USER': "admin",
+        'PASSWORD': "adminpas",
+        'HOST': 'localhost',  # or your database host
+        'PORT': '5432',  # or your database port
+    }
 }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-	{
-		'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-	},
-	{
-		'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-	},
-	{
-		'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-	},
-	{
-		'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-	},
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
 ]
 
 # Internationalization
@@ -209,8 +210,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, FRONTEND, 'media')
 
 STATICFILES_DIRS = [
-	os.path.join(BASE_DIR, FRONTEND, STATIC_URL),
-	os.path.join(BASE_DIR, FRONTEND, 'media'),
+    os.path.join(BASE_DIR, FRONTEND, STATIC_URL),
+    os.path.join(BASE_DIR, FRONTEND, 'media'),
 ]
 
 # Default primary key field type
