@@ -10,7 +10,6 @@ from django.contrib.auth import login
 
 class RegistrationView(View):
     template_name = 'register.html'
-    index_template = 'home.html'
 
     def get(self, request, *args, **kwargs):
         form = AllAuthSignupForm()
@@ -21,5 +20,5 @@ class RegistrationView(View):
         if form.is_valid():
             user = form.save(request)
             login(request, user, backend='allauth.account.auth_backends.AuthenticationBackend')
-            return render(request, self.index_template)
+            return redirect('index')
         return render(request, self.template_name, {'form': form})

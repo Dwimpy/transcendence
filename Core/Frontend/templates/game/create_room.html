@@ -1,0 +1,24 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% load widget_tweaks %}
+
+{% block content %}
+    
+<div class="my-row">
+    <div class="card-my-small">
+        <h2 class="user-profile-text"> Create Room </h2>
+        <form class="profile">
+            {% csrf_token %}
+            <div class="form-p">
+	            <div class="profile-item">
+	                <h3 class="text-profile"> Room Name </h3>
+	                {% render_field form.username %}
+	            </div>
+            </div>                        
+            <button type="submit" class="button"> Create Room </button>
+            <button type="submit" class="button"> Return to Lobby </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

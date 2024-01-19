@@ -10,9 +10,9 @@
         <h3 class="lobby-header"> Rooms </h3>
         <div class="lobby">
             <ul class="lobby-list">
-                <li class="lobby-item"> Room 1</li>
-                <li class="lobby-item"> Room 2</li>
-                <li class="lobby-item"> Room 3 </li>
+                {% for room in rooms %}
+                <li class="lobby-item"> {{ room.name }} </li>
+                {% endfor %}
             </ul>
         </div>
        <div class="menu-btn-group row-btn">

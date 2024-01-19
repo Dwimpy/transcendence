@@ -15,3 +15,11 @@ def pong_menu(request):
         return redirect('login')
 
 
+def pong_lobby(request):
+    template_name = 'pong_lobby.html'
+    lobby, created = PongLobby.objects.get_or_create(pk=1)
+    lobby.create_room()
+    rooms = lobby.rooms.all()
+    print(rooms)
+    return render(request, template_name, {'rooms': rooms})
+

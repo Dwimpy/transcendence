@@ -1,38 +1,26 @@
+from django.core.exceptions import ValidationError
 from django.db import models
-from enum import Enum
-from django.utils.translation import gettext as _
-from Frontend.model.customuser import CustomUser
-import uuid
-
-
-def generate_lobby_name():
-    return str(uuid.uuid4().hex[:8])
+from .lobbyroom import LobbyRoom
 
 
 class PongLobby(models.Model):
-    class LobbyState(models.TextChoices):
-        LOBBY = 'W', _('Waiting')
-        PLAYING = 'P', _('Playing')
-        FINISHED = 'F', _('Finished')
-
     class Meta:
-        db_table = 'pong_lobbies'
+        db_table = 'lobby_rooms'
 
-    lobby_id = models.UUIDField(uuid.uuid4, editable=False, unique=True, default=uuid.uuid4())
-    name = models.CharField(max_length=255, default=None)
-    state = models.CharField(max_length=1, choices=LobbyState.choices, default=LobbyState.LOBBY)
-    users = models.ManyToManyField(CustomUser, related_name='lobbies')
-    player_count = models.IntegerField(default=0)
-    lobby_full = models.BooleanField(default=False)
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
 
-    def add_to_lobby(self, username):
-        if self.lobby_full is True:
-            return
-        self.player_count += 1
-        self.users.add(username)
-        if self.player_count == 2:
-            self.lobby_full = True
+    rooms = models.ManyToManyField(LobbyRoom)
 
-    def __str__(self):
-        return f'id: {self.lobby_id}\nstate: {self.state}'
+    def get_rooms(self):
+        return self.rooms
 
+    def create_room(self):
+        room = LobbyRoom()
+        room.name = 'Hi'
+        room.player_count = 0
+        room.is_room_full = True
+        room.save()
+        self.rooms.add(room)
+        self.save()
