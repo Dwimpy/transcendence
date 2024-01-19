@@ -1,0 +1,29 @@
+<!-- templates/game_lobby -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% block content %}
+
+<script src="{% static 'js/lobby-selected.js' %}"></script>
+<div class="container-lobby">
+    <div class="card-my small-no-gap">
+        <h1> Welcome to the lobby</h1>
+        <h3 class="lobby-header"> Rooms </h3>
+        <div class="lobby">
+            <ul class="lobby-list">
+                <li class="lobby-item"> Room 1</li>
+                <li class="lobby-item"> Room 2</li>
+                <li class="lobby-item"> Room 3 </li>
+            </ul>
+        </div>
+       <div class="menu-btn-group row-btn">
+           <a class="btn-link-play">
+               <button> Create Room </button>
+           </a>
+           <a class="btn-link-play">
+               <button> Join Room </button>
+           </a>
+       </div>
+    </div>
+</div>
+
+{% endblock %}

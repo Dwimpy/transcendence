@@ -14,7 +14,11 @@
                 <p class="text-inside">Play an incredible game of PONG and enjoy yourself to your fullest!
                     Compete against your friends and become the ultimate player!</p>
                 <a class="btn-link-play" href="{% url 'pong' %}">
-                    <button>Play Now!</button>
+                    {% if user.is_authenticated %}
+                        <button>Play Now!</button>
+                    {% else %}
+                        <button href="{% url 'login' %}"> Log In!</button>
+                    {% endif %}
                 </a>
             </div>
         </div>
@@ -39,7 +43,12 @@
                 <p class="text-inside">Play an incredible game of NOT PONG and enjoy yourself to your fullest!
                     Compete against your friends and become the ultimate player!</p>
                 <a class="btn-link-play" href = {% url 'pong' %}>    
-                <button>Play Now!</button>
+                <a class="btn-link-play" href="{% url 'pong' %}">
+                    {% if user.is_authenticated %}
+                        <button>Play Now!</button>
+                    {% else %}
+                        <button href="{% url 'login' %}"> Log In!!</button>
+                    {% endif %}
                 </a>
             </div>
         </div>
