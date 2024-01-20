@@ -54,7 +54,7 @@ INSTALLED_APPS = [
 ]
 
 ACCOUNT_FORMS = {
-    'signup': 'Frontend.forms.AllAuthSignupForm'
+    'signup': 'Frontend.form.signup.AllAuthSignupForm'
 }
 
 LOGIN_REDIRECT_URL = 'index'

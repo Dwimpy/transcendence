@@ -14,7 +14,7 @@ class PongLobby(models.Model):
     rooms = models.ManyToManyField(LobbyRoom)
 
     def get_rooms(self):
-        return self.rooms
+        return self.rooms.all()
 
     def create_room(self):
         room = LobbyRoom()

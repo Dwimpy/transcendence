@@ -17,6 +17,10 @@ class AllAuthSignupForm(SignupForm):
                             widget=forms.TextInput(attrs={'placeholder': 'Email'}),
                             required=True,
                             label="Email")
+    picture = forms.ImageField(
+        widget=forms.FileInput(),
+        required=False
+    )
     bio = forms.CharField(max_length=255,
                             min_length=1,
                             widget=forms.TextInput(attrs={'placeholder': 'Bio'}),
@@ -24,5 +28,17 @@ class AllAuthSignupForm(SignupForm):
                             label="bio")
     password1 = forms.PasswordInput()
     password2 = forms.PasswordInput()
-    picture = forms.ImageField()
 
+    def save(self, request):
+        bio_value = self.cleaned_data['bio']
+        picture_value = self.cleaned_data['picture']
+        user = super().save(request)
+        user.picture = picture_value
+        user.bio = bio_value
+        user.save()
+
+        return user
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].label = "Email"

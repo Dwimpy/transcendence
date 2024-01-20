@@ -12,8 +12,16 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'profile.html'
     model = CustomUser
     form_class = ProfileForm
-    success_url = '/profile/'
 
     def get_object(self, queryset=None):
         return self.request.user
 
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return f'/profile/' + self.request.user.username
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
