@@ -23,3 +23,9 @@ def pong_lobby(request):
     print(rooms)
     return render(request, template_name, {'rooms': rooms})
 
+
+def pong_room(request):
+    template_name = 'pong_room.html'
+    lobby, created = PongLobby.objects.get_or_create(pk=1)
+    lobby.create_room()
+    return render(request, template_name, {})

@@ -173,6 +173,9 @@ DATABASES = {
         'PASSWORD': "adminpas",
         'HOST': 'localhost',  # or your database host
         'PORT': '5432',  # or your database port
+        'TEST': {
+            'NAME': 'test_trans_db',
+        },
     }
 }
 

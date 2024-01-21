@@ -7,7 +7,7 @@ class LobbyRoom(models.Model):
         db_table = 'rooms'
 
     name = models.CharField(max_length=255, null=False, default="")
-    users = models.ManyToManyField(CustomUser, related_name='room_users')
+    # users = models.ManyToManyField(CustomUser, related_name='room_users')
     player_count = models.IntegerField(default=0)
     is_room_full = models.BooleanField(default=False)
 
