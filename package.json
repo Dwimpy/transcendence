@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@buildo/bento-design-system": "^0.22.1",
-    "react-router-dom": "^6.20.1"
-  }
-}

@@ -5,7 +5,7 @@ services:
     container_name: django
     build:
       context: .
-      dockerfile: Core/Dockerfile
+      dockerfile: transcendence/Dockerfile
     env_file: .env
     ports:
       - "8000:8000"
@@ -41,7 +41,7 @@ volumes:
     name: django-files
     driver: local
     driver_opts:
-      device: /Users/arobu/projects/workdir/transcendence/Core/data
+      device: /Users/arobu/projects/workdir/trans_container/transcendence/data
       o: bind
       type: none
 
@@ -49,6 +49,6 @@ volumes:
     name: db-files
     driver: local
     driver_opts:
-      device: /Users/arobu/projects/workdir/transcendence/Database/data
+      device: /Users/arobu/projects/workdir/trans_container/Database/data
       o: bind
       type: none
