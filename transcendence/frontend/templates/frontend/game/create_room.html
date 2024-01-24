@@ -9,17 +9,23 @@
 <div class="row-my">
     <div class="card-my small">
 
-        <h2 class="user-profile-text" >User Profile</h2>
+        <h2 class="user-profile-text" >Room Creation</h2>
         <form class="profile" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
             <div class="form-p ">
 	            <div class="profile-item">
-	                <h3 class="text-profile"> Username </h3>
+	                <h3 class="text-profile"> Room Name </h3>
 	                {% render_field form.name %}
 	            </div>
             </div>
-            <button type="submit" class="button">Update Profile</button>
-            <a class="icon margin button" href="{% url 'logout' %}">Logout</a>
+            <div class="menu-btn-group row-btn">
+                <a class="btn-link-play">
+                    <button type="submit" class="button">Create Room</button>
+                </a>
+                <a class="btn-link-play">
+                    <button type="submit" class="button">Back to Lobby</button>
+                </a>
+            </div>
         </form>
     </div>
 </div>
