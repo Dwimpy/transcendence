@@ -4,11 +4,8 @@
 
 {% block content %}
 
-<script src="{% static 'js/create_room_ws.js' %}"></script>
-
 <div class="row-my">
     <div class="card-my small">
-
         <h2 class="user-profile-text" >Room Creation</h2>
         <form class="profile" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -20,10 +17,10 @@
             </div>
             <div class="menu-btn-group row-btn">
                 <a class="btn-link-play">
-                    <button type="submit" class="button">Create Room</button>
+                    <button type="submit" class="button" id="btn-create-room-go">Create Room</button>
                 </a>
                 <a class="btn-link-play">
-                    <button type="submit" class="button">Back to Lobby</button>
+                    <button type="submit" class="button" id="btn-back-to-lobby">Back to Lobby</button>
                 </a>
             </div>
         </form>

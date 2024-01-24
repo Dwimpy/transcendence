@@ -16,10 +16,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.body.addEventListener('click', function(event) {
         if (event.target && event.target.id === 'create-room-content') {
-            console.log('gg');
             load_page('/lobby/create_room');
         }
     });
+
+    document.body.addEventListener('click', function(event) {
+        if (event.target && event.target.id === 'btn-back-to-lobby') {
+            load_page('/lobby/game_lobby');
+        }
+    });
+
     }
 );
 
