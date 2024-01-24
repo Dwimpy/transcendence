@@ -106,7 +106,7 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
 ACCOUNT_FORMS = {
-    'signup': 'Frontend.form.signup.AllAuthSignupForm'
+    'signup': 'frontend.forms.signup.AllAuthSignupForm'
 }
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -191,15 +191,12 @@ STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
 
 # ROOT URLS
-STATIC_ROOT = BASE_DIR / 'static/'
-MEDIA_ROOT = BASE_DIR / 'media/'
-
-FRONTEND_APP_PATH = 'frontend'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR / FRONTEND_APP_PATH / STATIC_URL),
-    os.path.join(BASE_DIR / 'frontend' / MEDIA_URL)
+    os.path.join(BASE_DIR, 'frontend', 'static/'),
+    os.path.join(BASE_DIR, 'media/'),
 ]
 
 # Default primary key field type

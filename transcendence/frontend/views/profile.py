@@ -1,3 +1,4 @@
+from asgiref.sync import sync_to_async
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from ..models.customuser import CustomUser

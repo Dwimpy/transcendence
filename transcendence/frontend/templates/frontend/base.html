@@ -8,14 +8,15 @@
     <!-- Add your common CSS styles or links here -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'bootstrap-5.0.2/dist/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css">
 
 </head>
 <body>
 <div class="overlay"></div>
-<main class="container">
+<main class="container" id="main-content">
     {% block content %}{% endblock %}
 </main>
 	{% include 'frontend/navbar/navbar.html' %}
 </body>
 </html>
+

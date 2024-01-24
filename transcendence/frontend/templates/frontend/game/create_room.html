@@ -1,18 +1,28 @@
-<!-- create_room.html -->
-<div class="modal" id="createRoomModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Create Room</h5>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+<!-- templates/navbar.html -->
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<script src="{% static 'js/create_room_ws.js' %}"></script>
+
+<div class="row-my">
+    <div class="card-my small">
+
+        <h2 class="user-profile-text" >User Profile</h2>
+        <form class="profile" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+            <div class="form-p ">
+	            <div class="profile-item">
+	                <h3 class="text-profile"> Username </h3>
+	                {% render_field form.name %}
+	            </div>
             </div>
-            <div class="modal-body">
-                <form method="post" action="{% url 'create_room' %}">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">Create</button>
-                </form>
-            </div>
-        </div>
+            <button type="submit" class="button">Update Profile</button>
+            <a class="icon margin button" href="{% url 'logout' %}">Logout</a>
+        </form>
     </div>
 </div>
+
+{% endblock %}
+

@@ -1,7 +1,9 @@
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
+from psycopg2.extensions import JSON
+
 from .lobbyconsumer import LobbyConsumer
-from ..models.lobby import Room
+from ..models.lobby import Lobby
 from ..models.customuser import CustomUser
 import json
 
@@ -12,22 +14,10 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
             "group_lobby",
             self.channel_name
         )
-        await self.create_new_room()
         await self.accept()
 
     async def disconnect(self, code):
         pass
-
-    async def receive(self, text_data=None, bytes_data=None, **kwargs):
-        pass
-
-    @sync_to_async
-    def create_lobby_room(self):
-        new_room = Room().objects.get_or_create(name="random name")
-        # user = CustomUser.objects.get('andrei123')
-        # new_room.users.add(user)
-        new_room.player_count = 1
-        new_room.save()
 
     async def create_new_room(self):
         # Your logic to create a new room goes here
