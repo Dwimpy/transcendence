@@ -12,3 +12,17 @@ def render_game_menu(title, game, play_link, lobby_link, *args, **kwargs):
         'play_link': play_link,
         'lobby_link': lobby_link
     }
+
+
+@register.inclusion_tag('frontend/home/card_big.html')
+def card_big(title):
+    return {
+        'title': title
+    }
+
+
+@register.inclusion_tag('frontend/home/card_small.html')
+def card_small(title):
+    return {
+        'title': title
+    }

@@ -1,65 +1,15 @@
 {% extends 'frontend/base.html' %}
 {% load static %}
+{% load custom_tags %}
 {% block content %}
-
     
 <div class="row">
-    <div class="col-md-9 mb-4">
-        <div class="card rounded-50 bd-gray-100 h-100 border-whitesmoke" id="override">
-            <div class="card-body d-flex flex-row justify-content-center align-items-center">
-                    <div class="gif m-5">
-                <img class="gif" src="{% static 'gif2.gif' %}" alt="">
-            </div>
-            <div class="text">
-                <h1>Pong</h1>
-                <p class="text-inside text-white">Play an incredible game of PONG and enjoy yourself to your fullest!
-                    Compete against your friends and become the ultimate player!</p>
-                <a class="btn-link-play" href="{% url 'game_menu' %}">
-                    {% if user.is_authenticated %}
-                        <button>Play Now!</button>
-                    {% else %}
-                        <button href="{% url 'login' %}"> Log In!</button>
-                    {% endif %}
-                </a>
-            </div>
 
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mb-4">
-        <div class="card-my small">
-            <h1>My Page</h1>
-            <p>Lorem ipsum text.</p>
-            <div>A card.</div>
-        </div>
-        </div>
-    <div class="col-md-3 ">
-        <div class="card-my small">
-            <h1>My Page</h1>
-            <p>Lorem ipsum text.</p>
-            <div>A card.</div>
-        </div>
-        </div>
- <div class="col-md-9">
-        <div class="card-my big">
-                    <div class="gif">
-                <img class="gif" src="{% static 'gif2.gif' %}" alt="">
-            </div>
-            <div class="text">
-                <h1>Pong</h1>
-                <p class="text-inside">Play an incredible game of PONG and enjoy yourself to your fullest!
-                    Compete against your friends and become the ultimate player!</p>
-                <a class="btn-link-play" href="{% url 'game_menu' %}">
-                    {% if user.is_authenticated %}
-                        <button>Play Now!</button>
-                    {% else %}
-                        <button href="{% url 'login' %}"> Log In!</button>
-                    {% endif %}
-                </a>
-            </div>
-        </div>
-    </div>
+    {% card_big 'Pong' %}
+    {% card_small 'Pong Leaderboard' %}
+    {% card_small 'Not Pong Leaderboard' %}
+    {% card_big 'Not Pong' %}
 
-    </div>
-
+</div>
+    
 {% endblock %}

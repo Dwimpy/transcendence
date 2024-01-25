@@ -1,9 +1,0 @@
-@import "../bootstrap-5.0.2/scss/bootstrap";
-// Create your own map
-$custom-colors: (
-  "blue": $blue
-);
-
-// Merge the maps
-$theme-colors: map-merge($theme-colors, $custom-colors);
-

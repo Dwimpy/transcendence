@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_sass_compiler',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -198,6 +199,20 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend', 'static/'),
     os.path.join(BASE_DIR, 'media/'),
 ]
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+SASS_PROCESSOR_OUTPUT_DIR = '../frontend/static/css'
+
+SASS_PROCESSOR_INCLUDE_DIRS = [
+    os.path.join(BASE_DIR, 'frontend', 'static', 'bootstrap'),
+]
+
+SASS_PROCESSOR_INCLUDE_FILE_PATTERN = r'^.+\.scss$'
+SASS_PRECISION = 8
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
