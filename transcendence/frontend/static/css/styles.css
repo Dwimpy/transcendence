@@ -126,6 +126,10 @@ a{
     gap: 20px;
 }
 
+.rounded-50 {
+    border-radius: 50px;
+}
+
 .card-my{
     display: flex;
     height: 100%;
@@ -292,8 +296,7 @@ a.btn-link-play {
 .lobby {
     width: 100%;
     height: auto;
-    max-height: 300px;
-    min-height: 300px;
+    min-height: 50%;
     background-color: transparent;
     border: 1px solid gray;
     margin-bottom: 20px;

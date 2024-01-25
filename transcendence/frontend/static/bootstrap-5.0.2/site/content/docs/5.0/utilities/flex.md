@@ -191,9 +191,9 @@ Responsive variations also exist for `align-items`.
 {{< /flex.inline >}}
 {{< /markdown >}}
 
-## Align cls
+## Align self
 
-Use `align-cls` utilities on flexbox items to individually change their alignment on the cross axis (the y-axis to start, x-axis if `flex-direction: column`). Choose from the same options as `align-items`: `start`, `end`, `center`, `baseline`, or `stretch` (browser default).
+Use `align-self` utilities on flexbox items to individually change their alignment on the cross axis (the y-axis to start, x-axis if `flex-direction: column`). Choose from the same options as `align-items`: `start`, `end`, `center`, `baseline`, or `stretch` (browser default).
 
 <div class="bd-example">
   <div class="d-flex bd-highlight mb-3" style="height: 100px">
@@ -224,23 +224,23 @@ Use `align-cls` utilities on flexbox items to individually change their alignmen
 </div>
 
 ```html
-<div class="align-cls-start">Aligned flex item</div>
-<div class="align-cls-end">Aligned flex item</div>
-<div class="align-cls-center">Aligned flex item</div>
-<div class="align-cls-baseline">Aligned flex item</div>
-<div class="align-cls-stretch">Aligned flex item</div>
+<div class="align-self-start">Aligned flex item</div>
+<div class="align-self-end">Aligned flex item</div>
+<div class="align-self-center">Aligned flex item</div>
+<div class="align-self-baseline">Aligned flex item</div>
+<div class="align-self-stretch">Aligned flex item</div>
 ```
 
-Responsive variations also exist for `align-cls`.
+Responsive variations also exist for `align-self`.
 
 {{< markdown >}}
 {{< flex.inline >}}
 {{- range $.Site.Data.breakpoints }}
-- `.align-cls{{ .abbr }}-start`
-- `.align-cls{{ .abbr }}-end`
-- `.align-cls{{ .abbr }}-center`
-- `.align-cls{{ .abbr }}-baseline`
-- `.align-cls{{ .abbr }}-stretch`
+- `.align-self{{ .abbr }}-start`
+- `.align-self{{ .abbr }}-end`
+- `.align-self{{ .abbr }}-center`
+- `.align-self{{ .abbr }}-baseline`
+- `.align-self{{ .abbr }}-stretch`
 {{- end -}}
 {{< /flex.inline >}}
 {{< /markdown >}}

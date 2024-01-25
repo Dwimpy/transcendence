@@ -208,7 +208,7 @@ includes code changes) and under the terms of the
 
 [Adhere to the Code Guide.](https://codeguide.co/#html)
 
-- Use tags and elements appropriate for an HTML5 doctype (e.g., cls-closing tags).
+- Use tags and elements appropriate for an HTML5 doctype (e.g., self-closing tags).
 - Use CDNs and HTTPS for third-party JS when possible. We don't use protocol-relative URLs in this case because they break when viewing the page locally via `file://`.
 - Use [WAI-ARIA](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA) attributes in documentation examples to promote accessibility.
 
