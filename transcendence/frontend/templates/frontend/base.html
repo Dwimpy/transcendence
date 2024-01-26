@@ -11,14 +11,19 @@
     <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'build/css/custom.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" >
+    <link rel="stylesheet" type="text/css" href="{% static 'css/new_style.css' %}" >
 
 </head>
+
 <body>
-<div class="overlay"></div>
-<main class="container" id="main-content">
-    {% block content %}{% endblock %}
-</main>
-	{% include 'frontend/navbar/navbar.html' %}
+    <div class="main-container">
+    <div class="overlay"></div>
+        <main class="container z-1 d-flex justify-content-center align-items-center flex-column" id="main-content">
+            {% block content %}{% endblock %}
+        </main>
+        {% include 'frontend/navbar_remake.html' %}
+    </div>
 </body>
+
 </html>
 

@@ -19,6 +19,8 @@ $spacers: (
   10: ($spacer * 9.375)  //150px
 );
 
+$border-radius-custom:         50px !default;
+
 
 $utilities: map-merge(
   $utilities,
@@ -188,7 +190,51 @@ $utilities: map-merge(
         ),
       ),
     ),
-
+    "viewport-height": map-merge(
+      map-get($utilities, "viewport-height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "viewport-height"), "values"),
+        (50: 50vh),
+        ),
+      ),
+    ),
+    "min-viewport-height": map-merge(
+      map-get($utilities, "min-viewport-height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "min-viewport-height"), "values"),
+        (50: 50vh),
+        ),
+      ),
+    ),
+    "top": map-merge(
+      map-get($utilities, "top"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "top"), "values"),
+        (25: 25%),
+        ),
+      ),
+    ),
+    "rounded": map-merge(
+      map-get($utilities, "rounded"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "rounded"), "values"),
+        (6: $border-radius-custom),
+        ),
+      ),
+    ),
+    "rounded-start": map-merge(
+      map-get($utilities, "rounded-start"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "rounded-start"), "values"),
+        (6: $border-radius-custom),
+        ),
+      ),
+    ),
   )
 );
 

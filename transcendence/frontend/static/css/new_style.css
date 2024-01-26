@@ -1,0 +1,102 @@
+.main-container {
+    background-image: url('../background.png');
+    background-size: cover;
+    background-position: center;
+    margin: 0; /* Remove default margin to ensure full coverage */
+    height: 100vh;
+    padding: 6px;
+    color: whitesmoke;
+    display: flex;
+    position: relative;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.30);
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+button{
+	color: inherit;
+	border: none;
+	/*padding: 0;*/
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+    display: flex;
+    /*width: 280px;*/
+    padding: 16px 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    border-radius: 16px;
+    background: rgba(92, 23, 229, 0.70);
+}
+
+button:hover{
+    background: white;
+    color:  rgba(92, 23, 229, 0.70);
+}
+button:active{
+    background: rgba(92, 23, 229, 0.70) !important;
+    color:  white !important;
+}
+
+
+.border-solid-gray-1 {
+    border-color: gray;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.border-solid-white-1 {
+    border-color: white;
+    border-style: solid;
+    border-width: 1px;
+}
+
+
+.text-inside-border-solid {
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(154, 168, 188, 0.20);
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.16)
+}
+
+.bg-radial-fill-card {
+    background: radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%);
+}
+
+
+.bg-navbar {
+    background-color: rgba(16, 0, 50, 0.6);
+}
+
+.bg-navbar-extend {
+    left: 6px;
+}
+
+.icon{
+    padding: 1vw;
+    border-radius: 16px;
+    color: inherit;
+}
+
+.active-icon{
+    border: 1px solid  #8000FF;
+}
+
+.icon:hover{
+    cursor: pointer;
+    color: #8000FF;
+    border: 1px solid  #8000FF;
+}
+
+.icon:active{
+    color: white;
+    border: 1px solid white;
+}
