@@ -1,0 +1,28 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TransWeb{% endblock %}</title>
+    <!-- Add your common CSS styles or links here -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'build/css/custom.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" >
+    <link rel="stylesheet" type="text/css" href="{% static 'css/new_style.css' %}" >
+
+</head>
+
+<body>
+    <div class="main-container">
+    <div class="overlay"></div>
+        <main class="container z-1 d-flex justify-content-center align-items-center flex-column" id="main-content">
+            {% block content %}{% endblock %}
+        </main>
+        {% include 'transcendence/navbar.html' %}
+    </div>
+</body>
+
+</html>

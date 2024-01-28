@@ -1,0 +1,15 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block content %}
+    
+<div class="row">
+
+    {% card_big 'Pong' %}
+    {% card_small 'Pong Leaderboard' %}
+    {% card_small 'Not Pong Leaderboard' %}
+    {% card_big 'Not Pong' %}
+
+</div>
+    
+{% endblock %}

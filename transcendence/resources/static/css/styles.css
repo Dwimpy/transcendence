@@ -1,0 +1,325 @@
+/*body {*/
+/*    background-image: url('../background.png');*/
+/*    background-size: cover;*/
+/*    background-position: center;*/
+/*    margin: 0; !* Remove default margin to ensure full coverage *!*/
+/*    height: 100vh;*/
+/*    padding: 6px;*/
+/*    color: whitesmoke;*/
+/*    display: flex;*/
+/*}*/
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.border-solid-gray-1 {
+    border-color: gray;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.border-solid-white-1 {
+    border-color: white;
+    border-style: solid;
+    border-width: 1px;
+}
+
+
+.text-inside-border-solid {
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(154, 168, 188, 0.20);
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.16)
+}
+
+
+
+.bg-radial-fill-card {
+    background: radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%);
+}
+
+
+
+/*.navbar {*/
+
+/*    position: fixed;*/
+/*    top: 25%;*/
+/*    margin: 0;*/
+/*    right: 0;*/
+/*    display: flex;*/
+/*    width: 7vw;*/
+/*    height: 50vh;*/
+/*    padding: 2vh 1vw;*/
+/*    flex-direction: column;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*    border-bottom-left-radius: 32px;*/
+/*    border-top-left-radius: 32px;*/
+
+/*    background-color: rgba(16, 0, 50, 0.6);*/
+/*    !*background: #100032;*!*/
+
+/*}*/
+/*.navbar-el{*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: flex-start;*/
+/*    gap: 1vh;*/
+/*}*/
+
+
+
+
+a{
+    text-decoration: none;
+}
+
+.button{
+    width: 150px;
+    justify-content: center;
+
+}
+
+.row-my{
+    display: flex;
+    flex-direction: row;
+    max-height: min-content;
+    padding: 0px 35px;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+/*.container{*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-content: center;*/
+/*    flex-direction: column;*/
+/*    gap: 20px;*/
+/*}*/
+
+
+.card-my{
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    padding: 5vh 5vw;
+    align-items: center;
+    flex-shrink: 0;
+    border: 1px solid gray;
+    border-radius: 50px;
+    background: var(--radial-fill, radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%));
+}
+
+.user-profile-text {
+    margin-bottom: -5px;
+}
+
+.small{
+    flex-direction: column;
+    gap: 5vh;
+}
+
+.small-no-gap {
+    flex-direction: column;
+    margin: 25px;
+}
+
+.big{
+    gap: 3vh;
+}
+.gif{
+    display: flex;
+    max-width: 30vw;
+    max-height: 30vh;
+    /* padding: 57px 119px 56px 119px; */
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.margin{
+    margin: 10px;
+}
+
+form .form-p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+form .text-profile{
+    font-family: "helvetica", sans-serif;
+    font-size: 18px;
+    font-weight: lighter;
+}
+
+.text-inside{
+    border-radius: 24px;
+    border: 1px solid rgba(154, 168, 188, 0.20);
+    background: rgba(255, 255, 255, 0.00);
+    display: flex;
+    max-width: 300px;
+    max-height: 200px;
+    padding: 10px 13px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    align-self: stretch;
+    /* Elevation/Large */
+    box-shadow: 0px 16px 32px 0px rgba(0, 0, 0, 0.16);
+}
+
+
+.form-p input{
+    color: white;
+    padding: 20px;
+    margin: 10px;
+    border: 1px solid gray;
+    border-radius: 50px;
+    background: var(--radial-fill, radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%));
+}
+
+.profile-item {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.profile-item h3.text-profile {
+    margin-bottom: -5px; /* Adjust the value as needed */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+form.profile{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.center-img-form {
+    height: 200px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 35px;
+    border-radius: 50%;
+}
+
+a.btn-link-play {
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+
+}
+
+.pong-game {
+    display: block;
+    width: 100vh;
+    height: 60vh;
+    margin: auto;
+    background-color: #000000;
+}
+
+.menu-btn-group {
+    display: flex;
+    flex: fit-content;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-btn-group button {
+    width: 100%;
+    flex: 1;
+}
+
+.container-lobby {
+    display: flex;
+    height: 50%;
+    align-items: center;
+    justify-content: center;
+}
+
+.lobby {
+    width: 100%;
+    height: auto;
+    min-height: 50%;
+    background-color: transparent;
+    border: 1px solid gray;
+    margin-bottom: 20px;
+}
+
+.lobby-list {
+    list-style: none;
+    max-height: 300px;
+    padding: 0;
+    overflow: auto;
+}
+
+.lobby-item {
+    background-color: transparent;
+    border: 1px solid gray;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.lobby-item:hover {
+    background-color: rgba(80, 80, 80, 0.2);
+}
+
+.lobby-item:active{
+    background-color: rgba(80, 80, 80, 0.35);
+}
+
+.selected {
+    background-color: rgba(80, 80, 80, 0.50);
+}
+
+.card-my.small-no-gap h1{
+    text-align: center;
+    margin-top: 35px;
+}
+
+.card-my.small-no-gap h3{
+    text-align: center;
+    margin-top: 15px;
+}
+
+
+
+
+.menu-btn-group.row-btn {
+    flex-direction: row;
+    gap: 25px;
+    margin-top: 10px;
+}
+
