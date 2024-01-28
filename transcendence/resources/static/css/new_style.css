@@ -37,6 +37,7 @@ button{
     background: rgba(92, 23, 229, 0.70);
 }
 
+
 button:hover{
     background: white;
     color:  rgba(92, 23, 229, 0.70);
@@ -100,3 +101,25 @@ button:active{
     color: white;
     border: 1px solid white;
 }
+
+.text-whitesmoke {
+    color: whitesmoke;
+}
+
+/*.form-control {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    background-color: inherit;*/
+/*    color: white;*/
+/*    border-radius: 18px;*/
+/*    background-clip:  text;*/
+/*}*/
+
+/*.form-control:focus {*/
+/*    color: white;*/
+/*    background-color: blanchedalmond !important;*/
+/*}*/
+
+/*#div_id_username {*/
+/*    background-color: inherit;*/
+/*}*/

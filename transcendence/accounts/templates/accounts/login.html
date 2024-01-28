@@ -1,0 +1,21 @@
+{% extends 'transcendence/base.html' %}
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="card rounded-6 flex flex-column bg-radial-fill-card border-solid-gray-1 text-whitesmoke w-35 justify-content-center align-items-center">
+    <div class="card-body flex flex-column justify-content-center align-items-center text-center mb-4 me-5 ms-5">
+        <h2 class="mt-1 mb-4 pt-2"> Login </h2>
+        <form method="post" class="flex flex-column align-items-center justify-content-center">
+            {% csrf_token %}
+            <h3>Username</h3>
+            <div>
+                {% render_field form.username class="form-control"%}
+            </div>
+        <button class="btn-primary"> Log In </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

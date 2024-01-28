@@ -1,9 +1,9 @@
-@import "frontend/static/bootstrap/scss/functions";
-@import "frontend/static/bootstrap/scss/variables";
-@import "frontend/static/bootstrap/scss/variables-dark";
-@import "frontend/static/bootstrap/scss/maps";
-@import "frontend/static/bootstrap/scss/mixins";
-@import "frontend/static/bootstrap/scss/utilities";
+@import "resources/static/bootstrap/scss/functions";
+@import "resources/static/bootstrap/scss/variables";
+@import "resources/static/bootstrap/scss/variables-dark";
+@import "resources/static/bootstrap/scss/maps";
+@import "resources/static/bootstrap/scss/mixins";
+@import "resources/static/bootstrap/scss/utilities";
 
 $spacers: (
   0: 0,
@@ -238,4 +238,5 @@ $utilities: map-merge(
   )
 );
 
-@import "frontend/static/bootstrap/scss/utilities/api";
+@import "resources/static/bootstrap/scss/utilities/api";
+
