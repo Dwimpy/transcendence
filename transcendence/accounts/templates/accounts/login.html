@@ -4,18 +4,30 @@
 
 {% block content %}
 
-<div class="card rounded-6 flex flex-column bg-radial-fill-card border-solid-gray-1 text-whitesmoke w-35 justify-content-center align-items-center">
-    <div class="card-body flex flex-column justify-content-center align-items-center text-center mb-4 me-5 ms-5">
-        <h2 class="mt-1 mb-4 pt-2"> Login </h2>
-        <form method="post" class="flex flex-column align-items-center justify-content-center">
-            {% csrf_token %}
-            <h3>Username</h3>
-            <div>
-                {% render_field form.username class="form-control"%}
-            </div>
-        <button class="btn-primary"> Log In </button>
-        </form>
-    </div>
+<div class="card rounded-6 flex flex-column bg-radial-fill-card border-solid-gray-1 bg-image text-whitesmoke w-35 justify-content-center align-items-center">
+    <div class="card-overlay rounded-6 z-0"></div>
+        <div class="card-body flex z-1 flex-column justify-content-center align-items-center text-center mb-2 me-5 ms-5">
+            <h2 class="mt-1 mb-4 pt-2"> Login </h2>
+            <form method="post" class="flex flex-column align-items-center justify-content-center" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="d-flex flex-column align-items-center gap-2">
+                    <div>
+                        <div class="col login-input-color d-inline-flex flex-row align-items-center">
+                            {% render_field form.username class="form-control" placeholder="Username" id="id_username"%}
+                        </div>
+                    </div>
+                    <div>
+                    <div class="d-inline-flex login-input-color flex-row align-items-center">
+                          {% render_field form.password class="form-control" placeholder="Password" id="id_password" %}
+                    </div>
+                    </div>
+                    <div class="d-flex flex-column align-items-center">
+                        <h6 class="font-size-small fa-align-left"> Don't have an account?<br><a href="{% url 'login' %}">Sign Up here!</a></h6>
+                        <button class="mt-2"> Log In </button>
+                    </div>
+                </div>
+            </form>
+        </div>
 </div>
 
 {% endblock %}
