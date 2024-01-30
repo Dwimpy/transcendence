@@ -1,0 +1,12 @@
+{% load registration_tags %}
+
+<div class="d-flex-align-center-col m-5 gap-3">
+    {% csrf_token %}
+    {% render_base_field form "username" "" %}
+    {% render_base_field form "email" "" %}
+    {% render_base_field form "bio" "" %}
+    {% include 'accounts/registration_helpers/picture_field.html' %}
+    {% render_pass_field form "password2" "" "Password (again)" %}
+    {% include 'accounts/registration_helpers/form_errors.html' %}
+    <button type="submit" class="text-whitesmoke">Register</button>
+</div>

@@ -3,8 +3,8 @@
 {% load crispy_forms_filters %}
 {% load registration_tags %}
 {% load widget_tweaks %}
-{% block content %}
 
+{% block content %}
 
 <script>
 
@@ -20,23 +20,6 @@
 
 </script>
 
-<div class="card rounded-6 bg-radial-fill-card bg-image border-solid-gray-1 text-whitesmoke">
-    <div class="card-overlay z-0 rounded-6"></div>
-    <div class="card-body d-flex-align-center-col z-1">
-        <h2>Registration</h2>
-        <form method="post" class="container" enctype="multipart/form-data" action="{% url 'registration' %}">
-            <div class="d-flex-align-center-col m-5 gap-3">
-                {% csrf_token %}
-                    {% render_form_field form "username" "" %}
-                    {% render_form_field form "email" "" %}
-                    {% render_form_field form "bio" "" %}
-                    {% include 'accounts/registration_helpers/picture_field.html' %}
-                    {% render_pass_field form "password2" "" "Password (again)" %}
-                    {% include 'accounts/registration_helpers/form_errors.html' %}
-                <button type="submit" class="button">Register</button>
-            </div>
-        </form>
-    </div>
-</div>
+{% render_base_form 'Registration' form 'accounts/registration_helpers/registration_form.html' 'registration' %}
 
 {% endblock %}

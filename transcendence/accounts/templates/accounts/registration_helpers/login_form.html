@@ -1,0 +1,20 @@
+{% load widget_tweaks %}
+{% load registration_tags %}
+
+
+<div class="d-flex flex-column gap-2">
+    <div>
+        <div class="col login-input-color d-inline-flex">
+            {% render_field form.username class="form-control" placeholder="Username" id="id_username"%}
+        </div>
+    </div>
+    <div>
+    <div class="d-inline-flex login-input-color">
+          {% render_field form.password class="form-control" placeholder="Password" id="id_password" %}
+    </div>
+    </div>
+    <div class="d-flex flex-column">
+        <h6 class="font-size-small color-white"> Don't have an account?<br><a href="{{ url }}">Sign Up!</a></h6>
+        <button class="mt-2 color-white"> Log In </button>
+    </div>
+</div>

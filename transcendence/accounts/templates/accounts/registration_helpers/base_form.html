@@ -1,0 +1,12 @@
+{% load registration_tags %}
+
+<div class="card rounded-6 flex flex-column border-solid-gray-1 bg-image">
+    <div class="card-overlay rounded-6 z-0"></div>
+        <div class="card-body z-1 text-center mb-2 me-5 ms-5">
+            <h2 class="mt-1 mb-4 pt-2 color-white"> {{ title }} </h2>
+                <form method="post" class="flex flex-column align-items-center" action="{{ url }}">
+                    {% csrf_token %}
+                    {% include content_path %}
+                </form>
+        </div>
+</div>
