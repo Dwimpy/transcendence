@@ -243,3 +243,12 @@ h6#selected-image-name {
 }
 
 .selected-image-name {}
+
+.center-img-form {
+    height: 200px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 35px;
+    border-radius: 50%;
+}

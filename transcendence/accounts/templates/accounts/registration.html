@@ -8,18 +8,31 @@
 
 <script>
 
-    document.addEventListener('DOMContentLoaded', function() {
-    let fileInput = document.getElementById('registration-file-input');
-    let selectedImageName = document.getElementById('selected-image-name');
-        fileInput.addEventListener('change', function() {  
-            if (fileInput.files.length > 0) {    
-            selectedImageName.textContent = fileInput.files[0].name;
+    document.addEventListener('DOMContentLoaded', main);
+
+    function main() {
+        const fileInput = document.getElementById('registration-file-input');
+        const selectedImageName = document.getElementById('selected-image-name');
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                selectedImageName.textContent = fileInput.files[0].name;
             }
         })
-    });
+        {#const textContainer = document.getElementById("main-content")#}
+        {#fetch("http://127.0.0.1:8000/accounts/login/")#}
+        {#    .then(html => html.text())#}
+        {#    .then(text => {#}
+        {#        const fragment = document.createElement("document");#}
+        {#        fragment.innerHTML = text;#}
+        {#        const container = fragment.getElementsByClassName("card")[0]#}
+        {#        textContainer.innerHTML = ""#}
+        {#        textContainer.appendChild(container)#}
+        {#    })#}
+    }
+
 
 </script>
 
-{% render_base_form 'Registration' form 'accounts/registration_helpers/registration_form.html' 'registration' %}
+{% render_base_form 'Registration' form 'accounts/base_templates/registration_form.html' 'registration' %}
 
 {% endblock %}

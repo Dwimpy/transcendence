@@ -223,14 +223,6 @@ form.profile{
     gap: 15px;
 }
 
-.center-img-form {
-    height: 200px;
-    width: 200px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 35px;
-    border-radius: 50%;
-}
 
 a.btn-link-play {
     flex-direction: column;

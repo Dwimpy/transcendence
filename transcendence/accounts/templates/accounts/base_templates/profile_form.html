@@ -1,0 +1,24 @@
+{% load widget_tweaks %}
+{% load registration_tags %}
+
+<div class="form-p ">
+    {% if user.get_picture_url %}
+        <img class="center-img-form" src="{{ user.picture.url }}" alt="Uploaded Image">
+    {% else %}
+        <h4>Upload picture (TODO)</h4>
+    {% endif %}
+    <div class="profile-item">
+        <h3 class="text-profile"> Username </h3>
+        {% render_field form.username %}
+    </div>
+    <div class="profile-item">
+        <h3 class ="text-profile"> Bio </h3>
+        {% render_field form.bio %}
+    </div>
+	<div class="profile-item">
+        <h3 class="text-profile">Email</h3>
+        {% render_field form.email %}
+	</div>
+</div>
+<button type="submit" class="button">Update Profile</button>
+<a class="icon margin button" href="{% url 'logout' %}">Logout</a>
