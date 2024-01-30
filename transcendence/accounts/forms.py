@@ -24,18 +24,28 @@ class RegistrationForm(UserCreationForm):
                                widget=forms.TextInput(attrs={'placeholder': 'Username'}),
                                required=True,
                                label="Username")
-    email = forms.CharField(max_length=255,
-                            min_length=1,
-                            widget=forms.TextInput(attrs={'placeholder': 'Email'}),
-                            required=True,
-                            label="Email")
+    email = forms.EmailField(max_length=255,
+                             min_length=1,
+                             widget=forms.TextInput(attrs={'placeholder': 'Email'}),
+                             required=True,
+                             label="Email")
+
     picture = forms.ImageField(
         widget=forms.FileInput(),
         required=False
     )
 
     bio = forms.CharField(max_length=255,
-                            min_length=1,
-                            widget=forms.TextInput(attrs={'placeholder': 'Bio'}),
-                            required=True,
-                            label="bio")
+                          min_length=1,
+                          widget=forms.TextInput(attrs={'placeholder': 'Bio'}),
+                          required=True,
+                          label="Bio")
+
+    def save(self, commit=True):
+        bio_value = self.cleaned_data['bio']
+        picture_value = self.cleaned_data['picture']
+        user = super().save()
+        user.picture = picture_value
+        user.bio = bio_value
+        user.save()
+        return user

@@ -31,6 +31,9 @@ class AccountUser(AbstractUser):
         primary_key=True
     )
     bio = models.CharField(max_length=255, default="")
-    picture = models.ImageField(upload_to='profile_pics', blank=True, null=True)
+    picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+
+    def get_picture_url(self):
+        return self.picture.url if hasattr(self, 'picture') and self.picture else None
 
 

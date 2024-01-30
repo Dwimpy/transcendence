@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os.path
 from pathlib import Path
 from decouple import config
+from django.template.context_processors import media
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,10 +49,9 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'index',
-    'index.templatetags',
     'pong',
     'accounts',
-    'widget_tweaks',
+    'widget_tweaks'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
@@ -106,7 +106,7 @@ TEMPLATES = [
             ],
             'builtins': [
                 'index.templatetags.custom_tags',
-                # 'frontend.templatetags.custom_filters'
+                # 'accounts.templatetags.registration_tags'
             ],
         },
     },
@@ -209,12 +209,11 @@ MEDIA_URL = 'media/'
 
 # ROOT URLS
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_production_test/')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'resources/', 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'resources', 'media/')
 
 STATICFILES_DIRS = [
-    # os.path.join(BASE_DIR, 'frontend', 'static'),
-    os.path.join(BASE_DIR, 'resources', 'static'),
-    os.path.join(BASE_DIR, 'resources', 'media'),
+    os.path.join(BASE_DIR, 'resources', 'static/'),
+    os.path.join(BASE_DIR, 'resources', 'media/')
 ]
 
 STATICFILES_FINDERS = [
