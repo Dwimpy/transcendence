@@ -22,6 +22,6 @@ def render_base_form(title, form, path, url):
 
 
 @register.inclusion_tag('accounts/base_templates/base_form.html')
-def render_profile_form(title, form, user, path, url_name):
+def render_profile_form(title, form, user, path, url_name, logged_user):
     url = reverse_lazy(url_name, args=[user.username])
-    return {'title': title, 'form': form, 'user': user, 'url': url, 'content_path': path}
+    return {'title': title, 'form': form, 'user': user, 'url': url, 'content_path': path, 'logged_user': logged_user}

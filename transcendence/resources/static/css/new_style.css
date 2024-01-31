@@ -247,8 +247,10 @@ h6#selected-image-name {
 .center-img-form {
     height: 200px;
     width: 200px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 35px;
     border-radius: 50%;
+}
+
+.field-width {
+    max-width: 250px;
+    min-width: 250px;
 }

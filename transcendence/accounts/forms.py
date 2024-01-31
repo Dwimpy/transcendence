@@ -8,7 +8,7 @@ from .models import AccountUser
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = AccountUser
-        fields = ['picture', 'username', 'bio', 'email']
+        fields = ['nickname', 'email', 'picture', 'bio']
 
 
 gettext_lazy = lazy(gettext, str)
@@ -17,13 +17,16 @@ gettext_lazy = lazy(gettext, str)
 class RegistrationForm(UserCreationForm):
     class Meta:
         model = AccountUser
-        fields = ['username', 'email', 'bio', 'picture']
+        fields = ['username', 'nickname', 'email', 'picture', 'bio']
 
-    username = forms.CharField(max_length=255,
+    username = forms.CharField(max_length=150,
                                min_length=1,
                                widget=forms.TextInput(attrs={'placeholder': 'Username'}),
                                required=True,
                                label="Username")
+
+    nickname = forms.CharField(max_length=150, min_length=1)
+
     email = forms.EmailField(max_length=255,
                              min_length=1,
                              widget=forms.TextInput(attrs={'placeholder': 'Email'}),
@@ -40,12 +43,3 @@ class RegistrationForm(UserCreationForm):
                           widget=forms.TextInput(attrs={'placeholder': 'Bio'}),
                           required=True,
                           label="Bio")
-
-    def save(self, commit=True):
-        bio_value = self.cleaned_data['bio']
-        picture_value = self.cleaned_data['picture']
-        user = super().save()
-        user.picture = picture_value
-        user.bio = bio_value
-        user.save()
-        return user

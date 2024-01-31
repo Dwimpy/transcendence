@@ -6,38 +6,6 @@
 {% load registration_tags %}
 {% block content %}
 
-    
-{#<div class="row-my">#}
-{#    <div class="card-my small">#}
-{##}
-{#        <h2 class="user-profile-text" >User Profile</h2>#}
-{#        <form class="profile" method="post" enctype="multipart/form-data">#}
-{#                {% csrf_token %}#}
-{#            <div class="form-p ">#}
-{#                {% if user.get_picture_url %}#}
-{#                    <img class="center-img-form" src="{{ user.picture.url }}" alt="Uploaded Image">#}
-{#                {% else %}#}
-{#                    <h4>Upload picture (TODO)</h4>#}
-{#                {% endif %}#}
-{#	            <div class="profile-item">#}
-{#	                <h3 class="text-profile"> Username </h3>#}
-{#	                {% render_field form.username %}#}
-{#	            </div>#}
-{#	            <div class="profile-item">#}
-{#	                <h3 class ="text-profile"> Bio </h3>#}
-{#	                {% render_field form.bio %}#}
-{#	            </div>#}
-{#				<div class="profile-item">#}
-{#		            <h3 class="text-profile">Email</h3>#}
-{#		            {% render_field form.email %}#}
-{#				</div>#}
-{#            </div>#}
-{#            <button type="submit" class="button">Update Profile</button>#}
-{#            <a class="icon margin button" href="{% url 'logout' %}">Logout</a>#}
-{#        </form>#}
-{#    </div>#}
-{#</div>#}
-
-{% render_profile_form 'User Profile' form user 'accounts/base_templates/profile_form.html' 'profile' %}
+{% render_profile_form user.username form user 'accounts/base_templates/profile_form.html' 'profile' request.user %}
 
 {% endblock %}

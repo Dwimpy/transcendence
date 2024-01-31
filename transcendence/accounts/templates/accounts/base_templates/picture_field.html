@@ -1,13 +1,10 @@
 {% load widget_tweaks %}
 {% load registration_tags %}
 
-<div class="gap-0 d-flex-align-center-col">
-    <div class="col font-size-18 d-inline-flex flex-shrink-1 login-input-color border-radius-18 flex-row text-center align-items-center container-label-border-radius-solid">
-            <label for="registration-file-input" class="btn btn-label-profile-picture flex-shrink-0 w-45" id="btn-label-picture"> Upload </label>
-            <span id="selected-image-name" class="border-0 mx-auto flex-grow-1" > Profile Picture </span>
-            {% render_field form.picture style="display: none" id="registration-file-input"%}
-    </div>
-    <div class="d-inline-flex login-input-color flex-row align-items-center mt-5">
-        {% render_pass_field form "password1" "" "Password" %}
-    </div>
+<div class="gap-0 d-flex-align-center-col w-100">
+        <div class="col field-width font-size-18 d-inline-flex login-input-color border-radius-18 flex-row text-center align-items-center container-label-border-radius-solid">
+                <label for="registration-file-input" class="btn btn-label-profile-picture flex-shrink-0 w-45" id="btn-label-picture"> Upload </label>
+                <span id="selected-image-name" class="border-0 mx-auto" > Profile Picture </span>
+                {% render_field form.picture style="display: none" id="registration-file-input"%}
+        </div>
 </div>
