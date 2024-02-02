@@ -1,0 +1,54 @@
+{% extends 'transcendence/base.html' %}
+{% load registration_tags %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+
+<div class="container lobby d-flex border-solid-gray-1">
+    <div class="d-flex flex-1 position-relative flex-column align-items-center m-4">
+        <p> Lobby </p>
+        <div class="d-flex bg-black flex-column w-100 h-100 text-center border-solid-gray-2 align-items-center">
+                    <table class="z-1" style="width: 100%;">
+                        <caption class="text-center text-white" style="caption-side: top; bottom: 1rem; font-size: 18px;"> Rooms </caption>
+                        <thead>
+                        <tr>
+                            <th scope="col">Hello</th>
+                            <th scope="col">gg</th>
+                            <th scope="col">hh</th>
+                            <th scope="col">tt</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for room in rooms %}
+                                <tr>
+                                    <td>{{ room.room_name }}</td>
+                                    <td>{{ room.player_count }}</td>
+                                    <td>{{ room.is_full }}</td>
+                                    <td>qewqe</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+{#                    <div class="item border-solid-gray-2">hello</div>#}
+{#                    <div class="item border-solid-gray-2">gg</div>#}
+{#                    <div class="item border-solid-gray-2">test</div>#}
+{#                    <div class="item border-solid-gray-2">god</div>#}
+{#            </div>#}
+{#            <div class="d-flex flex-row w-100 bg-primary align-items-center text-center">#}
+{#                    <div class="item-2 border-solid-gray-1">{{ room.room_name }}</div>#}
+{#                    <div class="item-2 border-solid-gray-1">{{ room.player_count }}</div>#}
+{#                    <div class="item-2 border-solid-gray-1">{{ room.is_full }}</div>#}
+{#                    <div class="item-2 border-solid-gray-1">god</div>#}
+        </div>
+    </div>
+</div>
+
+{#{% for room in rooms %}#}
+{#    <p> {{ room.room_name }}</p>#}
+{#    {% for users in room.assigned_users.all %}#}
+{#        <p> {{ users.username }}</p>#}
+{#    {% endfor %}#}
+{#{% endfor %}#}
+
+{% endblock %}

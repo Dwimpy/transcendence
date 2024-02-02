@@ -254,3 +254,61 @@ h6#selected-image-name {
     max-width: 250px;
     min-width: 250px;
 }
+
+.container.lobby {
+    width: 75%;
+    height: 50%;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.item{
+    background-color: red;
+    flex-grow: 1;
+    min-width: 25%;
+}
+
+.item-2{
+    background-color: blue;
+    flex-grow: 1;
+    min-width: 25%;
+}
+
+table {
+    position: relative;
+}
+
+
+
+table th {
+    background: url(../fioletovyi-fon-uzor-tekstura-purple-abstract-ornamental-flow.jpeg);
+    height: 3rem;
+    border: 1px solid rebeccapurple;
+}
+
+thead,
+tfoot{
+    background: url(../fioletovyi-fon-uzor-tekstura-purple-abstract-ornamental-flow.jpeg);
+}
+
+caption {
+    background: url(../fioletovyi-fon-uzor-tekstura-purple-abstract-ornamental-flow.jpeg);
+    height: 2.5rem;
+    justify-content: center;
+}
+
+.table-body-color {
+    background-color: blue;
+}
+
+tbody tr,
+tbody td{
+    border: 1px solid rebeccapurple;
+}
+
+.border-solid-gray-2 {
+    border: solid 1px rebeccapurple;
+}
+

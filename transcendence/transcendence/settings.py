@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'index',
     'pong',
     'accounts',
+    'lobby',
     'widget_tweaks'
 ]
 
