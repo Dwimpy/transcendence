@@ -6,8 +6,7 @@ class Rooms(models.Model):
     room_name = models.CharField(max_length=150, unique=True)
     assigned_users = models.ManyToManyField(AccountUser,
                                             related_name='assigned_room',
-                                            blank=True,
-                                            null=True)
+                                            blank=True)
     player_count = models.IntegerField(default=0)
     is_full = models.BooleanField(default=False)
 

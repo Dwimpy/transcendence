@@ -34,7 +34,6 @@ class ProfileView(LoginRequiredMixin, UpdateView):
             raise Http404("User does not exist")
 
     def form_invalid(self, form):
-        print("WTF")
         return super().form_invalid(form)
 
     def get_success_url(self):
