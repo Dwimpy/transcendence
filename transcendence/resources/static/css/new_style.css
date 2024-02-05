@@ -259,7 +259,7 @@ h6#selected-image-name {
     width: 75%;
     height: 50%;
     border-color: rebeccapurple;
-background:
+    background: rgba(0,0,0,0.3);
   /* On "top" */
   /*repeating-radial-gradient(*/
   /*  circle,*/
@@ -268,7 +268,7 @@ background:
   /*  rgba(48, 25, 52, 0.3) 10px,*/
   /*  rgba(120, 81, 169, 0.3) 20px*/
   /*);*/
-    rgba(0,0,0,0.3)
+
 }
 
 .flex-1 {
@@ -345,12 +345,18 @@ background:
 }
 
 .styled-lobby .container {
+    max-width: 99.6%;
+    margin-bottom: 0.15rem;
     background: repeating-linear-gradient(
         to bottom,
         rgba(48, 25, 52, 1),
-        rgba(48, 25, 52, 1) 2.5rem,
+        rgba(48, 25, 52, 1) 2.35rem,
+        transparent 2.35rem,
+        transparent 2.5rem,
         rgba(112, 38, 112, 1) 2.5rem,
-        rgba(112, 38, 112, 1) 5rem);
+        rgba(112, 38, 112, 1) 4.85rem,
+        transparent 4.85rem,
+        transparent 5rem);
 }
 
 .lobby-btn button {
@@ -409,4 +415,32 @@ background:
 
 #create_room_modal .modal-header{
     background: url(../fioletovyi-fon-uzor-tekstura-purple-abstract-ornamental-flow.jpeg);
+}
+
+.lobby-modal {
+    --bs-modal-footer-border-color: rgba(0,0,0,1);
+    --bs-modal-header-border-color: rgba(0,0,0,1);
+    --bs-border-width: 0.15rem;
+}
+
+#modal-body {
+    background-color: rgba(112, 38, 112, 1);
+}
+
+#modal-footer {
+    background: url(../fioletovyi-fon-uzor-tekstura-purple-abstract-ornamental-flow.jpeg);
+}
+
+#modal-footer .btn {
+    color: white;
+    background-color: #820c7e;
+    border: 0.2rem transparent solid;
+}
+
+#modal-footer .btn:hover {
+    background-color: #c412bd;
+}
+
+#modal-footer .btn:active {
+    border: 0.2rem #f593f1 solid;
 }

@@ -18,16 +18,6 @@
                 selectedImageName.textContent = fileInput.files[0].name;
             }
         })
-        {#const textContainer = document.getElementById("main-content")#}
-        {#fetch("http://127.0.0.1:8000/accounts/login/")#}
-        {#    .then(html => html.text())#}
-        {#    .then(text => {#}
-        {#        const fragment = document.createElement("document");#}
-        {#        fragment.innerHTML = text;#}
-        {#        const container = fragment.getElementsByClassName("card")[0]#}
-        {#        textContainer.innerHTML = ""#}
-        {#        textContainer.appendChild(container)#}
-        {#    })#}
     }
 
 

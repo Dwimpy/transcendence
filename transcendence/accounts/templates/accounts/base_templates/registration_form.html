@@ -7,8 +7,8 @@
     {% render_base_field form "bio" "" %}
     {% include 'accounts/base_templates/picture_field.html' %}
     <div class="d-flex flex-column align-items-center gap-2 mt-4">
-        {% render_pass_field form "password1" "" "Password" %}
-        {% render_pass_field form "password2" "" "Password (again)" %}
+        {% render_field_placeholder form "password1" "" "Password" %}
+        {% render_field_placeholder form "password2" "" "Password (again)" %}
     </div>
     <div class="position-relative">
         <button type="submit" class="text-whitesmoke" >Register</button>

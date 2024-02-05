@@ -1,32 +1,19 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, FormView
 
 from .models import Rooms
 from .forms import RoomForm
-from accounts.models import AccountUser
+
+
 # Create your views here.
 
-
-# def lobby_view(request):
-#     if request.method == 'POST':
-#         print("POST POST POST")
-#     test2, _ = Rooms.objects.get_or_create(room_name='test')
-#     test1, _ = Rooms.objects.get_or_create(room_name='test1')
-#     user1, _ = AccountUser.objects.get_or_create(username='andrei')
-#     user2, _ = AccountUser.objects.get_or_create(username='danila')
-#     test1.add_user_to_room(user1)
-#     test1.add_user_to_room(user2)
-#
-#     if Rooms.is_user_assigned(user1) is False:
-#         print('false')
-#         test2.add_user_to_room(user1)
-#     else:
-#         print('true')
-#     rooms = Rooms.objects.all()
-#     return render(request, 'lobby/lobby.html', {'rooms': rooms})
-#
 
 class LobbyView(LoginRequiredMixin, ListView):
     model = Rooms
@@ -36,17 +23,38 @@ class LobbyView(LoginRequiredMixin, ListView):
 
 
 class RoomProcessView(FormView):
-    template_name = 'accounts/registration.html'
+    template_name = 'lobby/lobby_form.html'
     form_class = RoomForm
-    success_url = reverse_lazy('index')
-
-    def get(self, request, *args, **kwargs):
-        print("get")
+    success_url = reverse_lazy('lobby')
 
     def form_valid(self, form):
         form.save()
-        return super().form_valid(form)
+        return HttpResponse(
+            status=204,
+            headers={
+                'success': True,
+                'HX-Trigger': json.dumps(
+                    {
+                        'roomAdded': None,
+                        'success': True,
+                    }
+                )
+            }
+        )
 
     def form_invalid(self, form):
-        print("FORM INVALID")
-        return super().form_invalid(form)
+        return render(self.request, self.template_name, context={'form': form}, status=400)
+
+
+class UpdateRoomsView(View):
+
+    def get(self, request, *args, **kwargs):
+        rooms = Rooms.objects.all()
+        html_to_string = render_to_string('lobby/lobby_room_partial.html', {'rooms': rooms})
+        return HttpResponse(html_to_string, content_type='text/html',
+                            status=200,
+                            headers=
+                            {
+                                'success': True,
+                            }
+                        )

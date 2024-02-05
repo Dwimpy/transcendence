@@ -1,6 +1,7 @@
 {% extends 'transcendence/base.html' %}
 {% load registration_tags %}
 {% load widget_tweaks %}
+{% load static %}
 
 {% block content %}
 
@@ -18,28 +19,68 @@
                     <th scope="col">tt</th>
                 </tr>
                 </thead>
-                <tbody>
-                    {% for room in rooms %}
-                        <tr>
-                            <td>{{ room.room_name }}</td>
-                            <td>{{ room.player_count }}</td>
-                            <td>{{ room.is_full }}</td>
-                            <td>qewqe</td>
-                        </tr>
-                    {% endfor %}
+                <tbody hx-trigger="roomAdded from:body" hx-get="{% url 'update_rooms' %}">
+                    {% include 'lobby/lobby_room_partial.html' %}
                 </tbody>
             </table>
-            <span class="container w-100 h-100"></span>
+            <span class="container h-100"></span>
         </div>
         <div class="d-flex flex-row gap-5 mt-4 lobby-btn">
-            <button class="" type="button" data-bs-toggle="modal" data-bs-target="#create_room_modal"> Create Room </button>
+            <button id="create_room_button" class="" type="button"
+                    hx-get="{% url 'add_room' %}"
+                    hx-target="#dialog">
+                    Create Room
+            </button>
             <button class=""> Join Room </button>
         </div>
     </div>
 </div>
 
+{#<script src="{% static 'lobby/js/create_room.js' %}"></script>#}
+
+{% endblock %}
 
 
+{% block modal_content %}
+
+<script>
+addEventListener("DOMContentLoaded", function () {
+  const modal = new bootstrap.Modal(document.getElementById("create_room_modal"))
+
+  htmx.on("htmx:afterSwap", (e) => {
+              console.log("FIRED AFTER SWAP")
+
+
+   if (e.detail.target.id === "dialog") {
+      modal.show()
+  }
+  })
+
+  htmx.on("htmx:beforeSwap", (e) => {
+    // Empty response targeting #dialog => hide the modal
+        console.log("FIRED BEFORE SWAP")
+      console.log(e.detail.target.id)
+   if (e.detail.target.id === "dialog" && !e.detail.xhr.response) {
+    modal.hide()
+    e.detail.shouldSwap = false
+  }
+  })
+
+
+
+  // Remove dialog content after hiding
+  htmx.on("hidden.bs.modal", () => {
+    document.getElementById("dialog").innerHTML = ""
+  })
+})
+
+</script>
+
+<div id="create_room_modal" class="modal lobby-modal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
+</div>
+
+{% endblock %}
 
 {#{% for room in rooms %}#}
 {#    <p> {{ room.room_name }}</p>#}
@@ -48,30 +89,3 @@
 {#    {% endfor %}#}
 {#{% endfor %}#}
 
-{% endblock %}
-
-{% block modal_content %}
-
-<!-- Modal -->
-<div class="modal" id="create_room_modal" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" style="right: 5rem;">
-    <div class="modal-content bg-primary">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5 text-white mx-auto" id="exampleModalLabel">Create Room</h1>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-            <form method="post" action="{% url 'lobby' %}">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Create Room</button>
-            </form>
-      </div>
-      <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-{% endblock %}
