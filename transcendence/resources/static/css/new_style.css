@@ -1,0 +1,474 @@
+.main-container {
+    background-image: url('../background.png');
+    background-size: cover;
+    background-position: center;
+    margin: 0; /* Remove default margin to ensure full coverage */
+    height: 100vh;
+    padding: 6px;
+    color: whitesmoke;
+    display: flex;
+    position: relative;
+}
+
+.d-flex-align-center-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.30);
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.font-size-small {
+    font-size: 12px;
+}
+
+.card-overlay {
+    background-color: rgba(16, 0, 50, 0.7);
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+button{
+	color: inherit;
+	border: none;
+	/*padding: 0;*/
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+    display: flex;
+    /*width: 280px;*/
+    padding: 16px 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    border-radius: 16px;
+    background: rgba(92, 23, 229, 0.70);
+}
+
+
+button:hover{
+    background: white;
+    color:  rgba(92, 23, 229, 0.70);
+}
+button:active{
+    background: rgba(92, 23, 229, 0.70);
+    color:  white;
+}
+
+
+.border-solid-gray-1 {
+    border-color: gray;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.border-solid-white-1 {
+    border-color: white;
+    border-style: solid;
+    border-width: 1px;
+}
+
+
+.text-inside-border-solid {
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(154, 168, 188, 0.20);
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.16)
+}
+
+.bg-radial-fill-card {
+    background: radial-gradient(371.89% 134.33% at 3.21% 1.26%, rgba(255, 255, 255, 0.07) 0%, rgba(217, 217, 217, 0.00) 100%);
+}
+
+
+.bg-navbar {
+    background-color: rgba(16, 0, 50, 0.6);
+}
+
+.bg-navbar-extend {
+    left: 6px;
+}
+
+.icon{
+    padding: 1vw;
+    border-radius: 16px;
+    color: inherit;
+}
+
+.active-icon{
+    border: 1px solid  #8000FF;
+}
+
+.icon:hover{
+    cursor: pointer;
+    color: #8000FF;
+    border: 1px solid  #8000FF;
+}
+
+.icon:active{
+    color: white;
+    border: 1px solid white;
+}
+
+.text-whitesmoke {
+    color: whitesmoke;
+}
+
+.bg-image {
+    background-image: url('../background.png');
+    background-size: cover;
+}
+
+.form-control {
+    display: flex;
+    font-size: 22px;
+    align-items: center;
+    background-color: inherit;
+    color: white;
+    border-radius: 18px;
+    background-clip: text;
+    -webkit-text-fill-color: #fff;
+    text-align: center;
+    border-color: #b3e0dc;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Add box shadow */
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.form-control:hover {
+    box-shadow: 0 0 10px #0d6efd; /* Change to your desired box shadow on hover/focus */
+}
+
+.border-radius-18 {
+    border-radius: 18px;
+}
+
+.color-white {
+    color: #fff;
+}
+
+#selected-image-name {
+    color: #b3e0dc;
+}
+
+.login-input-color {
+    background-color: #100032;
+    border-radius: 18px;
+}
+
+.form-control:focus-visible {
+    background-color: #100032;
+    color: white;
+}
+
+.form-control::placeholder {
+    -webkit-text-fill-color: #b3e0dc;
+    text-align: center;
+    font-size: 18px;
+    /*-webkit-text-fill-color: rgba(16, 0, 50, 1);*/
+}
+
+input[type='file']#registration-file-input::file-selector-button {
+    width: 28%;
+    -webkit-text-fill-color: black;
+    cursor: pointer;
+}
+
+#btn-label-picture {
+    background-color: rgba(92, 23, 229, 0.70);
+}
+
+.container-label-border-radius-solid {
+    border: solid #b3e0dc 1px;
+    border-radius: 1rem;
+    width: 100%;
+}
+
+.container-label-border-radius-solid {
+    border: solid #b3e0dc 1px;
+    border-radius: 1rem;
+    width: 100%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Add box shadow */
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.container-label-border-radius-solid:hover,
+.container-label-border-radius-solid:active { /* Change to your desired active border color */
+    box-shadow: 0 0 7px 2px rgba(13, 110, 253, 0.7) /* Change to your desired box shadow on hover/focus */
+}
+
+.font-size-22 {
+    font-size: 22px;
+}
+
+.font-size-18 {
+    font-size: 18px;
+}
+
+
+.btn-label-profile-picture {
+    background-color: white;
+    color: #b3e0dc;
+    border-radius: 1rem 0 0 1rem;
+    height: 3rem;
+    width: 33%;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+
+input[type='text']#id_username {
+    width: 100%;
+}
+
+
+label#btn-label:hover {
+    background-color: rgba(200, 0, 200, 0.8);
+}
+
+h6#selected-image-name {
+
+}
+
+.selected-image-name {}
+
+.center-img-form {
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+}
+
+.field-width {
+    max-width: 250px;
+    min-width: 250px;
+}
+
+.container.lobby {
+    width: 75%;
+    height: 50%;
+    border-color: rebeccapurple;
+    background: rgba(0,0,0,0.3);
+  /* On "top" */
+  /*repeating-radial-gradient(*/
+  /*  circle,*/
+  /*  rgba(48, 25, 52, 0.3),*/
+  /*  rgba(48, 25, 52, 0.3) 10px,*/
+  /*  rgba(48, 25, 52, 0.3) 10px,*/
+  /*  rgba(120, 81, 169, 0.3) 20px*/
+  /*);*/
+
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.styled-lobby {
+    border-bottom: 0;
+    overflow-y: auto;
+}
+
+
+.styled-lobby table {
+    position: relative;
+    width: 100%;
+    border-collapse: separate;
+}
+
+.styled-lobby::-webkit-scrollbar {
+    background-color: rgba(48, 25, 52, 1);
+}
+
+.styled-lobby::-webkit-scrollbar-thumb {
+    background-color: rgba(112, 38, 112, 0.45);
+}
+
+.styled-lobby thead {
+    position: sticky;
+    top: 0;
+}
+
+
+.styled-lobby tbody {
+    border: 1px solid rebeccapurple;
+    border-bottom: 0;
+}
+
+.styled-lobby table th {
+    background: url(../fioletovyi-fon-uzor-tekstura-purple-abstract-ornamental-flow.jpeg);
+    height: 2.5rem;
+    border: 1px solid rebeccapurple;
+}
+
+.styled-lobby thead,
+.styled-lobby tfoot{
+    background: url(../fioletovyi-fon-uzor-tekstura-purple-abstract-ornamental-flow.jpeg);
+}
+
+.styled-lobby caption {
+    background: url(../fioletovyi-fon-uzor-tekstura-purple-abstract-ornamental-flow.jpeg);
+    height: 2.5rem;
+    justify-content: center;
+    border: 1px solid rebeccapurple;
+    /*margin-bottom: 0.375rem;*/
+    margin: 0.1rem;
+}
+
+
+.styled-lobby tbody tr,
+.styled-lobby tbody td{
+    height: 2.5rem;
+}
+
+.styled-lobby tbody tr:nth-child(odd) {
+    background-color: rgba(48, 25, 52, 1);
+}
+
+.styled-lobby tbody tr:nth-child(even) {
+    background-color: rgba(112, 38, 112, 1);
+}
+
+.border-solid-rebecca-purple-1 {
+    border: solid 1px rebeccapurple;
+}
+
+.styled-lobby .container {
+    max-width: 99.6%;
+    margin-bottom: 0.15rem;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(48, 25, 52, 1),
+        rgba(48, 25, 52, 1) 2.35rem,
+        transparent 2.35rem,
+        transparent 2.5rem,
+        rgba(112, 38, 112, 1) 2.5rem,
+        rgba(112, 38, 112, 1) 4.85rem,
+        transparent 4.85rem,
+        transparent 5rem);
+}
+
+.lobby-btn button {
+    min-width: 12rem;
+    max-width: 12rem;
+}
+
+#create_room_modal {
+    /*--bs-modal-header-border-color: rebeccapurple;*/
+}
+
+#create_room_modal .close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    width: 1.5em;
+    height: 1.5em;
+    font-size: 0;
+    background-color: transparent;
+}
+
+#create_room_modal .close:before,
+#create_room_modal .close:after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 26px;
+    background-color: white;
+    transform: rotate(45deg) translate(-50%, -50%);
+    transform-origin: top left;
+    transition: all 420ms;
+    content: '';
+}
+
+#create_room_modal .close:after {
+    width: 2px;
+    transform: rotate(-45deg) translate(-50%, -50%);
+}
+
+
+#create_room_modal .close:hover:before,
+#create_room_modal .close:hover:after {
+    background-color: aqua;
+}
+
+#create_room_modal .close:active {
+    background-color: rgba(48, 25, 52, 0.75) ;
+}
+
+#create_room_modal button:hover {
+    /*--bs-btn-close-color: red;*/
+    /*--bs-btn-close-color: white;*/
+}
+
+#create_room_modal .modal-header{
+    background: url(../fioletovyi-fon-uzor-tekstura-purple-abstract-ornamental-flow.jpeg);
+}
+
+.lobby-modal {
+    --bs-modal-footer-border-color: rgba(0,0,0,1);
+    --bs-modal-header-border-color: rgba(0,0,0,1);
+    --bs-border-width: 0.15rem;
+}
+
+#modal-body {
+    background-color: rgba(112, 38, 112, 1);
+}
+
+#modal-footer {
+    background: url(../fioletovyi-fon-uzor-tekstura-purple-abstract-ornamental-flow.jpeg);
+}
+
+#modal-footer .btn {
+    color: white;
+    background-color: #820c7e;
+    border: 0.2rem transparent solid;
+}
+
+#modal-footer .btn:hover {
+    background-color: #c412bd;
+}
+
+#modal-footer .btn:active {
+    border: 0.2rem #f593f1 solid;
+}
+
+.styled-lobby tbody tr:nth-child(odd).table-active {
+    background-color: #fc68e1;
+}
+
+.styled-lobby tbody tr:nth-child(even).table-active {
+    background-color: #fc68e1;
+}
+
+.styled-lobby tbody tr:nth-child(even).table-active:hover{
+    background-color: rgba(252, 104, 225, 1);
+}
+
+.styled-lobby tbody tr:nth-child(odd).table-active:hover{
+    background-color: rgba(252, 104, 225, 1);
+}
+
+.styled-lobby tbody tr:nth-child(odd):hover{
+    background-color: rgba(253, 139, 232, 0.6);
+}
+
+.styled-lobby tbody tr:nth-child(even):hover {
+    background-color: rgba(253, 139, 232, 0.6);
+}
+
+.modal-content .form-errors {
+    background-color: red;
+}

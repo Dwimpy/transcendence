@@ -1,0 +1,9 @@
+{% extends 'transcendence/base.html' %}
+{% load registration_tags %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+{% render_base_form 'Login' form 'accounts/base_templates/login_form.html' 'login' %}
+    
+{% endblock %}

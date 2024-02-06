@@ -1,0 +1,14 @@
+<ul class="text-white me-5">
+    {% if form.non_field_errors %}
+      <li>{{ form.non_field_errors }}</li>
+    {% endif %}
+    {% for field in form %}
+      {% if field.errors %}
+          <ul>
+            {% for error in field.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+      {% endif %}
+    {% endfor %}
+</ul>

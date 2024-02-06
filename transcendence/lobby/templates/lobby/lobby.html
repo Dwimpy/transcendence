@@ -1,0 +1,59 @@
+{% extends 'transcendence/base.html' %}
+{% load registration_tags %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+
+<script src="{% static 'lobby/js/selected-room.js' %}"></script>
+<div class="container lobby d-flex border-solid-rebecca-purple-1">
+    <div class="d-flex flex-1 position-relative flex-column align-items-center m-4">
+        <div class="styled-lobby d-flex bg-black flex-column w-100 h-100 text-center align-items-center">
+            <table class="">
+                <caption class="text-center text-white" style="caption-side: top; bottom: 1rem; font-size: 18px;"> Rooms </caption>
+                <thead>
+                <tr>
+                    <th scope="col">Room Name</th>
+                    <th scope="col">gg</th>
+                    <th scope="col">hh</th>
+                    <th scope="col">tt</th>
+                </tr>
+                </thead>
+                <tbody hx-trigger="roomAdded from:body" hx-get="{% url 'update_rooms' %}">
+                    {% include 'lobby/lobby_room_partial.html' %}
+                </tbody>
+            </table>
+            <span class="container h-100"></span>
+        </div>
+        <div class="d-flex flex-row gap-5 mt-4 lobby-btn">
+            <button id="create_room_button" class="" type="button"
+                    hx-get="{% url 'add_room' %}"
+                    hx-target="#dialog">
+                    Create Room
+            </button>
+            <button class=""> Join Room </button>
+        </div>
+    </div>
+</div>
+
+{#<script src="{% static 'lobby/js/create_room.js' %}"></script>#}
+
+{% endblock %}
+
+
+{% block modal_content %}
+
+
+<div id="create_room_modal" class="modal lobby-modal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
+</div>
+
+{% endblock %}
+
+{#{% for room in rooms %}#}
+{#    <p> {{ room.room_name }}</p>#}
+{#    {% for users in room.assigned_users.all %}#}
+{#        <p> {{ users.username }}</p>#}
+{#    {% endfor %}#}
+{#{% endfor %}#}
+

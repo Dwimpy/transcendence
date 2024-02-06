@@ -1,0 +1,10 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% load widget_tweaks %}
+{% load registration_tags %}
+{% block content %}
+
+{% render_profile_form user.username form user 'accounts/base_templates/profile_form.html' 'profile' request.user %}
+
+{% endblock %}

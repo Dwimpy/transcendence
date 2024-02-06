@@ -1,0 +1,15 @@
+{
+  "name": "arobu",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "web-types": "./htmx.web-types.json"
+}
+

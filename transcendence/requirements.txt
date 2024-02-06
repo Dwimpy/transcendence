@@ -28,3 +28,5 @@ sqlparse==0.4.4
 tzdata==2023.4
 urllib3==2.1.0
 channels~=4.0.0
+python-decouple~=3.8
+djangorestframework~=3.14.0

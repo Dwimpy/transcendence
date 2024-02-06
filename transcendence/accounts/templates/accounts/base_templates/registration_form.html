@@ -1,0 +1,17 @@
+{% load registration_tags %}
+
+<div class="d-flex-align-center-col me-2 ms-2 mt-2 gap-3">
+    {% render_base_field form "username" "" %}
+    {% render_base_field form "nickname" "" %}
+    {% render_base_field form "email" "" %}
+    {% render_base_field form "bio" "" %}
+    {% include 'accounts/base_templates/picture_field.html' %}
+    <div class="d-flex flex-column align-items-center gap-2 mt-4">
+        {% render_field_placeholder form "password1" "" "Password" %}
+        {% render_field_placeholder form "password2" "" "Password (again)" %}
+    </div>
+    <div class="position-relative">
+        <button type="submit" class="text-whitesmoke" >Register</button>
+    </div>
+</div>
+    {% include 'accounts/base_templates/form_errors.html' %}

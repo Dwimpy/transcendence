@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os.path
 from pathlib import Path
+from decouple import config
+from django.template.context_processors import media
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,17 +24,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-&95rh562@s-za%5_ngf6a*7*@2i=ue%+3if@^lb49iq)56a0=u'
 
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'websocketking.com']
-AUTH_USER_MODEL = 'frontend.CustomUser'
+AUTH_USER_MODEL = 'accounts.AccountUser'
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'frontend',
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,19 +44,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.oauth2',
-    'allauth.socialaccount.providers.google',
-    'authentication',
-    'widget_tweaks',
-    'bootstrap5'
+    'django_sass_compiler',
+    'rest_framework',
+    'crispy_forms',
+    'crispy_bootstrap5',
+    'index',
+    'pong',
+    'accounts',
+    'lobby',
+    'widget_tweaks'
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -62,8 +67,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+
 AUTHENTICATION_BACKENDS = [
-    'allauth.account.auth_backends.AuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend'
 ]
 
@@ -78,6 +90,12 @@ ROOT_URLCONF = 'transcendence.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': {
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'index', 'templates'),
+            os.path.join(BASE_DIR, 'pong', 'templates'),
+            os.path.join(BASE_DIR, 'accounts', 'templates')
+        },
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,49 +106,27 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
             'builtins': [
-                'frontend.templatetags.custom_tags',
-                'frontend.templatetags.custom_filters'
+                'index.templatetags.custom_tags',
+                # 'accounts.templatetags.registration_tags'
             ],
         },
     },
 ]
 
+# Logins
+
 LOGIN_REDIRECT_URL = 'index'
 ACCOUNT_LOGOUT_REDIRECT = 'index'
-SITE_ID = 4  # Use the ID of the site you added in the admin
-
+SITE_ID = 2  # Use the ID of the site you added in the admin
 LOGOUT_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-SOCIALACCOUNT_LOGIN_ON_GET = True
-SOCIALACCOUNT_AUTO_SIGNUP = True
 
-ACCOUNT_FORMS = {
-    'signup': 'Frontend.form.signup.AllAuthSignupForm'
-}
+CLIENT_ID = config('FT_CLIENT_ID')
+CLIENT_SECRET = config('FT_CLIENT_SECRET')
+REDIRECT_URI = config('REDIRECT_URI')
 
-SOCIALACCOUNT_PROVIDERS = {
-    '42': {
-        'APP': {
-            'client_id': 'u-s4t2ud-4ca9b16084b5a8cc3d3273b6db68ffa56943bf4c7652decc31d30653c4ca1295',
-            'secret': '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',
-        }
-    },
-    'google': {
-        'APP': {
-            'client_id': '<your-client-id>',
-            'secret': '<your-client-secret>',
-            'key': ''
-        },
-        'SCOPE': [
-            'navbar',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
-}
+
+
 
 # WSGI_APPLICATION = 'transcendence.wsgi.application'
 ASGI_APPLICATION = 'transcendence.asgi.application'
@@ -139,12 +135,13 @@ ASGI_APPLICATION = 'transcendence.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': "trans_db",
-        'USER': "admin",
-        'PASSWORD': "adminpas",
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASS'),
         'HOST': 'localhost',  # or your database host
         'PORT': '5432',  # or your database port
     }
@@ -191,16 +188,28 @@ STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
 
 # ROOT URLS
-STATIC_ROOT = BASE_DIR / 'static/'
-MEDIA_ROOT = BASE_DIR / 'media/'
-
-FRONTEND_APP_PATH = 'frontend'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_production_test/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'resources', 'media/')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR / FRONTEND_APP_PATH / STATIC_URL),
-    os.path.join(BASE_DIR / 'frontend' / MEDIA_URL)
+    os.path.join(BASE_DIR, 'resources', 'static/'),
+    os.path.join(BASE_DIR, 'lobby', 'static/'),
+    os.path.join(BASE_DIR, 'resources', 'media/')
 ]
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+SASS_PROCESSOR_OUTPUT_DIR = os.path.join(BASE_DIR, 'resources', 'static', 'css')
+
+SASS_PROCESSOR_INCLUDE_DIRS = [
+    os.path.join(BASE_DIR, 'resources', 'static', 'bootstrap'),
+]
+
+SASS_PROCESSOR_INCLUDE_FILE_PATTERN = r'^.+\.scss$'
+SASS_PRECISION = 8
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

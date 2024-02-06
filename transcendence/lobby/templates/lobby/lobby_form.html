@@ -1,0 +1,30 @@
+{% load widget_tweaks %}
+{% load registration_tags %}
+
+
+<!-- Modal -->
+
+{% csrf_token %}
+    <div class="modal-content bg-primary">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5 text-white mx-auto" id="exampleModalLabel">Create Room</h1>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div id="modal-body" class="modal-body">
+            <form hx-post="{% url 'add_room' %}" id="create_room_form" class="">
+                {% csrf_token %}
+                <div class="m-1">
+                    {% render_field_placeholder form "room_name" "" "Room Name" %}
+                </div>
+            </form>
+        </div>
+        <div id="modal-footer" class="modal-footer justify-content-center flex-column">
+        <div class="d-block text-white">
+            {% include 'accounts/base_templates/form_errors.html' %}
+        </div>
+            <div class="modal-btn d-flex flex-row gap-4 m-1">
+                <button id="btnSave" form="create_room_form" type="submit" class="btn rounded-pill"> Create </button>
+                <button type="button" class="btn rounded-pill" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>

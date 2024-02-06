@@ -1,0 +1,28 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% load registration_tags %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', main);
+
+    function main() {
+        const fileInput = document.getElementById('registration-file-input');
+        const selectedImageName = document.getElementById('selected-image-name');
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                selectedImageName.textContent = fileInput.files[0].name;
+            }
+        })
+    }
+
+
+</script>
+
+{% render_base_form 'Registration' form 'accounts/base_templates/registration_form.html' 'registration' %}
+
+{% endblock %}
