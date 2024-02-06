@@ -113,41 +113,20 @@ TEMPLATES = [
     },
 ]
 
+# Logins
 
 LOGIN_REDIRECT_URL = 'index'
 ACCOUNT_LOGOUT_REDIRECT = 'index'
-SITE_ID = 1  # Use the ID of the site you added in the admin
-
+SITE_ID = 2  # Use the ID of the site you added in the admin
 LOGOUT_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
-# ACCOUNT_EMAIL_VERIFICATION = 'none'
-# SOCIALACCOUNT_LOGIN_ON_GET = True
-# SOCIALACCOUNT_AUTO_SIGNUP = True
+
+CLIENT_ID = config('FT_CLIENT_ID')
+CLIENT_SECRET = config('FT_CLIENT_SECRET')
+REDIRECT_URI = config('REDIRECT_URI')
 
 
-#
-# SOCIALACCOUNT_PROVIDERS = {
-#     '42': {
-#         'APP': {
-#             'client_id': 'u-s4t2ud-4ca9b16084b5a8cc3d3273b6db68ffa56943bf4c7652decc31d30653c4ca1295',
-#             'secret': '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',
-#         }
-#     },
-#     'google': {
-#         'APP': {
-#             'client_id': '<your-client-id>',
-#             'secret': '<your-client-secret>',
-#             'key': ''
-#         },
-#         'SCOPE': [
-#             'navbar',
-#             'email',
-#         ],
-#         'AUTH_PARAMS': {
-#             'access_type': 'online',
-#         }
-#     }
-# }
+
 
 # WSGI_APPLICATION = 'transcendence.wsgi.application'
 ASGI_APPLICATION = 'transcendence.asgi.application'

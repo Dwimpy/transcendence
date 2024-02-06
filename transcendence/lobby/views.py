@@ -36,7 +36,7 @@ class RoomProcessView(FormView):
                 'HX-Trigger': json.dumps(
                     {
                         'roomAdded': None,
-                        'success': True,
+                        'message': 'Room created.'
                     }
                 )
             }

@@ -25,6 +25,7 @@
     <div class="main-container">
     <div class="overlay"></div>
         <main class="container z-1 d-flex justify-content-center align-items-center flex-column" id="main-content">
+            {% include 'transcendence/messages.html' %}
             {% block content %}{% endblock %}
         </main>
         {% include 'transcendence/navbar.html' %}
