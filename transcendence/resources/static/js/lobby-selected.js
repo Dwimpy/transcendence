@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', function() {
     roomItems.forEach(function (item){
         item.addEventListener('click', function() {
             roomItems.forEach(function(innerItem) {
-               innerItem.classList.remove('selected')
+               innerItem.classList.remove('table-active')
             });
 
-            item.classList.add('selected')
+            item.classList.add('table-active')
         });
     });
 });

@@ -43,7 +43,7 @@ class RoomProcessView(FormView):
         )
 
     def form_invalid(self, form):
-        return render(self.request, self.template_name, context={'form': form}, status=400)
+        return super().form_invalid(form)
 
 
 class UpdateRoomsView(View):

@@ -444,3 +444,31 @@ h6#selected-image-name {
 #modal-footer .btn:active {
     border: 0.2rem #f593f1 solid;
 }
+
+.styled-lobby tbody tr:nth-child(odd).table-active {
+    background-color: #fc68e1;
+}
+
+.styled-lobby tbody tr:nth-child(even).table-active {
+    background-color: #fc68e1;
+}
+
+.styled-lobby tbody tr:nth-child(even).table-active:hover{
+    background-color: rgba(252, 104, 225, 1);
+}
+
+.styled-lobby tbody tr:nth-child(odd).table-active:hover{
+    background-color: rgba(252, 104, 225, 1);
+}
+
+.styled-lobby tbody tr:nth-child(odd):hover{
+    background-color: rgba(253, 139, 232, 0.6);
+}
+
+.styled-lobby tbody tr:nth-child(even):hover {
+    background-color: rgba(253, 139, 232, 0.6);
+}
+
+.modal-content .form-errors {
+    background-color: red;
+}

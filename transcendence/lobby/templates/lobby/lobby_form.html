@@ -18,7 +18,10 @@
                 </div>
             </form>
         </div>
-        <div id="modal-footer" class="modal-footer justify-content-center">
+        <div id="modal-footer" class="modal-footer justify-content-center flex-column">
+        <div class="d-block text-white">
+            {% include 'accounts/base_templates/form_errors.html' %}
+        </div>
             <div class="modal-btn d-flex flex-row gap-4 m-1">
                 <button id="btnSave" form="create_room_form" type="submit" class="btn rounded-pill"> Create </button>
                 <button type="button" class="btn rounded-pill" data-bs-dismiss="modal">Close</button>
