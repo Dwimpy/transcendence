@@ -1,5 +1,23 @@
+
+
+<script>
+
+    addEventListener("DOMContentLoaded", fade_alert)
+
+    function fade_alert() {
+        messages = document.getElementById("alert-messages")
+        if (messages) {
+            setTimeout(() => {
+                messages.classList.remove('show')
+                messages.classList.add('d-none')
+            }, 1500);
+        }
+    }
+
+</script>
+
 {% if messages %}
-<ul class="messagelist">
+<ul class="alert alert-primary fade show" id="alert-messages">
     {% for message in messages %}
     <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
     {% endfor %}

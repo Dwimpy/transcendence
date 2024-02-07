@@ -1,6 +1,11 @@
-from django.contrib.auth import login
+import json
+
+from django.contrib.auth import login, get_user
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404
+from django.contrib.auth.views import LoginView
+from django.contrib.sessions.backends.db import SessionStore
+from django.core.files.base import ContentFile
+from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import UpdateView
@@ -13,6 +18,7 @@ from django.conf import settings
 from urllib.parse import quote
 import requests
 from django.contrib import messages
+from django.conf import settings
 
 
 # Create your views here.
@@ -47,6 +53,17 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         return url
 
 
+class UserLoginView(LoginView):
+    template_name = 'accounts/login.html'
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_success_url(self):
+        user = self.request.user
+        return reverse_lazy('profile', args=[user.username])
+
+
 class RegistrationView(FormView):
     template_name = 'accounts/registration.html'
     form_class = RegistrationForm
@@ -61,8 +78,8 @@ class RegistrationView(FormView):
 class FortyTwoAuthView(View):
 
     def get(self, request):
+        print(request.COOKIES)
         authorize_url = 'https://api.intra.42.fr/oauth/authorize'
-        print(settings.REDIRECT_URI)
         redirect_uri = quote(settings.REDIRECT_URI, safe='')
         scope = 'public'
         response_type = 'code'
@@ -73,31 +90,31 @@ class FortyTwoAuthView(View):
                         f'scope={scope}')
 
 
+class UserDataFetchError(Exception):
+    """Exception raised when failing to fetch user data."""
+
+    def __init__(self, message="Failed to fetch user data"):
+        self.message = message
+        super().__init__(self.message)
+
+
+class AccessTokenException(Exception):
+    """Exception raised when failing to fetch user data."""
+
+    def __init__(self, message="Invalid access token"):
+        self.message = message
+        super().__init__(self.message)
+
+
 class FortyTwoAuthCallbackView(View):
 
     def __init__(self, *args, **kwargs):
         self.access_token = None
         super().__init__(*args, **kwargs)
 
-    def get(self, request):
-        self.access_token = FortyTwoAuthCallbackView.get_auth_token(self.request)
-        if self.access_token:
-            user_data = self.get_user_data().json()
-            user_login = user_data['login']
-            if not AccountUser.objects.filter(username=user_login).exists():
-                user_nickname = user_data['displayname']
-                user_email = user_data['email']
-                user_bio = user_data['kind']
-                user = AccountUser.objects.create(username=user_login,
-                                           email=user_email,
-                                           bio=user_bio,
-                                           nickname=user_nickname)
-                login(request, user)
-                return redirect('profile', user.username)
-            else:
-                user = AccountUser.objects.get(username=user_login)
-                login(request, user)
-        return redirect('index')
+    def get(self, request, *args, **kwargs):
+        self.access_token = FortyTwoAuthCallbackView.get_auth_token(request)
+        return self.authenticate_or_create_user(request)
 
     @staticmethod
     def get_auth_token(request):
@@ -111,26 +128,68 @@ class FortyTwoAuthCallbackView(View):
                 'redirect_uri': settings.REDIRECT_URI,
                 'code': request.GET.get('code')
             }
-            response = requests.post(token_url, data=token_data,
-                                     headers={
-                                         'Content-Type': 'application/x-www-form-urlencoded'
-                                     }).json()
-            token = response.get('access_token')
-            if token:
-                return token
-            else:
-                messages.info(request, response['error_message'])
-        messages.info(request, 'Invalid authorization code')
+            try:
+                response = requests.post(token_url, data=token_data,
+                                         headers={
+                                             'Content-Type': 'application/x-www-form-urlencoded'
+                                         })
+                response.raise_for_status()
+                token = response.json().get('access_token')
+                if token:
+                    return token
+                else:
+                    messages.info(request, response.json().get('error_message', 'Failed to get access token'))
+            except AccessTokenException as e:
+                messages.error(request, f'{str(e)}')
         return None
 
-    def get_user_data(self):
+    def get_user_data(self, request):
         profile_url = 'https://api.intra.42.fr/v2/me'
-        user_data = requests.get(profile_url,
-                                 headers={
-                                     'Authorization': f'Bearer {self.access_token}'
-                                 })
-        return user_data
+        try:
+            user_data = requests.get(profile_url,
+                                     headers={
+                                         'Authorization': f'Bearer {self.access_token}'
+                                     })
+            user_data.raise_for_status()
+            return user_data
+        except UserDataFetchError as e:
+            messages.error(request, str(e))
 
-    @staticmethod
-    def extract_login_details(self):
-        pass
+    def authenticate_or_create_user(self, request):
+        if self.access_token:
+            user_data = self.get_user_data(request)
+            if user_data.status_code == 200:
+                try:
+                    user_data = user_data.json()
+                    user_login = user_data['login']
+                    user_nickname = user_data['displayname']
+                    user_email = user_data['email']
+                    user_bio = user_data['kind']
+                    if user_login and user_nickname and user_email and user_bio:
+                        user, created = AccountUser.objects.get_or_create(username=user_login,
+                                                                          nickname=user_nickname,
+                                                                          email=user_email,
+                                                                          bio=user_bio)
+
+                        if created:
+                            user_image_url = user_data['image']['versions']['large']
+                            if user_image_url:
+                                user_image = requests.get(user_image_url)
+                                if user_image.status_code == 200:
+                                    user_image_content = user_image.content
+                                    file_name = f'{user.username}_profile_pic.jpg'
+                                    user.picture.save(name=file_name, content=ContentFile(user_image_content),
+                                                      save=True)
+                        login(request, user)
+                        messages.success(request, f'Welcome, {user.username}')
+                        response = redirect('profile', user.username)
+                        return response
+                    else:
+                        messages.error(request, 'Incomplete user data received')
+                except json.JSONDecodeError:
+                    messages.error(request, 'Failed to parse user data')
+            else:
+                messages.error(request, 'Failed to parse user data from API')
+        else:
+            messages.info(request, 'Invalid authorization code')
+        return redirect('login')
