@@ -55,13 +55,6 @@ INSTALLED_APPS = [
     'widget_tweaks'
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap5'
-# SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
-# SESSION_COOKIE_NAME = "user_session"
-SESSION_COOKIE_HTTPONLY = True
-
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

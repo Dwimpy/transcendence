@@ -4,8 +4,11 @@
 {% load static %}
 
 {% block content %}
+<div hx-ext="ws" ws-connect="/ws/lobby" class="flex flex-column w-100 h-100">
 
 <script src="{% static 'lobby/js/selected-room.js' %}"></script>
+
+
 <div class="container lobby d-flex border-solid-rebecca-purple-1">
     <div class="d-flex flex-1 position-relative flex-column align-items-center m-4">
         <div class="styled-lobby d-flex bg-black flex-column w-100 h-100 text-center align-items-center">
@@ -19,7 +22,7 @@
                     <th scope="col">tt</th>
                 </tr>
                 </thead>
-                <tbody hx-trigger="roomAdded from:body" hx-get="{% url 'update_rooms' %}">
+                <tbody id="lobby_room">
                     {% include 'lobby/lobby_room_partial.html' %}
                 </tbody>
             </table>
@@ -27,8 +30,7 @@
         </div>
         <div class="d-flex flex-row gap-5 mt-4 lobby-btn">
             <button id="create_room_button" class="" type="button"
-                    hx-get="{% url 'add_room' %}"
-                    hx-target="#dialog">
+                    hx-get="{% url 'add_room' %}" hx-target="#dialog">
                     Create Room
             </button>
             <button class=""> Join Room </button>
@@ -37,18 +39,16 @@
 </div>
 
 {#<script src="{% static 'lobby/js/create_room.js' %}"></script>#}
-
-{% endblock %}
-
-
-{% block modal_content %}
-
-
-<div id="create_room_modal" class="modal lobby-modal" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
+<div id="create_room_modal" class="modal lobby-modal" data-bs-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="overlay"></div>
+        <div id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
 </div>
-
+</div>
 {% endblock %}
+
+
+
+
 
 {#{% for room in rooms %}#}
 {#    <p> {{ room.room_name }}</p>#}

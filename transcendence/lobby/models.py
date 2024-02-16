@@ -1,5 +1,7 @@
+from asgiref.sync import sync_to_async
 from django.db import models
 from accounts.models import AccountUser
+from channels.db import database_sync_to_async
 
 
 class Rooms(models.Model):

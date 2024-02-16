@@ -6,19 +6,26 @@ function hide_modal() {
 
     htmx.on("htmx:afterSwap", (e) => {
     if (e.detail.target.id === "dialog") {
-        modal.show()
+        modal.show();
     }
 })
 
     htmx.on("htmx:beforeSwap", (e) => {
     if (e.detail.target.id === "dialog" && !e.detail.xhr.response) {
-        modal.hide()
-        e.detail.shouldSwap = false
+        modal.hide();
+        e.detail.shouldSwap = false;
     }
+})
+
+    htmx.on("htmx:wsAfterSend", (e) => {
+        if (e.detail.elt.id === 'create_room_form') {
+            console.log(e.detail.data)
+            modal.hide();
+        }
 })
 
     // Remove dialog content after hiding
     htmx.on("hidden.bs.modal", () => {
-    document.getElementById("dialog").innerHTML = ""
+    document.getElementById("dialog").innerHTML = "";
 })
 }

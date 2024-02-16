@@ -3,7 +3,6 @@ import json
 from django.contrib.auth import login, get_user
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.contrib.sessions.backends.db import SessionStore
 from django.core.files.base import ContentFile
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy

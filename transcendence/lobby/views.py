@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, FormView
+from django.views.generic import FormView, TemplateView
 
 from .models import Rooms
 from .forms import RoomForm
@@ -15,12 +15,13 @@ from .forms import RoomForm
 # Create your views here.
 
 
-class LobbyView(LoginRequiredMixin, ListView):
+class LobbyView(LoginRequiredMixin, TemplateView):
     model = Rooms
     form_class = RoomForm
     template_name = 'lobby/lobby.html'
-    context_object_name = 'rooms'
 
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, context={'rooms': Rooms.objects.all()})
 
 class RoomProcessView(FormView):
     template_name = 'lobby/lobby_form.html'

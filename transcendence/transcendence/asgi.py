@@ -13,7 +13,7 @@ import os
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
-# import transcendence.routing
+import lobby.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'transcendence.settings')
 
@@ -26,7 +26,7 @@ application = ProtocolTypeRouter({
     "websocket": AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             URLRouter([
-                # *frontend.routing.websocket_urlpatterns
+                *lobby.routing.websocket_urlpatterns
             ])
         )
     ),

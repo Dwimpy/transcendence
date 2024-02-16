@@ -1,5 +1,5 @@
 
-const lobby_socket = new WebSocket('ws://' + window.location.host + '/ws/lobby')
+const lobby_socket = new WebSocket('ws://' + window.location.host + '/ws/lobby/')
 
 lobby_socket.onmessage = function(event) {
 
