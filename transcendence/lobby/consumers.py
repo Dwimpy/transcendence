@@ -4,8 +4,9 @@ from typing import Any
 
 from asgiref.sync import sync_to_async, async_to_sync
 from channels.generic.websocket import WebsocketConsumer, AsyncJsonWebsocketConsumer
-from django.template.loader import get_template
-from .constants import LOBBY_WS_GROUP_NAME
+from django.shortcuts import redirect
+from django.template.loader import get_template, render_to_string
+from .constants import LOBBY_WS_GROUP_NAME, ErrorType, FormError
 from .forms import RoomForm
 from .models import Rooms
 
@@ -29,29 +30,35 @@ class LobbyConsumer(AsyncJsonWebsocketConsumer):
         print('received')
         text_data_json = json.loads(text_data)
         room_name = text_data_json['room_name']
-        new_room = await Rooms.objects.aget_or_create(room_name=room_name)
-        rooms = [room async for room in Rooms.objects.all()]
-        html = get_template('lobby/lobby_room_partial_update.html').render(context={'rooms': rooms})
-        await self.channel_layer.group_send(
-            LOBBY_WS_GROUP_NAME,
-            {
-                'type': 'update_rooms',
-                'html': html
-            }
-        )
+        new_room, created = await Rooms.objects.aget_or_create(room_name=room_name)
+
+        if created:
+            rooms = [room async for room in Rooms.objects.all()]
+            html = get_template('lobby/lobby_room_partial_update.html').render(context={'rooms': rooms})
+            await self.channel_layer.group_send(
+                LOBBY_WS_GROUP_NAME,
+                {
+                    'type': 'update_rooms',
+                    'html': html
+                }
+            )
+        else:
+            html = get_template('lobby/errors.html').render(context=FormError.get_error(ErrorType.ROOM_EXISTS))
+            print(FormError.get_error(ErrorType.ROOM_EXISTS))
+            # print(html)
+            await self.send(text_data=html)
 
     async def update_rooms(self, event):
-        print(event['html'])
         await self.send(text_data=event['html'])
 
-    def created_room(self, event: Dict[str, Any]):
-        html = get_template(
-            "lobby/lobby_room_partial.html",
-        ).render(
-            context={
-                "rooms": [
-                    event["message"],
-                ]
-            }
-        )
-        self.send(text_data=html)
+    # def created_room(self, event: Dict[str, Any]):
+    #     html = get_template(
+    #         "lobby/lobby_room_partial.html",
+    #     ).render(
+    #         context={
+    #             "rooms": [
+    #                 event["message"],
+    #             ]
+    #         }
+    #     )
+    #     self.send(text_data=html)

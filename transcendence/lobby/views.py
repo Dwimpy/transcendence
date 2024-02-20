@@ -23,6 +23,7 @@ class LobbyView(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, context={'rooms': Rooms.objects.all()})
 
+
 class RoomProcessView(FormView):
     template_name = 'lobby/lobby_form.html'
     form_class = RoomForm

@@ -1,5 +1,7 @@
 
-addEventListener("DOMContentLoaded", hide_modal)
+if (window.location.pathname === '/lobby/') {
+    addEventListener("DOMContentLoaded", hide_modal)
+}
 
 function hide_modal() {
     const modal = new bootstrap.Modal(document.getElementById("create_room_modal"))
@@ -17,10 +19,15 @@ function hide_modal() {
     }
 })
 
-    htmx.on("htmx:wsAfterSend", (e) => {
-        if (e.detail.elt.id === 'create_room_form') {
-            console.log(e.detail.data)
-            modal.hide();
+
+    htmx.on("htmx:wsAfterMessage", (e) => {
+        if (e.detail.elt.id === 'create_room_modal') {
+            const received_data = e.detail.message;
+            const div = document.createElement('div');
+            div.innerHTML = received_data;
+            const errorElement = div.querySelector('#errors');
+            if (!errorElement)
+               modal.hide();
         }
 })
 

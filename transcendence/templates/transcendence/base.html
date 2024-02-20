@@ -16,7 +16,7 @@
     <script src="{% static 'htmx/htmx.min.js' %}"></script>
     <script src="{% static 'htmx/htmx_ext_ws.js' %}"></script>
     <script src="{% static 'jquery/jquery-3.7.1.min.js' %}"></script>
-
+    <script src="{% static 'lobby/js/modal-hide.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'build/css/custom.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/new_style.css' %} " >
 {#    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" >#}
@@ -32,7 +32,5 @@
         {% include 'transcendence/navbar.html' %}
     </div>
     {% block modal_content %}{% endblock %}
-    <script src="{% static 'lobby/js/modal-hide.js' %}"></script>
 </body>
-
 </html>

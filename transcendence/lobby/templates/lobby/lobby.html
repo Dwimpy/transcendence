@@ -4,15 +4,14 @@
 {% load static %}
 
 {% block content %}
-<div hx-ext="ws" ws-connect="/ws/lobby" class="flex flex-column w-100 h-100">
 
 <script src="{% static 'lobby/js/selected-room.js' %}"></script>
-
+<script src="{% static 'lobby/js/scroll_to_bottom.js' %}"></script>
 
 <div class="container lobby d-flex border-solid-rebecca-purple-1">
     <div class="d-flex flex-1 position-relative flex-column align-items-center m-4">
         <div class="styled-lobby d-flex bg-black flex-column w-100 h-100 text-center align-items-center">
-            <table class="">
+            <table id="room_table" class="">
                 <caption class="text-center text-white" style="caption-side: top; bottom: 1rem; font-size: 18px;"> Rooms </caption>
                 <thead>
                 <tr>
@@ -23,7 +22,7 @@
                 </tr>
                 </thead>
                 <tbody id="lobby_room">
-                    {% include 'lobby/lobby_room_partial.html' %}
+                    {% include 'lobby/lobby_room_partial_update.html' %}
                 </tbody>
             </table>
             <span class="container h-100"></span>
@@ -38,12 +37,15 @@
     </div>
 </div>
 
-{#<script src="{% static 'lobby/js/create_room.js' %}"></script>#}
-<div id="create_room_modal" class="modal lobby-modal" data-bs-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{% block modal_content %}
+<div hx-ext="ws" ws-connect="/ws/lobby"  id="create_room_modal" class="modal lobby-modal" data-bs-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="overlay"></div>
         <div id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
 </div>
-</div>
+
+
+{% endblock %}
+
 {% endblock %}
 
 

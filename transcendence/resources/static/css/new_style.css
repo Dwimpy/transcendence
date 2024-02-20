@@ -469,6 +469,6 @@ h6#selected-image-name {
     background-color: rgba(253, 139, 232, 0.6);
 }
 
-.modal-content .form-errors {
-    background-color: red;
+.errors-header {
+    color: cyan;
 }
