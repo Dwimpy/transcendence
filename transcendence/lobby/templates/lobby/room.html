@@ -1,0 +1,16 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container d-flex border-solid-rebecca-purple-1">
+    <div >
+        <p> Welcome to room {{ room.room_name }}</p>
+        {% for user in room.assigned_users.all %}
+            <p> {{ user }} </p>
+        {% endfor %}
+    </div>
+</div>
+    
+{% endblock %}

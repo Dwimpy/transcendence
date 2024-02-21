@@ -4,13 +4,55 @@
 {% load static %}
 
 {% block content %}
+<script>
+
+
+document.addEventListener('DOMContentLoaded', function() {
+// Get the parent element that contains the td elements you want to observe
+const targetNode = document.getElementById('lobby_table');
+
+// Options for the observer (which mutations to observe)
+const config = { subtree: true, attributeFilter: ['class'] };
+
+// Callback function to execute when mutations are observed
+const callback = function(mutationsList, observer) {
+    for (let mutation of mutationsList) {
+        // Check if the mutation occurred on a td element
+        if (mutation.target.tagName.toLowerCase() === 'tr') {
+            // Check if the 'table-active' class has been added
+            if (mutation.target.classList.contains('table-active')) {
+                // 'table-active' class has been added to a td element
+                console.log(mutation.target)
+                const target = mutation.target.querySelector('td#room_name')
+                console.log(target.innerText)
+                // Add your desired actions here
+                const joinRoomBtn = document.getElementById('join-room-btn');
+                if (joinRoomBtn) {
+                    // Construct the URL with the obtained room name
+                    const url = `localhost:8000/lobby/${encodeURIComponent(target.innerText)}/`;
+                    // Set the href attribute of the button
+                    joinRoomBtn.setAttribute('hx-get', url);
+                }
+            }
+        }
+    }
+};
+
+// Create a MutationObserver instance linked to the callback function
+const observer = new MutationObserver(callback);
+
+// Start observing the target node for configured mutations
+observer.observe(targetNode, config);
+});
+
+</script>
 
 <script src="{% static 'lobby/js/selected-room.js' %}"></script>
 <script src="{% static 'lobby/js/scroll_to_bottom.js' %}"></script>
 <div hx-ext="ws" ws-connect="/ws/lobby" class="container lobby d-flex border-solid-rebecca-purple-1">
     <div class="d-flex flex-1 position-relative flex-column align-items-center m-4">
         <div class="styled-lobby d-flex bg-black flex-column w-100 h-100 text-center align-items-center">
-            <table class="">
+            <table id="lobby_table" class="">
                 <caption class="text-center text-white" style="caption-side: top; bottom: 1rem; font-size: 18px;"> Rooms </caption>
                 <thead>
                 <tr>
@@ -32,7 +74,7 @@
                     hx-target="#dialog">
                     Create Room
             </button>
-            <button class=""> Join Room </button>
+            <button id="join-room-btn" hx-get="{% url 'room' 'test' %}" class=""> Join Room </button>
         </div>
     </div>
 </div>

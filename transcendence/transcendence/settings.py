@@ -121,7 +121,7 @@ TEMPLATES = [
 
 LOGIN_REDIRECT_URL = 'index'
 ACCOUNT_LOGOUT_REDIRECT = 'index'
-SITE_ID = 1  # Use the ID of the site you added in the admin
+SITE_ID = 2  # Use the ID of the site you added in the admin
 LOGOUT_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
 

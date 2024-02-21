@@ -3,6 +3,7 @@ import json
 from django.http import HttpResponse, StreamingHttpResponse
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
+from django.urls import reverse_lazy
 from rest_framework import status, serializers, viewsets
 
 from lobby.forms import RoomForm
@@ -31,8 +32,12 @@ class CreateRoomAPIView(APIView):
         form = RoomForm(request.data)
         if form.is_valid():
             room = form.save()
+            room.add_user_to_room(self.request.user)
             Rooms.update_rooms()
-            return CreateRoomAPIView.room_added()
+            index_url = reverse_lazy('room', args=[room.room_name])
+            return HttpResponse(headers={
+                'HX-Redirect': index_url,
+            })
         else:
             html_to_string = render_to_string(self.template_name, {'form': form})
             return HttpResponse(html_to_string)
