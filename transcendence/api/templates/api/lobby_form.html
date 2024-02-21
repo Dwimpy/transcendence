@@ -1,6 +1,6 @@
 {% load widget_tweaks %}
 {% load registration_tags %}
-
+{% load rest_framework %}
 
 <!-- Modal -->
 
@@ -11,7 +11,7 @@
         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div id="modal-body" class="modal-body">
-        <form id="create_room_form" name="form-create" hx-ws="send">
+        <form id="create_room_form" name="form-create" hx-post="{% url 'create-room' %}">
             {% csrf_token %}
             <div class="m-1">
                 {% render_field_placeholder form "room_name" "" "Room Name" %}
@@ -19,7 +19,7 @@
         </form>
     </div>
     <div id="modal-footer" class="modal-footer justify-content-center flex-column">
-        {% include 'lobby/errors.html' %}
+        {% include 'accounts/base_templates/form_errors.html' %}
         <div class="modal-btn d-flex flex-row gap-4 m-1">
             <button id="btnSave" form="create_room_form"  type="submit" class="btn rounded-pill"> Create </button>
             <button type="button" class="btn rounded-pill" data-bs-dismiss="modal">Close</button>

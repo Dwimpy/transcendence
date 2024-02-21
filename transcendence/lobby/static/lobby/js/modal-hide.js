@@ -19,18 +19,6 @@ function hide_modal() {
     }
 })
 
-
-    htmx.on("htmx:wsAfterMessage", (e) => {
-        if (e.detail.elt.id === 'create_room_modal') {
-            const received_data = e.detail.message;
-            const div = document.createElement('div');
-            div.innerHTML = received_data;
-            const errorElement = div.querySelector('#errors');
-            if (!errorElement)
-               modal.hide();
-        }
-})
-
     // Remove dialog content after hiding
     htmx.on("hidden.bs.modal", () => {
     document.getElementById("dialog").innerHTML = "";

@@ -13,7 +13,7 @@ def render_base_field(form, field_name, css_class=""):
 @register.inclusion_tag('accounts/base_templates/password_field.html')
 def render_field_placeholder(form, field_name, css_class="", placeholder=""):
     field = form[field_name]
-    return {'field': field, 'css_class': f'form-control {css_class}', 'placeholder': f'{placeholder}'}
+    return {'field': field, 'css_class': f'form-control {css_class}', 'placeholder': placeholder}
 
 
 @register.inclusion_tag('accounts/base_templates/base_form.html')

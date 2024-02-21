@@ -1,4 +1,5 @@
-from asgiref.sync import sync_to_async
+from asgiref.sync import sync_to_async, async_to_sync
+from channels.layers import get_channel_layer
 from django.db import models
 from accounts.models import AccountUser
 from channels.db import database_sync_to_async
@@ -21,3 +22,13 @@ class Rooms(models.Model):
     @staticmethod
     def is_user_assigned(user):
         return Rooms.objects.filter(assigned_users=user).exists()
+
+    @staticmethod
+    def update_rooms():
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'lobby',
+            {
+                'type': 'update_rooms'
+            }
+        )

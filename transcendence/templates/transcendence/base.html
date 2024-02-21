@@ -22,7 +22,7 @@
 {#    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" >#}
 </head>
 
-<body>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <div class="main-container">
     <div class="overlay"></div>
         <main class="container z-1 d-flex justify-content-center align-items-center flex-column" id="main-content">

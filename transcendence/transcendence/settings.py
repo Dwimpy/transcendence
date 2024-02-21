@@ -70,7 +70,11 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.IsAuthenticated'
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
     ]
 }
 
@@ -92,6 +96,7 @@ TEMPLATES = [
         'DIRS': {
             os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'index', 'templates'),
+            os.path.join(BASE_DIR, 'api', 'templates'),
             os.path.join(BASE_DIR, 'pong', 'templates'),
             os.path.join(BASE_DIR, 'accounts', 'templates')
         },
@@ -116,7 +121,7 @@ TEMPLATES = [
 
 LOGIN_REDIRECT_URL = 'index'
 ACCOUNT_LOGOUT_REDIRECT = 'index'
-SITE_ID = 2  # Use the ID of the site you added in the admin
+SITE_ID = 1  # Use the ID of the site you added in the admin
 LOGOUT_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
 
