@@ -7,7 +7,7 @@
 
 <script src="{% static 'lobby/js/selected-room.js' %}"></script>
 <script src="{% static 'lobby/js/scroll_to_bottom.js' %}"></script>
-<div class="container lobby d-flex border-solid-rebecca-purple-1">
+<div hx-ext="ws" ws-connect="/ws/lobby" class="container lobby d-flex border-solid-rebecca-purple-1">
     <div class="d-flex flex-1 position-relative flex-column align-items-center m-4">
         <div class="styled-lobby d-flex bg-black flex-column w-100 h-100 text-center align-items-center">
             <table class="">
@@ -44,7 +44,7 @@
 
 
 <div hx-ext="ws" ws-connect="/ws/lobby"
-     id="create_room_modal"
+        id="create_room_modal"
      class="modal lobby-modal"
      aria-labelledby="exampleModalLabel"
      aria-hidden="true">

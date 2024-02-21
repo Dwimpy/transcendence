@@ -52,7 +52,7 @@ This extension adds support for WebSockets to htmx.  See /www/extensions/ws.md f
 					return;
 
 				// Try to create websockets when elements are processed
-				case "htmx:afterProcessNode":
+				case "htmx:beforeProcessNode":
 					var parent = evt.target;
 
 					forEach(queryAttributeOnThisOrChildren(parent, "ws-connect"), function (child) {
@@ -200,7 +200,7 @@ This extension adds support for WebSockets to htmx.  See /www/extensions/ws.md f
 				if (!this.socket) {
 					api.triggerErrorEvent()
 				}
-				if (sendElt && api.triggerEvent(sendElt, 'htmx:wsBeforeSend', {
+				if (!sendElt || api.triggerEvent(sendElt, 'htmx:wsBeforeSend', {
 					message: message,
 					socketWrapper: this.publicInterface
 				})) {
@@ -341,7 +341,7 @@ This extension adds support for WebSockets to htmx.  See /www/extensions/ws.md f
 
 				/** @type {WebSocketWrapper} */
 				var socketWrapper = api.getInternalData(socketElt).webSocket;
-				var headers = api.getHeaders(sendElt, socketElt);
+				var headers = api.getHeaders(sendElt, api.getTarget(sendElt));
 				var results = api.getInputValues(sendElt, 'post');
 				var errors = results.errors;
 				var rawParameters = results.values;
@@ -379,7 +379,7 @@ This extension adds support for WebSockets to htmx.  See /www/extensions/ws.md f
 
 				socketWrapper.send(body, elt);
 
-				if (api.shouldCancel(evt, elt)) {
+				if (evt && api.shouldCancel(evt, elt)) {
 					evt.preventDefault();
 				}
 			});

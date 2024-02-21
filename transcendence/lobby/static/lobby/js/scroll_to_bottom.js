@@ -1,2 +1,1 @@
 
-htmx.logAll();

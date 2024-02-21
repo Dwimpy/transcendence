@@ -4,6 +4,18 @@
 
 <!-- Modal -->
 
+<script>
+    document.addEventListener('keypress', function(event) {
+        // Check if the key pressed is the key you're interested in (e.g., "Enter" key)
+        if (event.key === 'z') {
+            // Trigger a custom event on the #key-up element
+            htmx.trigger(document.getElementById('key-up'), 'keyup');
+        }
+        else if (event.key === 'x') {
+            htmx.trigger(document.getElementById('key-up'), 'keydown');
+        }
+    });
+</script>
 
 <div class="modal-content bg-primary">
     <div class="modal-header">
@@ -17,6 +29,7 @@
                 {% render_field_placeholder form "room_name" "" "Room Name" %}
             </div>
         </form>
+            <div id="key-up" hx-ws="send" hx-trigger="keyup, keydown" hx-vals="js:{keyPressed: event.type}"></div>
     </div>
     <div id="modal-footer" class="modal-footer justify-content-center flex-column">
         {% include 'accounts/base_templates/form_errors.html' %}

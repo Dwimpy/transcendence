@@ -17,7 +17,6 @@ class LobbyConsumer(AsyncJsonWebsocketConsumer):
             LOBBY_WS_GROUP_NAME,
             self.channel_name,
         )
-        print('connected')
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -28,8 +27,12 @@ class LobbyConsumer(AsyncJsonWebsocketConsumer):
 
     async def receive(self, text_data=None, bytes_data=None, **kwargs):
         text_data_json = json.loads(text_data)
-        room_name = text_data_json['room_name']
-        new_room, created = await Rooms.objects.aget_or_create(room_name=room_name)
+        print(text_data_json)
+        if 'room_name' in text_data_json:
+            room_name = text_data_json['room_name']
+            new_room, created = await Rooms.objects.aget_or_create(room_name=room_name)
+        if text_data_json['HEADERS']['HX-Trigger'] == 'key-up':
+            print('hello')
 
     async def update_rooms(self, event):
         rooms = [room async for room in Rooms.objects.all()]
