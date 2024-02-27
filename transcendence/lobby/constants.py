@@ -1,6 +1,7 @@
 from enum import Enum
 
 LOBBY_WS_GROUP_NAME = 'lobby'
+ROOMS_WS_GROUP_NAME = 'room_'
 
 
 class EventType:

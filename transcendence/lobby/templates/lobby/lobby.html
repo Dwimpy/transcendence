@@ -9,10 +9,12 @@
 
 document.addEventListener('DOMContentLoaded', function() {
 // Get the parent element that contains the td elements you want to observe
-const targetNode = document.getElementById('lobby_table');
-
+    const targetNode = document.getElementById('lobby_table');
+    const button = htmx.find('#join-room-btn');
+    htmx.addClass(button, 'disabled');
+    let found = false;
 // Options for the observer (which mutations to observe)
-const config = { subtree: true, attributeFilter: ['class'] };
+    const config = { subtree: true, attributeFilter: ['class'] };
 
 // Callback function to execute when mutations are observed
 const callback = function(mutationsList, observer) {
@@ -21,17 +23,9 @@ const callback = function(mutationsList, observer) {
         if (mutation.target.tagName.toLowerCase() === 'tr') {
             // Check if the 'table-active' class has been added
             if (mutation.target.classList.contains('table-active')) {
-                // 'table-active' class has been added to a td element
-                console.log(mutation.target)
-                const target = mutation.target.querySelector('td#room_name')
-                console.log(target.innerText)
-                // Add your desired actions here
-                const joinRoomBtn = document.getElementById('join-room-btn');
-                if (joinRoomBtn) {
-                    // Construct the URL with the obtained room name
-                    const url = `localhost:8000/lobby/${encodeURIComponent(target.innerText)}/`;
-                    // Set the href attribute of the button
-                    joinRoomBtn.setAttribute('hx-get', url);
+                if (!found) {
+                    htmx.removeClass(button, 'disabled')
+                    found = true
                 }
             }
         }
@@ -44,6 +38,15 @@ const observer = new MutationObserver(callback);
 // Start observing the target node for configured mutations
 observer.observe(targetNode, config);
 });
+
+function join_room() {
+    room_name = htmx.find('.table-active').querySelector('td#room_name').innerText;
+    htmx.ajax('POST', '{% url 'room-list' %}', {
+        values: {
+            "room-name": room_name
+        }
+    })
+}
 
 </script>
 
@@ -74,7 +77,7 @@ observer.observe(targetNode, config);
                     hx-target="#dialog">
                     Create Room
             </button>
-            <button id="join-room-btn" hx-get="{% url 'room' 'test' %}" class=""> Join Room </button>
+            <button id="join-room-btn" onclick="join_room()" type="button"> Join Room </button>
         </div>
     </div>
 </div>
@@ -84,13 +87,12 @@ observer.observe(targetNode, config);
 
 {% block modal_content %}
 
-
 <div hx-ext="ws" ws-connect="/ws/lobby"
-        id="create_room_modal"
+     id="create_room_modal"
      class="modal lobby-modal"
      aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-    <div id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
+     <div id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
 </div>
 
 {% endblock %}

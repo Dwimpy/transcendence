@@ -29,11 +29,11 @@ class RoomView(LoginRequiredMixin, TemplateView):
     template_name = 'lobby/room.html'
 
     def get(self, request, *args, **kwargs):
-        print(self.request.headers)
         return super().get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         room = Rooms.objects.get(room_name=self.kwargs['room_name'])
-        context['room'] = room
+        context['room_name'] = room.room_name
+        context['assigned_users'] = room.assigned_users.all()
         return context

@@ -4,6 +4,7 @@ from django.http import HttpResponse, StreamingHttpResponse
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status, serializers, viewsets
 
 from lobby.forms import RoomForm
@@ -60,4 +61,12 @@ class RoomListAPIView(APIView):
         queryset = Rooms.objects.all()
         html_content = render_to_string('api/lobby_room_partial_update.html', {'rooms': queryset})
         return HttpResponse(html_content)
+
+    @csrf_exempt
+    def post(self, request):
+        room_name = request.POST.get('room-name')
+        room_url = reverse_lazy('room', args=[room_name])
+        return HttpResponse(status.HTTP_200_OK, headers={
+            'HX-Redirect': room_url
+        })
 

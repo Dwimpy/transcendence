@@ -1,16 +1,16 @@
 {% extends 'transcendence/base.html' %}
 {% load static %}
 
-
 {% block content %}
 
-<div class="container d-flex border-solid-rebecca-purple-1">
-    <div >
-        <p> Welcome to room {{ room.room_name }}</p>
-        {% for user in room.assigned_users.all %}
-            <p> {{ user }} </p>
-        {% endfor %}
-    </div>
+<script>
+    function test() {
+        return "/ws/rooms"
+    }
+
+</script>
+
+<div hx-ext="ws" ws-connect="/ws/rooms/{{ room_name }}" class="container d-flex border-solid-rebecca-purple-1">
+    {% include 'lobby/room_partial_update.html' %}
 </div>
-    
 {% endblock %}

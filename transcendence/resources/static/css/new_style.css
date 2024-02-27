@@ -472,3 +472,8 @@ h6#selected-image-name {
 .errors-header {
     color: cyan;
 }
+
+button.disabled {
+    background: gray;
+    pointer-events: none;
+}

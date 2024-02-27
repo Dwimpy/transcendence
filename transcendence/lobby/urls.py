@@ -4,5 +4,5 @@ from .views import RoomView
 
 urlpatterns = [
     path('', LobbyView.as_view(), name='lobby'),
-    path('<room_name>/', RoomView.as_view(), name='room')
+    path('<str:room_name>/', RoomView.as_view(), name='room')
 ]
