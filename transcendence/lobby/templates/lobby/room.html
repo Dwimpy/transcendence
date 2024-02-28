@@ -3,14 +3,8 @@
 
 {% block content %}
 
-<script>
-    function test() {
-        return "/ws/rooms"
-    }
-
-</script>
-
-<div hx-ext="ws" ws-connect="/ws/rooms/{{ room_name }}" class="container d-flex border-solid-rebecca-purple-1">
+<div hx-ext="ws" ws-connect="/ws/rooms/{{ room_name }}" class="container d-flex flex-column border-solid-rebecca-purple-1">
     {% include 'lobby/room_partial_update.html' %}
+    <button> Play Game </button>
 </div>
 {% endblock %}

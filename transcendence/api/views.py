@@ -70,3 +70,17 @@ class RoomListAPIView(APIView):
             'HX-Redirect': room_url
         })
 
+
+class RoomsViewSet(viewsets.ModelViewSet):
+    queryset = Rooms.objects.all()
+    serializer_class = RoomSerializer
+    lookup_field = 'room_name'
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+
+
+

@@ -23,8 +23,7 @@
         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div id="modal-body" class="modal-body">
-        <form id="create_room_form" name="form-create" hx-post="{% url 'create-room' %}">
-            {% csrf_token %}
+        <form id="create_room_form" name="form-create" hx-post="{% url 'lobby' %}">
             <div class="m-1">
                 {% render_field_placeholder form "room_name" "" "Room Name" %}
             </div>

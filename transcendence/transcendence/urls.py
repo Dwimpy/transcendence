@@ -19,11 +19,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from api.views import RoomsViewSet
 from rest_framework import routers
-# from api.views import RoomViewSet
 
 router = routers.DefaultRouter()
-# router.register(r'rooms', RoomViewSet, basename='rooms')
+
+router.register(r'rooms', RoomsViewSet, basename='rooms')
 
 urlpatterns = ([
     path('', include('index.urls')),

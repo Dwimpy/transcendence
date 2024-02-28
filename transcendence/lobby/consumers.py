@@ -25,18 +25,9 @@ class LobbyConsumer(AsyncJsonWebsocketConsumer):
             self.channel_name,
         )
 
-    async def receive(self, text_data=None, bytes_data=None, **kwargs):
-        text_data_json = json.loads(text_data)
-        print(text_data_json)
-        if 'room_name' in text_data_json:
-            room_name = text_data_json['room_name']
-            new_room, created = await Rooms.objects.aget_or_create(room_name=room_name)
-        if text_data_json['HEADERS']['HX-Trigger'] == 'key-up':
-            print('hello')
-
     async def update_rooms(self, event):
         rooms = [room async for room in Rooms.objects.all()]
-        html = get_template('api/lobby_room_partial_update.html').render(context={'rooms': rooms})
+        html = get_template('lobby/lobby_room_partial_update.html').render(context={'rooms': rooms})
         await self.send(text_data=html)
 
 
@@ -57,30 +48,27 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
             self.channel_name,
         )
         await self.accept()
-        await self.channel_layer.group_send(
-            self.group_room_name,
-            {
-                'type': 'world',
-                'message': 'what the fuck'
-            }
-        )
+        await self.room_action('update_room', 'Room ' + self.room_name + ' updated')
 
     async def disconnect(self, close_code):
         room = await Rooms.objects.aget(room_name=self.room_name)
         await sync_to_async(room.remove_user_from_room)(self.scope['user'])
-        await self.channel_layer.group_send(
-            self.group_room_name,
-            {
-                'type': 'world',
-                'message': 'what the fuck'
-            }
-        )
+        await self.room_action('update_room', 'Room ' + self.room_name + ' updated')
         await self.channel_layer.group_discard(
             self.group_room_name,
             self.channel_name,
         )
 
-    async def world(self, event):
+    async def room_action(self, type, message):
+        await self.channel_layer.group_send(
+            self.group_room_name,
+            {
+                'type': type,
+                'message': message
+            }
+        )
+
+    async def update_room(self, event):
         room = await Rooms.objects.aget(room_name=self.room_name)
         html = (get_template('lobby/room_partial_update.html')
                 .render(context={'assigned_users': [user async for user in room.assigned_users.all()], 'room_name': self.room_name}))

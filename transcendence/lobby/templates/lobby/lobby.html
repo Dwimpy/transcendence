@@ -6,7 +6,7 @@
 {% block content %}
 <script>
 
-
+htmx.logAll()
 document.addEventListener('DOMContentLoaded', function() {
 // Get the parent element that contains the td elements you want to observe
     const targetNode = document.getElementById('lobby_table');
@@ -41,7 +41,10 @@ observer.observe(targetNode, config);
 
 function join_room() {
     room_name = htmx.find('.table-active').querySelector('td#room_name').innerText;
-    htmx.ajax('POST', '{% url 'room-list' %}', {
+    htmx.ajax('GET', '{% url 'lobby' %}', {
+        headers: {
+          "HX-Target": "join-room-btn"
+        },
         values: {
             "room-name": room_name
         }
@@ -65,15 +68,13 @@ function join_room() {
                     <th scope="col">tt</th>
                 </tr>
                 </thead>
-                <tbody id="lobby_rooms" hx-trigger="load, roomAdded from:body" hx-get="{% url 'room-list' %}">
-                    {% include 'api/lobby_room_partial_update.html' %}
-                </tbody>
+                {% include 'lobby/lobby_room_partial_update.html' %}
             </table>
             <span class="container h-100"></span>
         </div>
         <div class="d-flex flex-row gap-5 mt-4 lobby-btn">
             <button id="create_room_button" class="" type="button"
-                    hx-get="{% url 'create-room' %}"
+                    hx-get="{% url 'lobby' %}"
                     hx-target="#dialog">
                     Create Room
             </button>
@@ -87,7 +88,7 @@ function join_room() {
 
 {% block modal_content %}
 
-<div hx-ext="ws" ws-connect="/ws/lobby"
+<div
      id="create_room_modal"
      class="modal lobby-modal"
      aria-labelledby="exampleModalLabel"
