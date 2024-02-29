@@ -5,6 +5,7 @@
 
 <div hx-ext="ws" ws-connect="/ws/rooms/{{ room_name }}" class="container d-flex flex-column border-solid-rebecca-purple-1">
     {% include 'lobby/room_partial_update.html' %}
-    <button> Play Game </button>
+    <button type="button"> Play Game </button>
+    <button id="leave-room-btn" hx-get="{% url 'room' room_name %}" type="button"> Leave Room </button>
 </div>
 {% endblock %}

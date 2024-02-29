@@ -1,17 +1,14 @@
 import json
 
-from asgiref.sync import async_to_sync
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 
-from .consumers import LobbyConsumer
 from .models import Rooms
 from .forms import RoomForm
-from channels.layers import get_channel_layer
-from .constants import LOBBY_WS_GROUP_NAME
+
 
 # Create your views here.
 
@@ -49,7 +46,7 @@ class LobbyView(LoginRequiredMixin, TemplateView):
             room_url = reverse_lazy('room', args=[room_name])
             Rooms.update_rooms()
             return HttpResponse(status=200, headers={
-                'HX-Redirect': room_url
+                'HX-Redirect': reverse_lazy(room_url)
             })
         else:
             context = self.get_context_data(**kwargs)
@@ -62,7 +59,6 @@ class LobbyView(LoginRequiredMixin, TemplateView):
         rooms = Rooms.objects.all()
         context['rooms'] = rooms
         return context
-
 
     @staticmethod
     def join_room(request):
@@ -78,6 +74,12 @@ class RoomView(LoginRequiredMixin, TemplateView):
     template_name = 'lobby/room.html'
 
     def get(self, request, *args, **kwargs):
+        if is_htmx(request):
+            hx_target = request.headers.get('HX-Target')
+            if hx_target == 'leave-room-btn':
+                return HttpResponse(status=200, headers={
+                    'HX-Redirect': reverse_lazy('lobby')
+                })
         return super().get(self, request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

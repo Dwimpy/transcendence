@@ -77,7 +77,6 @@ class RegistrationView(FormView):
 class FortyTwoAuthView(View):
 
     def get(self, request):
-        print(request.COOKIES)
         authorize_url = 'https://api.intra.42.fr/oauth/authorize'
         redirect_uri = quote(settings.REDIRECT_URI, safe='')
         scope = 'public'
