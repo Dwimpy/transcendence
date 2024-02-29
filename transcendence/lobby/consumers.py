@@ -3,7 +3,7 @@ from typing import Dict
 from typing import Any
 
 from asgiref.sync import sync_to_async, async_to_sync
-from channels.generic.websocket import WebsocketConsumer, AsyncJsonWebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from django.shortcuts import redirect
 from django.template.loader import get_template, render_to_string
 from .constants import LOBBY_WS_GROUP_NAME, ROOMS_WS_GROUP_NAME
@@ -11,18 +11,32 @@ from .forms import RoomForm
 from .models import Rooms
 
 
-class LobbyConsumer(AsyncJsonWebsocketConsumer):
+class LobbyConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         await self.channel_layer.group_add(
             LOBBY_WS_GROUP_NAME,
             self.channel_name,
         )
         await self.accept()
+        await self.channel_layer.group_send(
+            LOBBY_WS_GROUP_NAME,
+            {
+                'type': 'update_rooms',
+                'message': 'rooms_updated'
+            }
+        )
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             LOBBY_WS_GROUP_NAME,
             self.channel_name,
+        )
+        await self.channel_layer.group_send(
+            LOBBY_WS_GROUP_NAME,
+            {
+                'type': 'update_rooms',
+                'message': 'rooms_updated'
+            }
         )
 
     async def update_rooms(self, event):
@@ -31,7 +45,7 @@ class LobbyConsumer(AsyncJsonWebsocketConsumer):
         await self.send(text_data=html)
 
 
-class RoomConsumer(AsyncJsonWebsocketConsumer):
+class RoomConsumer(AsyncWebsocketConsumer):
 
     def __init__(self):
         self.room_name = None
@@ -47,8 +61,8 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
             self.group_room_name,
             self.channel_name,
         )
-        await self.accept()
         await self.room_action('update_room', 'Room ' + self.room_name + ' updated')
+        await self.accept()
 
     async def disconnect(self, close_code):
         room = await Rooms.objects.aget(room_name=self.room_name)
@@ -59,11 +73,11 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
             self.channel_name,
         )
 
-    async def room_action(self, type, message):
+    async def room_action(self, update_type, message):
         await self.channel_layer.group_send(
             self.group_room_name,
             {
-                'type': type,
+                'type': update_type,
                 'message': message
             }
         )
@@ -71,6 +85,8 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
     async def update_room(self, event):
         room = await Rooms.objects.aget(room_name=self.room_name)
         html = (get_template('lobby/room_partial_update.html')
-                .render(context={'assigned_users': [user async for user in room.assigned_users.all()], 'room_name': self.room_name}))
+                .render(context={'assigned_users': [user async for user in room.assigned_users.all()],
+                                 'room_name': self.room_name,
+                                 'room': room}))
         await self.send(text_data=html)
 

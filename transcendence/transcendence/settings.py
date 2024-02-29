@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'accounts',
     'pong',
     'lobby',
+    'chat',
     'widget_tweaks'
 ]
 
@@ -96,9 +97,9 @@ TEMPLATES = [
         'DIRS': {
             os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'index', 'templates'),
-            os.path.join(BASE_DIR, 'api', 'templates'),
             os.path.join(BASE_DIR, 'pong', 'templates'),
-            os.path.join(BASE_DIR, 'accounts', 'templates')
+            os.path.join(BASE_DIR, 'accounts', 'templates'),
+            os.path.join(BASE_DIR, 'chat', 'templates')
         },
         'APP_DIRS': True,
         'OPTIONS': {

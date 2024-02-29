@@ -1,5 +1,6 @@
 <div id="rooms">
 	<p> Welcome to room {{ room_name }}</p>
+	<p> Count {{ room.player_count }}</p>
 	{% for user in assigned_users %}
 		<p> {{ user }} </p>
 	{% endfor %}

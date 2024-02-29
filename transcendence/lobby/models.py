@@ -14,10 +14,14 @@ class Rooms(models.Model):
     is_full = models.BooleanField(default=False)
 
     def add_user_to_room(self, user):
+        self.player_count += 1
         self.assigned_users.add(user)
+        self.save()
 
     def remove_user_from_room(self, user):
+        self.player_count -= 1
         self.assigned_users.remove(user)
+        self.save()
 
     @staticmethod
     def is_user_assigned(user):

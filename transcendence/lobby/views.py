@@ -1,11 +1,13 @@
 import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.checks import messages
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.template.loader import get_template, render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
-
+from django.contrib import messages
 from .models import Rooms
 from .forms import RoomForm
 
@@ -43,10 +45,12 @@ class LobbyView(LoginRequiredMixin, TemplateView):
         if form.is_valid():
             form.save()
             room_name = form.data.get('room_name')
+            room = Rooms.objects.get(room_name=room_name)
+            # room.player_count += 1
             room_url = reverse_lazy('room', args=[room_name])
             Rooms.update_rooms()
             return HttpResponse(status=200, headers={
-                'HX-Redirect': reverse_lazy(room_url)
+                'HX-Redirect': room_url
             })
         else:
             context = self.get_context_data(**kwargs)
@@ -63,6 +67,18 @@ class LobbyView(LoginRequiredMixin, TemplateView):
     @staticmethod
     def join_room(request):
         room_name = request.GET.get('room-name')
+        room = Rooms.objects.get(room_name=room_name)
+        if room.is_full:
+            messages.success(request, 'Room is full')
+            html = render_to_string('transcendence/messages_partial_update.html',
+                                    context={'messages': messages.get_messages(request)})
+            return HttpResponse(html, status=200, headers={
+                'HX-Retarget': '#alert-messages',
+            })
+        # room.player_count += 1
+        # if room.player_count == 2:
+        #     room.is_full = True
+        # room.save()
         room_url = reverse_lazy('room', args=[room_name])
         return HttpResponse(status=200, headers={
             'HX-Redirect': room_url
@@ -80,11 +96,13 @@ class RoomView(LoginRequiredMixin, TemplateView):
                 return HttpResponse(status=200, headers={
                     'HX-Redirect': reverse_lazy('lobby')
                 })
-        return super().get(self, request, *args, **kwargs)
+        context = self.get_context_data(**kwargs)
+        return render(request, self.template_name, context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         room = Rooms.objects.get(room_name=self.kwargs['room_name'])
+        context['room'] = room
         context['room_name'] = room.room_name
         context['assigned_users'] = room.assigned_users.all()
         return context

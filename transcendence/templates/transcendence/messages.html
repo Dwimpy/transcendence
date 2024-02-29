@@ -1,25 +1,46 @@
 
-
 <script>
 
     addEventListener("DOMContentLoaded", fade_alert)
 
+    timeoutId = null
+    
     function fade_alert() {
         messages = document.getElementById("alert-messages")
-        if (messages) {
-            setTimeout(() => {
+        if (messages.innerText.length > 0) {
+                messages.classList.add('show')
+            
+            if (timeoutId) {
+                clearTimeout(timeoutId)
+            }
+            
+            timeoutId = setTimeout(() => {
                 messages.classList.remove('show')
-                messages.classList.add('d-none')
+                messages.classList.add('hide')
             }, 1500);
         }
     }
 
+
+    htmx.on('htmx:beforeSwap', (event) => {
+        if (event.detail.target.id === 'alert-messages') {
+            alerts = document.getElementById('alert-messages')
+            alerts.classList.add('show')
+            if (timeoutId) {
+                clearTimeout(timeoutId)
+            }
+
+            timeoutId = setTimeout(() => {
+                alerts.classList.remove('show')
+                alerts.classList.add('hide')
+                timeoutId = null
+            }, 1500);
+        }
+    })
+
 </script>
 
-{% if messages %}
-<ul class="alert alert-primary fade show" id="alert-messages">
-    {% for message in messages %}
-    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
-    {% endfor %}
+
+<ul class="alert alert-primary fade hide" id="alert-messages">
+    {% include 'transcendence/messages_partial_update.html' %}
 </ul>
-{% endif %}
