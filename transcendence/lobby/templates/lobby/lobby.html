@@ -62,9 +62,8 @@ function join_room() {
                 <thead>
                 <tr>
                     <th scope="col">Room Name</th>
-                    <th scope="col">gg</th>
-                    <th scope="col">hh</th>
-                    <th scope="col">tt</th>
+                    <th scope="col">Player Count</th>
+                    <th scope="col">Full</th>
                 </tr>
                 </thead>
                 {% include 'lobby/lobby_room_partial_update.html' %}
@@ -92,7 +91,7 @@ function join_room() {
      class="modal lobby-modal"
      aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-     <div id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
+     <div hx-ext="ws" ws-connect="/ws/lobby" id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
 </div>
 
 {% endblock %}

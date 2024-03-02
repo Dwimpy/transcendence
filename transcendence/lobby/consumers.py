@@ -18,25 +18,15 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             self.channel_name,
         )
         await self.accept()
-        await self.channel_layer.group_send(
-            LOBBY_WS_GROUP_NAME,
-            {
-                'type': 'update_rooms',
-                'message': 'rooms_updated'
-            }
-        )
+
+    async def receive(self, text_data=None, bytes_data=None):
+        data_json = json.loads(text_data)
+        print(data_json)
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
             LOBBY_WS_GROUP_NAME,
             self.channel_name,
-        )
-        await self.channel_layer.group_send(
-            LOBBY_WS_GROUP_NAME,
-            {
-                'type': 'update_rooms',
-                'message': 'rooms_updated'
-            }
         )
 
     async def update_rooms(self, event):
@@ -55,8 +45,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.group_room_name = ROOMS_WS_GROUP_NAME + self.room_name
-        room = await Rooms.objects.aget(room_name=self.room_name)
-        await sync_to_async(room.add_user_to_room)(self.scope['user'])
         await self.channel_layer.group_add(
             self.group_room_name,
             self.channel_name,
@@ -65,13 +53,16 @@ class RoomConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        room = await Rooms.objects.aget(room_name=self.room_name)
-        await sync_to_async(room.remove_user_from_room)(self.scope['user'])
-        await self.room_action('update_room', 'Room ' + self.room_name + ' updated')
-        await self.channel_layer.group_discard(
-            self.group_room_name,
-            self.channel_name,
-        )
+        try:
+            room = await Rooms.objects.aget(room_name=self.room_name)
+            if room:
+                await self.room_action('update_room', 'Room ' + self.room_name + ' updated')
+                await self.channel_layer.group_discard(
+                    self.group_room_name,
+                    self.channel_name,
+                )
+        except Rooms.DoesNotExist as e:
+            print(str(e))
 
     async def room_action(self, update_type, message):
         await self.channel_layer.group_send(
@@ -83,10 +74,12 @@ class RoomConsumer(AsyncWebsocketConsumer):
         )
 
     async def update_room(self, event):
-        room = await Rooms.objects.aget(room_name=self.room_name)
-        html = (get_template('lobby/room_partial_update.html')
-                .render(context={'assigned_users': [user async for user in room.assigned_users.all()],
-                                 'room_name': self.room_name,
-                                 'room': room}))
-        await self.send(text_data=html)
-
+        try:
+            room = await Rooms.objects.aget(room_name=self.room_name)
+            html = (get_template('lobby/room_partial_update.html')
+                    .render(context={'assigned_users': [user async for user in room.assigned_users.all()],
+                                     'room_name': self.room_name,
+                                     'room': room}))
+            await self.send(text_data=html)
+        except Rooms.DoesNotExist as e:
+            print(str(e))

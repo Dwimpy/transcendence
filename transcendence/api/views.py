@@ -34,7 +34,7 @@ class CreateRoomAPIView(APIView):
         if form.is_valid():
             room = form.save()
             room.add_user_to_room(self.request.user)
-            Rooms.update_rooms()
+            Rooms.update_lobby()
             index_url = reverse_lazy('room', args=[room.room_name])
             return HttpResponse(headers={
                 'HX-Redirect': index_url,

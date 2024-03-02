@@ -28,7 +28,7 @@
                 {% render_field_placeholder form "room_name" "" "Room Name" %}
             </div>
         </form>
-            <div id="key-up" hx-ws="send" hx-trigger="keyup, keydown" hx-vals="js:{keyPressed: event.type}"></div>
+            <div id="key-up" hx-ws="send" hx-trigger="keyup from:dialog, keydown" hx-vals="js:{keyPressed: event.type}"></div>
     </div>
     <div id="modal-footer" class="modal-footer justify-content-center flex-column">
         {% include 'accounts/base_templates/form_errors.html' %}
