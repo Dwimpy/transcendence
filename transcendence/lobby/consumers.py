@@ -1,6 +1,4 @@
 import json
-from typing import Dict
-from typing import Any
 
 from asgiref.sync import sync_to_async, async_to_sync
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer

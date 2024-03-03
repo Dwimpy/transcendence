@@ -260,6 +260,7 @@ h6#selected-image-name {
     height: 50%;
     border-color: rebeccapurple;
     background: rgba(0,0,0,0.3);
+    border-radius: 24px;
   /* On "top" */
   /*repeating-radial-gradient(*/
   /*  circle,*/
@@ -271,15 +272,29 @@ h6#selected-image-name {
 
 }
 
+.container.chat {
+    width: 75%;
+    height: 50%;
+    border: 1px solid rebeccapurple;
+}
+
 .flex-1 {
     flex: 1;
 }
 
 .styled-lobby {
     border-bottom: 0;
+    border-radius: 1.5rem;
     overflow-y: auto;
 }
 
+.border-radius-24 {
+    border-radius: 1.5rem;
+}
+
+#lobby_table caption {
+    border-radius: 1.5rem 1.5rem 0 0;
+}
 
 .styled-lobby table {
     position: relative;
@@ -346,7 +361,8 @@ h6#selected-image-name {
 
 .styled-lobby .container {
     max-width: 99.6%;
-    margin-bottom: 0.15rem;
+    margin-bottom: 0.1rem;
+    border-radius: 0 0 1.3rem 1.3rem;
     background: repeating-linear-gradient(
         to bottom,
         rgba(48, 25, 52, 1),
@@ -476,4 +492,113 @@ h6#selected-image-name {
 button.disabled {
     background: gray;
     pointer-events: none;
+}
+
+.chat-list {
+    border: 1px solid gray;
+    border-radius: 1em;
+    margin: 2em 0 2em 2em;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+#chat-list > div {
+    margin: 0.5em 2em 0.5em 2em;
+}
+
+#chat.chat-list {
+   margin: 2em 2em 2em 0;
+}
+
+#chat::-webkit-scrollbar {
+    display: none;
+}
+
+.triangle-container {
+    position: relative;
+    background-color: transparent; /* Background color of the container */
+}
+
+.user-me .triangle-container::after {
+    content: '';
+    position: absolute;
+    top: -2.4rem;
+    right: -1.8rem;
+    rotate: 91deg;
+    border-width: 15px; /* Adjust the size of the triangle */
+    border-style: solid;
+    border-color: transparent transparent #0dcaf0 transparent; /* Adjust the color of the triangle */
+}
+
+.user-you .triangle-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0.5rem;
+    left: -1.75rem;
+    rotate: -91deg;
+    border-width: 15px; /* Adjust the size of the triangle */
+    border-style: solid;
+    border-color: transparent transparent red transparent; /* Adjust the color of the triangle */
+}
+
+.chat-list-btn {
+    border-radius: 0.5rem 0 0 0.5rem;
+    margin: 0.1em;
+    height: 10%;
+}
+
+.mw-50 {
+    max-width: 45%;
+}
+
+.pt-auto {
+    padding-top: 20%;
+}
+
+.ai-flex-end {
+    align-items: flex-end;
+}
+
+.ai-flex-start {
+    align-items: flex-start;
+}
+
+.left-25 {
+    left: 25%;
+}
+
+.right-25 {
+    right: 25%
+}
+
+.user-me {
+    border-radius: 1rem;
+    background-color: #0dcaf0;
+}
+
+.user-you {
+    border-radius: 1rem;
+    background-color: red;
+}
+
+#chat-btn-2.chat-list-btn {
+    border-radius: 0 0.5rem 0.5rem 0;
+
+}
+
+.no-resize {
+    resize: inline;
+}
+
+.chat-button {
+    color: turquoise;
+    background-color: transparent;
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+    bottom: 0.2rem;
+}
+
+.chat-button:hover {
+    background-color: transparent;
+    color: cornflowerblue;
 }

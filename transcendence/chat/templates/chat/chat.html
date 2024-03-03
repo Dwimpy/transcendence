@@ -1,10 +1,67 @@
 {% extends 'transcendence/base.html' %}
-
+{% load static %}
 {% block content %}
 
-<div hx-ext="ws" ws-connect="/ws/rooms/{{ room_name }}" class="container d-flex flex-column border-solid-rebecca-purple-1">
+<script>
+    
 
 
+    document.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            htmx.trigger(document.getElementById('chat-button'), 'send-message')
+        }
+    })
+
+    document.addEventListener('DOMContentLoaded', (e) => {
+            document.getElementById('chat-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+        });
+           
+    })
+
+    
+</script>
+    
+<div class="container chat border-radius-24">
+    <div class="d-flex flex-row h-100 gap-3">
+        <div id="chat-list" class="d-flex flex-column w-25 chat-list align-items-center">
+            <div class="d-flex flex-row align-items-center">
+                <button class="chat-list-btn"> Friends </button>
+                <button id="chat-btn-2" class="chat-list-btn"> Groups </button>
+            </div>
+            <table class="">
+                <tbody>
+                    <tr class="d-flex flex-column align-items-center justify-content-center">
+                        <td>what</td>
+                        <td>what</td>
+                        <td>what</td>
+                        <td>what</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div hx-ext="ws" ws-connect="/ws/chat" id="chat" class="d-flex flex-column-reverse w-75 chat-list p-4 overflow-auto">
+            <div class="d-flex flex-column w-100 align-items-center">
+                <div class="user-me mw-50 position-relative left-25">
+                    <p class="m-2"> thisthis is a messagethis is a messagethis is a messagethis is a messagethis is a message is a message</p>
+                    <div id="triangle" class="triangle-container"></div>
+                </div>
+                <div class="user-you mw-50 position-relative right-25">
+                    <p class="m-2">is a messagethis is a messagethis is a messagemessageis a messagethis is a messagethis is a messagemessageis a messagethis is a messagethis is a messagemessage</p>
+                    <div id="triangle" class="triangle-container"></div>
+                </div>
+                <form hx-post="{% url 'chat' %}" id="chat-form" class="d-flex flex-row w-100 mt-4 gap-2 align-items-center">
+                    <label class="w-100">
+                        <input id="chat-input" type="text" class="d-flex form-control" placeholder="chat here" name="message"/>
+                    </label>
+                    <button hx-ws="send" id="chat-button" type="button"
+                        class="chat-button position-relative" hx-trigger="send-message from:chat">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>  
 </div>
     
 {% endblock %}
