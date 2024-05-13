@@ -1,8 +1,14 @@
+
 from asgiref.sync import sync_to_async, async_to_sync
 from channels.layers import get_channel_layer
 from django.db import models
+from django.http import HttpResponse
+from django.urls import reverse_lazy
+
 from accounts.models import AccountUser
 from channels.db import database_sync_to_async
+
+from lobby.constants import LOBBY_WS_GROUP_NAME
 
 
 class Rooms(models.Model):
@@ -12,6 +18,10 @@ class Rooms(models.Model):
                                             blank=True)
     player_count = models.IntegerField(default=0)
     is_full = models.BooleanField(default=False)
+
+    @database_sync_to_async
+    def adelete(self):
+        return self.delete()
 
     def add_user_to_room(self, user):
         self.player_count += 1
@@ -37,13 +47,3 @@ class Rooms(models.Model):
     @staticmethod
     def is_user_assigned(user):
         return Rooms.objects.filter(assigned_users=user).exists()
-
-    @staticmethod
-    def update_lobby():
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            'lobby',
-            {
-                'type': 'update_rooms'
-            }
-        )

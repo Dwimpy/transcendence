@@ -3,6 +3,11 @@
 
 {% block content %}
 
+
+<script>
+
+</script>
+
 <div hx-ext="ws" ws-connect="/ws/rooms/{{ room_name }}" class="container d-flex flex-column border-solid-rebecca-purple-1">
     {% include 'lobby/room_partial_update.html' %}
     <button type="button"> Play Game </button>

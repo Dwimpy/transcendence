@@ -50,6 +50,18 @@ function join_room() {
     })
 }
 
+function delete_room() {
+    room_name = htmx.find('.table-active').querySelector('td#room_name').innerText;
+    htmx.ajax('GET', '{% url 'lobby' %}', {
+        headers: {
+          "HX-Target": "delete-room-btn"
+        },
+        values: {
+            "room-name": room_name
+        }
+    })
+}
+
 </script>
 
 <script src="{% static 'lobby/js/selected-room.js' %}"></script>
@@ -77,6 +89,7 @@ function join_room() {
                     Create Room
             </button>
             <button id="join-room-btn" onclick="join_room()" type="button"> Join Room </button>
+            <button id="join-room-btn" onclick="delete_room()" type="button"> Delete Room </button>
         </div>
     </div>
 </div>

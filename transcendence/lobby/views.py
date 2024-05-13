@@ -1,15 +1,20 @@
 import json
+from time import sleep
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.checks import messages
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import get_template, render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 from django.contrib import messages
+
+from accounts.models import AccountUser
 from .models import Rooms
 from .forms import RoomForm
+from .signals import room_created, user_joined_a_room, user_left_a_room
+from .signals import delete_room
 
 
 # Create your views here.
@@ -27,20 +32,29 @@ class LobbyView(LoginRequiredMixin, TemplateView):
         context = self.get_context_data(**kwargs)
         if is_htmx(request):
             hx_target = request.headers.get('HX-Target')
-            if hx_target == 'lobby_room':
-                Rooms.update_lobby()
-            elif hx_target == 'dialog':
+            if hx_target == 'dialog':
                 context['field_name'] = 'room_name'
                 context['form'] = RoomForm()
                 return render(request, 'lobby/lobby_form.html', context)
             elif hx_target == 'join-room-btn':
                 return LobbyView.join_room(request)
+            elif hx_target == 'delete-room-btn':
+                return LobbyView.delete_room(room_name=request.GET.get("room-name"))
         return render(request, self.template_name, context)
+
+    @staticmethod
+    def delete_room(room_name: str):
+        delete_room.send(
+            sender=LobbyView,
+            action=f"Room {room_name} has been deleted",
+            room_name=room_name
+        )
+        return HttpResponse(status=204)
 
     def post(self, request, *args, **kwargs):
         form = RoomForm(request.POST)
-        if is_htmx(request):
-            hx_target = request.headers.get('HX-Target')
+        # if is_htmx(request):
+        #     hx_target = request.headers.get('HX-Target')
         if form.is_valid():
             return LobbyView.create_room(form, request)
         else:
@@ -50,11 +64,9 @@ class LobbyView(LoginRequiredMixin, TemplateView):
     def create_room(form, request):
         form.save()
         room_name = form.data.get('room_name')
-        room = Rooms.objects.get(room_name=room_name)
-        room.add_user_to_room(request.user)
-        room.save()
-        Rooms.update_lobby()
         room_url = reverse_lazy('room', args=[room_name])
+        room_created.send(sender=LobbyView, action='Room created',
+                          room_name=room_name, user=request.user)
         return HttpResponse(status=200, headers={
             'HX-Redirect': room_url
         })
@@ -76,6 +88,13 @@ class LobbyView(LoginRequiredMixin, TemplateView):
         try:
             room_name = request.GET.get('room-name')
             room = Rooms.objects.get(room_name=room_name)
+            user = request.user
+            user_joined_a_room.send(
+                sender=LobbyView,
+                action=f"{user.username} has left room {room_name}",
+                room_name=room_name,
+                user=user
+            )
             if room.is_full:
                 messages.success(request, 'Room is full')
                 html = render_to_string('transcendence/messages_partial_update.html',
@@ -83,8 +102,6 @@ class LobbyView(LoginRequiredMixin, TemplateView):
                 return HttpResponse(html, status=200, headers={
                     'HX-Retarget': '#alert-messages',
                 })
-            room.add_user_to_room(request.user)
-            Rooms.update_lobby()
             room_url = reverse_lazy('room', args=[room_name])
             return HttpResponse(status=200, headers={
                 'HX-Redirect': room_url
@@ -98,25 +115,28 @@ class RoomView(LoginRequiredMixin, TemplateView):
     template_name = 'lobby/room.html'
 
     def get(self, request, *args, **kwargs):
+        try:
+            context = self.get_context_data(**kwargs)
+        except Rooms.DoesNotExist:
+            return redirect("lobby")
         if is_htmx(request):
             hx_target = request.headers.get('HX-Target')
             room_name = kwargs['room_name']
             if hx_target == 'leave-room-btn':
                 return RoomView.leave_room(room_name, request.user)
-        context = self.get_context_data(**kwargs)
         return render(request, self.template_name, context)
 
     @staticmethod
-    def leave_room(room_name: str, user):
-        try:
-            room = Rooms.objects.get(room_name=room_name)
-            room.remove_user_from_room(user)
-            Rooms.update_lobby()
-            return HttpResponse(status=200, headers={
-                'HX-Redirect': reverse_lazy('lobby')
-            })
-        except Rooms.DoesNotExist:
-            raise Http404
+    def leave_room(room_name: str, user: AccountUser):
+        user_left_a_room.send(
+            sender=RoomView,
+            action=f"{user.username} has left room {room_name}",
+            room_name=room_name,
+            user=user
+        )
+        return HttpResponse(status=200, headers={
+            'HX-Redirect': reverse_lazy('lobby')
+        })
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

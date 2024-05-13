@@ -1,0 +1,9 @@
+<button class="chat-button" hx-get="{% url 'chat' %}" hx-target="#chat-window-container" hx-vals="js:{other: '{{ first_name }}'}" >
+    <span class="chat-btn-items">
+        <span class="btn-icon">{{ name_initial }}</span>
+        <span id="btn-name" class="btn-name">{{ first_name }}</span>
+        <span class="notification  {{ active }}">
+                <span class="notification-content">{{ notification }}</span>
+            </span>
+        </span>
+</button>

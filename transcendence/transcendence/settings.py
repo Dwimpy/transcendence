@@ -112,7 +112,7 @@ TEMPLATES = [
             ],
             'builtins': [
                 'index.templatetags.custom_tags',
-                # 'accounts.templatetags.registration_tags'
+                'chat.templatetags.chat_tags'
             ],
         },
     },

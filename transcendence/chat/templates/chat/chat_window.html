@@ -1,52 +1,33 @@
-<div class="d-flex flex-row mx-1 p-1">
-    <div class="d-flex position-relative align-items-center justify-content-center w-100 h-100 mx-">
-        <span class="position-absolute private-icon rounded-pill bg-red"> T </span>
-        <div class="position-absolute private-name">
-            Group Name
+ <div class="chat-window-items">
+            <div class="chat-window-title">
+                <div class="chat-title-icon">T</div>
+                <div class="chat-title-name"> This is a name </div>
+                <div class="chat-title-info"></div>
+            </div>
+            <div class="chat-window">
+                {% for message in messages %}
+                    {% if message.sender == request.user %}
+                        <div class="window-bubble me">
+                            <div class="bubble-me">
+                                {{ message.content }}
+                            </div>
+                        </div>
+                    {% else %}
+                <div class="window-bubble other">
+                    <div class="bubble-me">
+                        {{ message.content }}
+                    </div>
+                </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="chat-window-message">
+                <button id="chat-button" type="button" hx-ws="send"
+                        hx-include="[name='message']" hx-vals='js:{values: {"user": "{{ request.user.username }}", "other": clicked }}'
+                        hx-trigger="send-message from:chat-button"
+                        class="message-align"><i class="fa fa-paper-plane"></i></button>
+                <label style="width: 100%">
+                    <input id="chat-input" name="message" class="message-align chat-message">
+                </label>
+            </div>
         </div>
-        <div id="notification" class="position-absolute notification">
-            Notification
-        </div>
-    </div>
-</div>
-<div hx-ext="ws" ws-connect="/ws/chat" id="chat-frame" class="position-relative h-100  mt-4 background">
-    <form id="chat-form">
-        <div>
-            <label class="m-2">
-                <input placeholder="chat" id="chat-input"
-                       type="text" name="message"
-                       class="position-absolute text-center bottom-0 right-0 p-2">
-            </label>
-            <button id="chat-button" hx-ws="send" type="button"
-                    class="chat-button chat-input position-absolute"
-                    onclick="onChatButtonClick()"
-                    hx-trigger="send-message from:chat-frame">
-            <i class="fa-solid fa-paper-plane"></i>
-            </button>
-        </div>
-    </form>
-    <div id="chat-history" class="chat-history">
-        <ul class="me-5">
-            {% for message in messagess %}
-            <li>
-                <div class="message-data align-left">
-                    <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
-                    <span class="message-data-time">10:12 AM, Today</span>
-                </div>
-                <div class="message my-message">
-                    {{ message }}
-                </div>
-            </li>
-            <li>
-                <div class="message-data align-right">
-                    <span class="message-data-time">10:12 AM, Today</span>
-                    <span class="message-data-name"><i class="fa fa-circle online"></i> Olia</span>
-                </div>
-                <div class="message other-message">
-                    {{ message }}
-                </div>
-            </li>
-        {% endfor %}
-        </ul>
-    </div>
-</div>

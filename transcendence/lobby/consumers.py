@@ -7,6 +7,7 @@ from django.template.loader import get_template, render_to_string
 from .constants import LOBBY_WS_GROUP_NAME, ROOMS_WS_GROUP_NAME
 from .forms import RoomForm
 from .models import Rooms
+from channels.db import database_sync_to_async
 
 
 class LobbyConsumer(AsyncWebsocketConsumer):
@@ -27,8 +28,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             self.channel_name,
         )
 
-    async def update_rooms(self, event):
-        rooms = [room async for room in Rooms.objects.all()]
+    async def update_lobby_view(self, event):
+        rooms = await database_sync_to_async(list)(Rooms.objects.all())
         html = get_template('lobby/lobby_room_partial_update.html').render(context={'rooms': rooms})
         await self.send(text_data=html)
 
@@ -47,37 +48,23 @@ class RoomConsumer(AsyncWebsocketConsumer):
             self.group_room_name,
             self.channel_name,
         )
-        await self.room_action('update_room', 'Room ' + self.room_name + ' updated')
         await self.accept()
 
     async def disconnect(self, close_code):
-        try:
-            room = await Rooms.objects.aget(room_name=self.room_name)
-            if room:
-                await self.room_action('update_room', 'Room ' + self.room_name + ' updated')
-                await self.channel_layer.group_discard(
-                    self.group_room_name,
-                    self.channel_name,
-                )
-        except Rooms.DoesNotExist as e:
-            print(str(e))
-
-    async def room_action(self, update_type, message):
-        await self.channel_layer.group_send(
-            self.group_room_name,
-            {
-                'type': update_type,
-                'message': message
-            }
+        user = self.scope['user']
+        await self.channel_layer.group_discard(
+            ROOMS_WS_GROUP_NAME + self.room_name,
+            self.channel_name,
         )
 
-    async def update_room(self, event):
+    async def update_room_view(self, event):
         try:
             room = await Rooms.objects.aget(room_name=self.room_name)
+            assigned_users = await database_sync_to_async(list)(room.assigned_users.all())
             html = (get_template('lobby/room_partial_update.html')
-                    .render(context={'assigned_users': [user async for user in room.assigned_users.all()],
-                                     'room_name': self.room_name,
-                                     'room': room}))
+                    .render(context={'room': room,
+                                     'assigned_users': assigned_users
+                                     }))
             await self.send(text_data=html)
         except Rooms.DoesNotExist as e:
             print(str(e))

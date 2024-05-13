@@ -1,9 +1,12 @@
 {% extends 'transcendence/base.html' %}
 {% load static %}
+{% load chat_tags %}
 {% block content %}
 
 <script>
-    
+
+    let clicked;
+
     document.addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
             htmx.trigger(document.getElementById('chat-button'), 'send-message')
@@ -12,18 +15,21 @@
     })
     
     document.addEventListener('DOMContentLoaded', (e) => {
-            document.getElementById('chat-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
-        });
-           
+        document.getElementById('chat-input').focus()
+
+        let buttons = document.querySelectorAll('.chat-button')
+
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                const btn = button.querySelector('.btn-name')
+                clicked = btn.innerHTML
+                document.getElementById('chat-input').focus()
+            })
+        })
     })
-    
-    function onChatButtonClick() {
-        htmx.trigger(document.getElementById('chat-button'), 'send-message')
-        document.getElementById('chat-input').value = ""
-        
-    }
-    
+
+
+
 </script>
     
 {#<div class="container chat border-radius-24">#}
@@ -111,50 +117,52 @@
 {#</div>#}
 
 <div hx-ext="ws" ws-connect="/ws/chat" class="container clearfix chat-container">
-
 <div class="chat-lists">
+    <div class="d-flex flex-row justify-content-center align-items-center">
         <i class="fa-brands fa-rocketchat title-icon chat-title"></i>
         <span class=ms-2></span> <!-- Add a space element here -->
         <span class="chat-title"> Pong Chat </span>
+    </div>
     <div class="lists">
-        <div class="d-flex flex-row justify-content-center">
+        <div class="d-flex flex-row justify-content-center align-items-center">
             <i class="fas fa-user-friends title-icon list-type-title"></i>
-            <span class="ms-2"></span>
-            <span class="chat-title list-type-title">Friends</span>
+             <span class="chat-title list-type-title">Friends</span>
         </div>
         <div class="groups">
             <div class="list">
-                <button> Test </button>
-                <button> Test </button>
-                <button> Test </button>
-                <button> Test </button>
-                <button> Test </button>
-                <button> Test </button>
-                <button> Test </button>
-                <button> Test </button>
-                <button> Test </button>
-
+                {% list_button 'danila' '' %}
+                {% list_button 'Gravy' '11' %}
+                {% list_button 'ww' '11' %}
+                {% list_button 'Gravy' '11' %}
+                {% list_button 'Gravy' '11' %}
+                {% list_button 'Gravy' '11' %}
+                {% list_button 'Gravy' '11' %}
             </div>
         </div>
-        <div class="d-flex flex-row justify-content-center mt-2">
+        <div class="d-flex flex-row justify-content-center align-items-center mt-2">
             <i class="fa-solid fa-users title-icon list-type-title"></i>
             <span class="ms-2"></span>
             <span class="chat-title list-type-title">Groups</span>
         </div>
         <div class="groups">
             <div class="list">
-                <button class="chat-button">
-                    <span class="chat-btn-items">
-                        <span class="btn-icon">C</span>
-                        <span class="btn-name">Test</span>
-                        <span class="notification">124</span>
-                    </span>
-                </button>
+                {% list_button 'TTHG' '343434' %}
+                {% list_button 'TTHG' '343434' %}
+                {% list_button 'TTHG' '343434' %}
+                {% list_button 'TTHG' '343434' %}
+                {% list_button 'TTHG' '343434' %}
+                {% list_button 'TTHG' '343434' %}
+                {% list_button 'TTHG' '343434' %}
+                {% list_button 'TTHG' '343434' %}
+                {% list_button 'TTHG' '343434' %}
+                {% list_button 'TTHG' '343434' %}
             </div>
         </div>
     </div>
-</div>
-
+    </div>
+    <div id="chat-window-container" class="chat-window-container">
+       {% include 'chat/chat_window.html' %}
+    </div>
 </div>
 
 {% endblock %}
