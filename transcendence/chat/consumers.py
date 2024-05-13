@@ -11,7 +11,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         await self.accept()
 
     async def receive_json(self, text_data=None, bytes_data=None):
-        print(text_data)
+        pass
+        # print(text_data)
         print(text_data['message'])
 
     async def disconnect(self, close_code):

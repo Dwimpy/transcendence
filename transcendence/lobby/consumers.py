@@ -51,7 +51,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        user = self.scope['user']
         await self.channel_layer.group_discard(
             ROOMS_WS_GROUP_NAME + self.room_name,
             self.channel_name,
