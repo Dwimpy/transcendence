@@ -189,11 +189,12 @@ USE_TZ = True
 
 
 # URLS
-STATIC_URL = 'static/'
+STATIC_URL = 'resources/static/'
 MEDIA_URL = 'media/'
 
 # ROOT URLS
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_production_test/')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'resources', 'static/')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'resources', 'media/')
 
 STATICFILES_DIRS = [

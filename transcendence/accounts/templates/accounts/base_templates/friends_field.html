@@ -1,0 +1,52 @@
+{% load widget_tweaks %}
+{% load registration_tags %}
+
+<div class="card rounded-6 flex flex-column border-solid-gray-1 bg-image m-lg-2">
+    <div class="card-overlay rounded-6 z-0"></div>
+    <div class="card-body z-1 text-center  me-5 ms-5 align-items-center">
+        <h2 class="mt-1 mb-5 pt-2 color-white">{{ user.username }}'s Friends</h2>
+
+<div class="card rounded-6 flex flex-column border-solid-gray-1 bg-image">
+    <div class="card-overlay rounded-6 z-0"></div>
+    <div class="card-body z-1 text-center  me-5 ms-5 align-items-center">
+        <h2 class="mt-1 mb-5 pt-2 color-white">Search Users</h2>
+        <form method="get" class="color-white align-items-center">
+            {% render_field search_form.query class="form-control" placeholder="Enter Username..." id="search_username"%}
+            <div class="d-flex flex-column align-items-center">
+
+            <button class="mb-2 mt-4 color-white " type="submit">Search</button>
+            </div>
+        </form>
+
+        {% if search_results %}
+        <h3 class="mt-1 mb-5 pt-2 color-white">Results:</h3>
+        <ul class="mt-1 mb-5 pt-2 color-white">
+            {% for result in search_results %}
+            <li>
+                {{ result.username }}
+                {% if result in user.friends.all %}
+                    <span>(Already a friend)</span>
+                {% else %}
+                    <a href="{% url 'add_friend' result.username %}">Add as Friend</a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+</div>
+</div>
+        <h3 class="mt-1 mb-5 pt-2 color-white">Friends List:</h3>
+        <ul class="mt-1 mb-5 pt-2 color-white">
+            {% for friend in user.friends.all %}
+            <li class="mt-1 mb-5 pt-2 color-white">
+                {{ friend.username }}
+                {% if friend.get_picture_url %}
+                    <img class="center-img-form-small mb-3" src="{{ friend.picture.url }}" alt="Uploaded Image">
+                {% else %}
+                    <span>No Picture<span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
