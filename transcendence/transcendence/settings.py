@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'pong',
     'lobby',
     'chat',
-    'widget_tweaks'
+    'widget_tweaks',
+    'tictac',
 ]
 
 
@@ -99,7 +100,8 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'index', 'templates'),
             os.path.join(BASE_DIR, 'pong', 'templates'),
             os.path.join(BASE_DIR, 'accounts', 'templates'),
-            os.path.join(BASE_DIR, 'chat', 'templates')
+            os.path.join(BASE_DIR, 'chat', 'templates'),
+            os.path.join(BASE_DIR, 'tictac', 'templates'),
         },
         'APP_DIRS': True,
         'OPTIONS': {

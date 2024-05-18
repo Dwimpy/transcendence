@@ -1,0 +1,42 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+{% load chat_tags %}
+{% block content %}
+
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <div class="board">
+        {% for i in range(9) %}
+            <div class="cell" data-index="{{ i }}" onclick="makeMove({{ i }})">{{ game.board[i] }}</div>
+        {% endfor %}
+    </div>
+    <div class="winner">
+        {% if game.is_over %}
+            {% if game.winner == 'Draw' %}
+                It's a draw!
+            {% else %}
+                Winner: {{ game.winner }}
+            {% endif %}
+        {% else %}
+            Current turn: {{ game.current_turn }}
+        {% endif %}
+    </div>
+    <form id="move-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="index" id="move-index">
+    </form>
+    <button onclick="resetGame()">Reset</button>
+
+    <script>
+        function makeMove(index) {
+            document.getElementById('move-index').value = index;
+            document.getElementById('move-form').submit();
+        }
+        function resetGame() {
+            window.location.href = "{% url 'reset' %}";
+        }
+    </script>
+</body>
+
+
+{% endblock %}
