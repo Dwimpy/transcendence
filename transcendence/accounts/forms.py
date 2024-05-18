@@ -4,7 +4,8 @@ from django.utils.functional import lazy
 from django.utils.translation import gettext
 from .models import AccountUser
 
-
+class UserSearchForm(forms.Form):
+    query = forms.CharField(label='Search for users', max_length=150)
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = AccountUser

@@ -1,0 +1,242 @@
+@import "resources/static/bootstrap/scss/functions";
+@import "resources/static/bootstrap/scss/variables";
+@import "resources/static/bootstrap/scss/variables-dark";
+@import "resources/static/bootstrap/scss/maps";
+@import "resources/static/bootstrap/scss/mixins";
+@import "resources/static/bootstrap/scss/utilities";
+
+$spacers: (
+  0: 0,
+  1: ($spacer * .25),    //4px
+  2: ($spacer * .5),     //8px
+  3: $spacer,            //16px
+  4: ($spacer * 1.5),    //24px
+  5: ($spacer * 3),      //48px
+  6: ($spacer * 4),      //64px
+  7: ($spacer * 5),      //80px
+  8: ($spacer * 6.25),   //100px
+  9: ($spacer * 7.5),    //120px
+  10: ($spacer * 9.375)  //150px
+);
+
+$border-radius-custom:         50px !default;
+
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "margin": map-merge(
+      map-get($utilities, "margin"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "margin"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "margin-x": map-merge(
+      map-get($utilities, "margin-x"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "margin-x"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "margin-y": map-merge(
+      map-get($utilities, "margin-y"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "margin-y"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "margin-end": map-merge(
+      map-get($utilities, "margin-end"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "margin-end"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "margin-top": map-merge(
+      map-get($utilities, "margin-top"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "margin-top"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "margin-bottom": map-merge(
+      map-get($utilities, "margin-bottom"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "margin-bottom"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "margin-start": map-merge(
+      map-get($utilities, "margin-start"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "margin-start"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "padding": map-merge(
+      map-get($utilities, "padding"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "padding"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "padding-x": map-merge(
+      map-get($utilities, "padding-x"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "padding-x"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "padding-y": map-merge(
+      map-get($utilities, "padding-y"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "padding-y"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "padding-top": map-merge(
+      map-get($utilities, "padding-top"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "padding-top"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "padding-end": map-merge(
+      map-get($utilities, "padding-end"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "padding-end"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "padding-bottom": map-merge(
+      map-get($utilities, "padding-bottom"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "padding-bottom"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "padding-start": map-merge(
+      map-get($utilities, "padding-start"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "padding-start"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "gap": map-merge(
+      map-get($utilities, "gap"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "gap"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "row-gap": map-merge(
+      map-get($utilities, "row-gap"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "row-gap"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "column-gap": map-merge(
+      map-get($utilities, "column-gap"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "column-gap"), "values"),
+          ($spacers),
+        ),
+      ),
+    ),
+    "width": map-merge(
+      map-get($utilities, "width"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "width"), "values"),
+        (80: 80%,
+        35: 30%,
+        40: 40%,
+        85: 85%),
+        ),
+      ),
+    ),
+    "viewport-height": map-merge(
+      map-get($utilities, "viewport-height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "viewport-height"), "values"),
+        (50: 50vh),
+        ),
+      ),
+    ),
+    "min-viewport-height": map-merge(
+      map-get($utilities, "min-viewport-height"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "min-viewport-height"), "values"),
+        (50: 50vh),
+        ),
+      ),
+    ),
+    "top": map-merge(
+      map-get($utilities, "top"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "top"), "values"),
+        (25: 25%),
+        ),
+      ),
+    ),
+    "rounded": map-merge(
+      map-get($utilities, "rounded"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "rounded"), "values"),
+        (6: $border-radius-custom),
+        ),
+      ),
+    ),
+    "rounded-start": map-merge(
+      map-get($utilities, "rounded-start"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "rounded-start"), "values"),
+        (6: $border-radius-custom),
+        ),
+      ),
+    ),
+  )
+);
+
+@import "resources/static/bootstrap/scss/utilities/api";
+
