@@ -15,7 +15,7 @@ def tictacMainQ(request):
     game, created = Game2.objects.get_or_create(id=1)  # For simplicity, we use a single game instance
 
     if request.method == 'POST':
-        index = int(request.POST.get('tictacMainQ'))
+        index = int(request.POST.get('index'))
         if not game.is_over and game.board[index] == ' ':
             board = list(game.board)
             board[index] = game.current_turn
@@ -24,10 +24,15 @@ def tictacMainQ(request):
             game.is_over, game.winner = check_winner(game.board)
             game.save()
 
+    # Create a list of tuples (index, value) for the board
+    board_with_indices = [(i, game.board[i]) for i in range(9)]
+
     context = {
         'game': game,
+        'board_with_indices': board_with_indices,
     }
     return render(request, 'tictac/tictac.html', context)
+
 
 def reset(request):
     game = Game2.objects.get(id=1)
@@ -36,7 +41,8 @@ def reset(request):
     game.is_over = False
     game.winner = None
     game.save()
-    return redirect('tictacMainQ')
+    return redirect('tictac')
+
 
 def check_winner(board):
     winning_combinations = [

@@ -31,11 +31,11 @@
 </head>
 <body>
     <h1>Tic-Tac-Toe</h1>
-{#    <div class="board">#}
-{#        {% for i in 9|range_filter %}#}
-{#            <div class="cell" data-index="{{ i }}" onclick="makeMove({{ i }})">{{ game.board[i] }}</div>#}
-{#        {% endfor %}#}
-{#    </div>#}
+    <div class="board">
+        {% for index, value in board_with_indices %}
+            <div class="cell" data-index="{{ index }}" onclick="makeMove({{ index }})">{{ value }}</div>
+        {% endfor %}
+    </div>
     <div class="winner">
         {% if game.is_over %}
             {% if game.winner == 'Draw' %}
