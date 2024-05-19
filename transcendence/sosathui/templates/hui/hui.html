@@ -18,6 +18,11 @@
             text-align: center;
             {#max-width: 100px; /* Max width for two digits */#}
         }
+        @media (max-width: 768px) {
+            .text {
+                font-size: 1em; /* Set font size to 1em for viewport width up to 768px */
+            }
+        }
     </style>
         <div class="text" id="textElement"></div>
 
