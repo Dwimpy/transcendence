@@ -1,7 +1,7 @@
 {% load static %}
 
 {% if user.is_authenticated %}
-<a class="icon border-solid-white-1 rounded-3" href="{% url 'profile' pk=request.user.username %}">
+<a class="icon border-solid-white-1 rounded-3" href="{% url 'profile' username=request.user.username %}">
     <img src="{% static 'user.png' %}" alt="">
 </a>
 {% else %}

@@ -1,0 +1,22 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% block content %}
+<h2>Search Users</h2>
+<form method="get">
+    {{ form.as_p }}
+    <button type="submit">Search</button>
+</form>
+
+{% if results %}
+<h3>Results:</h3>
+<ul>
+    {% for user in results %}
+    <li>
+        {{ user.username }}
+        <a href="{% url 'add_friend' user.username %}">Add as Friend</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
