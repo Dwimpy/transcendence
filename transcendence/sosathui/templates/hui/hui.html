@@ -168,7 +168,15 @@
         }
         changeText(0 + ' ' + 0)
 
+        let cam_angle = 0
+        let mem = true
         const animate = () => {
+            if (mem) {
+                camera.lookAt(0, -90, 0)
+
+                camera.position.x = sphere.position.x
+                camera.position.z = sphere.position.z
+            }
             requestAnimationFrame(animate);
             if (score_top >= max_score || score_bottom >= max_score)
             {
@@ -299,10 +307,16 @@
             }
             if (event.key === 'a')
             {
-                bot_speed = -bar_max_speed;
+                if (mem)
+                    bot_speed = bar_max_speed;
+                else
+                    bot_speed = -bar_max_speed;
             }
             if (event.key === 'd')
             {
+                if (mem)
+                    bot_speed = -bar_max_speed;
+                else
                 bot_speed = bar_max_speed;
             }
 
