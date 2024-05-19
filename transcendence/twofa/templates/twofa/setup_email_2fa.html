@@ -1,0 +1,12 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Setup Email Two-Factor Authentication</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary mt-3">Setup Email 2FA</button>
+    </form>
+</div>
+{% endblock %}

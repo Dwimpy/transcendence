@@ -5,6 +5,13 @@
 {% load registration_tags %}
 {% block content %}
 
-{% render_profile_form user.username form user 'accounts/base_templates/profile_form.html' 'profile' request.user %}
+
+<div class="container z-1 d-flex justify-content-center align-items-center flex-row">
+
+    {% render_profile_form user.username form user 'accounts/base_templates/profile_form.html' 'profile' request.user %}
+
+    {% render_friends_view user.username user logged_user search_form search_results%}
+
+</div>
 
 {% endblock %}

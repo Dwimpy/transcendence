@@ -18,13 +18,73 @@ from urllib.parse import quote
 import requests
 from django.contrib import messages
 from django.conf import settings
+from .forms import UserSearchForm
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from twofa.models import UserProfile
 
+@login_required
+def search_users(request):
+    form = UserSearchForm()
+    results = []
+    if 'query' in request.GET:
+        form = UserSearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            results = AccountUser.objects.filter(username__icontains=query).exclude(username=request.user.username)
+    return render(request, 'accounts/search_users.html', {'form': form, 'results': results})
+
+@login_required
+def add_friend(request, username):
+    user = request.user
+    friend = get_object_or_404(AccountUser, username=username)
+    user.friends.add(friend)
+    return redirect('profile', username=user.username)
+
+@login_required
+def profile(request, username):
+    user = get_object_or_404(AccountUser, username=username)
+    is_friend = request.user.friends.filter(username=username).exists()
+    return render(request, 'accounts/profile.html', {'user': user, 'is_friend': is_friend})
 
 # Create your views here.
+# class ProfileView(LoginRequiredMixin, UpdateView):
+#     template_name = 'accounts/profile.html'
+#     model = AccountUser
+#     form_class = ProfileForm
+#
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#
+#     def get(self, *args, **kwargs):
+#         try:
+#             logged_user = self.request.user
+#             user = self.get_object()
+#             form = self.form_class(instance=user)
+#             if not logged_user.username == user.username:
+#                 for field in form.fields:
+#                     form.fields[field].widget.attrs['readonly'] = True
+#             return render(self.request, self.template_name, {'user': user,
+#                                                              'logged_user': logged_user.username,
+#                                                              'form': form})
+#         except AccountUser.DoesNotExist:
+#             raise Http404("User does not exist")
+#
+#     def form_invalid(self, form):
+#         return super().form_invalid(form)
+#
+#     def get_success_url(self):
+#         user = self.request.user
+#         url = reverse_lazy('profile', args=[user.username])
+#         return url
+
+
 class ProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/profile.html'
     model = AccountUser
     form_class = ProfileForm
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,12 +94,31 @@ class ProfileView(LoginRequiredMixin, UpdateView):
             logged_user = self.request.user
             user = self.get_object()
             form = self.form_class(instance=user)
-            if not logged_user.username == user.username:
+            search_form = UserSearchForm()
+
+            if 'query' in self.request.GET:
+                search_form = UserSearchForm(self.request.GET)
+                if search_form.is_valid():
+                    query = search_form.cleaned_data['query']
+                    search_results = AccountUser.objects.filter(username__icontains=query).exclude(username=self.request.user.username)
+                else:
+                    search_results = []
+            else:
+                search_results = []
+
+            if logged_user.username != user.username:
                 for field in form.fields:
                     form.fields[field].widget.attrs['readonly'] = True
-            return render(self.request, self.template_name, {'user': user,
-                                                             'logged_user': logged_user.username,
-                                                             'form': form})
+
+            context = {
+                'user': user,
+                'logged_user': logged_user.username,
+                'form': form,
+                'search_form': search_form,
+                'search_results': search_results,
+            }
+
+            return render(self.request, self.template_name, context)
         except AccountUser.DoesNotExist:
             raise Http404("User does not exist")
 
@@ -52,16 +131,37 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         return url
 
 
+# class UserLoginView(LoginView):
+#     template_name = 'accounts/login.html'
+
+#     def get(self, request, *args, **kwargs):
+#         return super().get(request, *args, **kwargs)
+
+#     def get_success_url(self):
+#         user = self.request.user
+#         return reverse_lazy('profile', args=[user.username])
+
 class UserLoginView(LoginView):
     template_name = 'accounts/login.html'
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+    def form_valid(self, form):
+        """
+        Security check complete. Log the user in.
+        """
+        user = form.get_user()
+        login(self.request, user)
+        try:
+            user_profile = UserProfile.objects.get(user=user)
+            if user_profile.chosen_2fa_method:
+                self.request.session['pre_2fa_login'] = True
+                return redirect('twofa:verify_2fa')
+        except UserProfile.DoesNotExist:
+            pass
+        return super().form_valid(form)
 
     def get_success_url(self):
         user = self.request.user
         return reverse_lazy('profile', args=[user.username])
-
 
 class RegistrationView(FormView):
     template_name = 'accounts/registration.html'

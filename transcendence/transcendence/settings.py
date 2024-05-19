@@ -53,19 +53,42 @@ INSTALLED_APPS = [
     'pong',
     'lobby',
     'chat',
-    'widget_tweaks'
+	'twofa',
+    'django_otp',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_email',
+    'widget_tweaks',
 ]
 
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_otp.middleware.OTPMiddleware',
 ]
+
+# Twilio settings
+TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
+TWILIO_PHONE_NUMBER = config('TWILIO_PHONE_NUMBER')
+
+# Email settings
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+OTP_TOTP_ISSUER = 'Transcendence'
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -80,7 +103,8 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend'
+    'django.contrib.auth.backends.ModelBackend',
+#    'django_otp.backends.OTPAuthenticationBackend',
 ]
 
 CHANNEL_LAYERS = {
@@ -189,11 +213,12 @@ USE_TZ = True
 
 
 # URLS
-STATIC_URL = 'static/'
+STATIC_URL = 'resources/static/'
 MEDIA_URL = 'media/'
 
 # ROOT URLS
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_production_test/')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'resources', 'static/')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'resources', 'media/')
 
 STATICFILES_DIRS = [
