@@ -130,32 +130,9 @@
         </div>
         <div class="groups">
             <div class="list">
-                {% list_button 'danila' '' %}
-                {% list_button 'Gravy' '11' %}
-                {% list_button 'ww' '11' %}
-                {% list_button 'Gravy' '11' %}
-                {% list_button 'Gravy' '11' %}
-                {% list_button 'Gravy' '11' %}
-                {% list_button 'Gravy' '11' %}
-            </div>
-        </div>
-        <div class="d-flex flex-row justify-content-center align-items-center mt-2">
-            <i class="fa-solid fa-users title-icon list-type-title"></i>
-            <span class="ms-2"></span>
-            <span class="chat-title list-type-title">Groups</span>
-        </div>
-        <div class="groups">
-            <div class="list">
-                {% list_button 'TTHG' '343434' %}
-                {% list_button 'TTHG' '343434' %}
-                {% list_button 'TTHG' '343434' %}
-                {% list_button 'TTHG' '343434' %}
-                {% list_button 'TTHG' '343434' %}
-                {% list_button 'TTHG' '343434' %}
-                {% list_button 'TTHG' '343434' %}
-                {% list_button 'TTHG' '343434' %}
-                {% list_button 'TTHG' '343434' %}
-                {% list_button 'TTHG' '343434' %}
+                {% for friend in request.user.friends.all %}
+                    {% list_button friend|stringformat:"s" '' %}
+                {% endfor %}
             </div>
         </div>
     </div>

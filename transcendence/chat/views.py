@@ -35,7 +35,11 @@ class ChatView(LoginRequiredMixin, TemplateView):
                     return render(request, 'chat/chat_window.html', context)
                 except AccountUser.DoesNotExist:
                     raise Http404
-        return render(request, self.template_name, status=200, context={})
+        user = AccountUser.objects.get(username=request.user)
+        context = self.get_context_data(**kwargs)
+        print(user.friends)
+        context['friends'] = user.friends
+        return render(request, self.template_name, status=200, context=context)
 
     def post(self, request, *args, **kwargs):
         return render(request, self.template_name, status=200, context={'messagess': 'wtf'})

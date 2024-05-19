@@ -21,6 +21,7 @@
             {% endif %}
         {% endfor %}
     </div>
+    {% if messages %}
     <div class="chat-window-message">
         <button id="chat-button" type="button" hx-ws="send"
                 hx-include="[name='message']" hx-vals='js:{values: {"user": "{{ request.user.username }}", "other": clicked }}'
@@ -30,4 +31,5 @@
             <input id="chat-input" name="message" class="message-align chat-message">
         </label>
     </div>
+    {% endif %}
 </div>
