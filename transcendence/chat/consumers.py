@@ -12,8 +12,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def receive_json(self, text_data=None, bytes_data=None):
         pass
-        # print(text_data)
-        print(text_data['message'])
+        print(text_data)
+        #print(text_data['message'])
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
