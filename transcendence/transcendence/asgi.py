@@ -16,6 +16,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 
 import chat.routing
 import lobby.routing
+import game.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'transcendence.settings')
 
@@ -29,7 +30,8 @@ application = ProtocolTypeRouter({
         AuthMiddlewareStack(
             URLRouter([
                 *lobby.routing.websocket_urlpatterns,
-                *chat.routing.websocket_urlpatterns
+                *chat.routing.websocket_urlpatterns,
+                *game.routing.websocket_urlpatterns
             ])
         )
     ),
