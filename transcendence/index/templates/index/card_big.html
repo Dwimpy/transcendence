@@ -25,6 +25,9 @@
                 </div>
                 {% else %}
                 <a class="text-whitesmoke text-decoration-none">
+                <a class="text-whitesmoke" href="{% url 'tictac' %}">
+                    <button class="text-center">Play Now tictac!</button>
+                </a>
                 {% if title == 'Not Pong' %}
                     <a class="text-whitesmoke" href="{% url 'localgame' %}">
                         <button class="text-center">Play Now game local!</button>

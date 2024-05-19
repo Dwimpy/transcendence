@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'lobby',
     'chat',
     'widget_tweaks',
+    'tictac',
     'game',
     'channels',
     'localgame',
@@ -110,6 +111,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'pong', 'templates'),
             os.path.join(BASE_DIR, 'accounts', 'templates'),
             os.path.join(BASE_DIR, 'chat', 'templates'),
+            os.path.join(BASE_DIR, 'tictac', 'templates'),
             os.path.join(BASE_DIR, 'game', 'templates'),
             os.path.join(BASE_DIR, 'localgame', 'templates'),
             os.path.join(BASE_DIR, 'sosathui', 'templates'),
@@ -202,11 +204,12 @@ USE_TZ = True
 
 
 # URLS
-STATIC_URL = 'static/'
+STATIC_URL = 'resources/static/'
 MEDIA_URL = 'media/'
 
 # ROOT URLS
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_production_test/')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'resources', 'static/')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'resources', 'media/')
 
 STATICFILES_DIRS = [
