@@ -3,13 +3,39 @@
 {% load chat_tags %}
 {% block content %}
 
+<!-- game/templates/game/index.html -->
+{% load game_filters %}
+
+<head>
+    <title>Tic-Tac-Toe</title>
+    <style>
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            border: 1px solid #000;
+        }
+        .winner {
+            font-size: 1.5em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
 <body>
     <h1>Tic-Tac-Toe</h1>
-    <div class="board">
-        {% for i in range(9) %}
-            <div class="cell" data-index="{{ i }}" onclick="makeMove({{ i }})">{{ game.board[i] }}</div>
-        {% endfor %}
-    </div>
+{#    <div class="board">#}
+{#        {% for i in 9|range_filter %}#}
+{#            <div class="cell" data-index="{{ i }}" onclick="makeMove({{ i }})">{{ game.board[i] }}</div>#}
+{#        {% endfor %}#}
+{#    </div>#}
     <div class="winner">
         {% if game.is_over %}
             {% if game.winner == 'Draw' %}
