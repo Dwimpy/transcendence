@@ -1,0 +1,392 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        canvas { background: black; display: block; margin: auto; width: 50vw; height: 50vh}
+    </style>
+    <body>
+    <canvas id="pongCanvasLocal" ></canvas>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+
+
+        function setup()
+        {
+
+          draw();
+        }
+
+
+
+        // set the scene size
+        var WIDTH = 640,
+        HEIGHT = 360;
+
+        // create a WebGL renderer, camera
+        // and a scene
+        var renderer = new THREE.WebGLRenderer();
+
+        // start the renderer
+        renderer.setSize(WIDTH, HEIGHT);
+
+        // attach the render-supplied DOM element (the gameCanvas)
+
+        const c = document.getElementById('pongCanvasLocal');
+        c.appendChild(renderer.domElement);
+const VIEW_ANGLE = 75; // Field of view in degrees
+const ASPECT = window.innerWidth / window.innerHeight; // Aspect ratio
+const NEAR = 0.1; // Near clipping plane
+const FAR = 1000; // Far clipping plane
+        camera = new THREE.PerspectiveCamera(
+            VIEW_ANGLE,
+            ASPECT,
+            NEAR,
+            FAR);
+
+        scene = new THREE.Scene();
+
+        // add the camera to the scene
+        scene.add(camera);
+
+        // set a default position for the camera
+        // not doing this somehow messes up shadow rendering
+        camera.position.z = 320;
+        var radius = 5,
+        segments = 6,
+        rings = 6;
+
+        // create the sphere's material
+        var sphereMaterial =
+        new THREE.MeshLambertMaterial(
+        {
+        color: 0xD43001
+        });
+
+        // Create a ball with sphere geometry
+        var ball = new THREE.Mesh(
+            new THREE.SphereGeometry(radius,
+            segments,
+            rings),
+            sphereMaterial);
+
+        // add the sphere to the scene
+        scene.add(ball);
+
+        function draw()
+        {
+            // draw THREE.JS scene
+            renderer.render(scene, camera);
+console.log('here')
+            // loop the draw() function
+            requestAnimationFrame(draw);
+
+            // process game logic
+
+        }
+        draw()
+
+
+        {##}
+        {#const canvas = document.getElementById('pongCanvasLocal');#}
+        {#const context = canvas.getContext('2d');#}
+        {#canvas.width = 1200#}
+        {#canvas.height = 600#}
+        {#let left_bar_x = 10#}
+        {#let left_bar_y = 10#}
+        {#let right_bar_x = canvas.width -  20#}
+        {#let right_bar_y = 10#}
+        {#let bar_height = 100#}
+        {#let bar_width = 10#}
+        {#let left_bar_speed = 0#}
+        {#let right_bar_speed = 0#}
+        {#let bar_speed = 200#}
+        {##}
+        {#let x_speed = 200#}
+        {#let y_speed = 200#}
+        {#let circle_x = 0;#}
+        {#let circle_y = 0;#}
+        {#let speed = 300;#}
+        {#let ball_size = 20#}
+        {#let ball_active = false#}
+        {##}
+        {##}
+        {#let score_left = 0#}
+        {#let score_right = 0#}
+        {#let running = false#}
+        {#let max_score = 5#}
+        {#let bot = true#}
+        {##}
+        {#let lastTime = performance.now();#}
+        {##}
+        {#function GameLoop()#}
+        {#{#}
+        {#    if (score_right >= max_score || score_left >= max_score) {#}
+        {#            running = false#}
+        {#        }#}
+        {#    if (running) {#}
+        {##}
+        {#        const currentTime = performance.now();#}
+        {#        const deltaTime = (currentTime - lastTime) / 1000; // Convert milliseconds to seconds#}
+        {#        lastTime = currentTime;#}
+        {#        if (bot) {#}
+        {#            if (x_speed < 0) {#}
+        {#                let y_collision = calculateYAtX(left_bar_x + bar_width, x_speed, y_speed, circle_x, circle_y)#}
+        {##}
+        {#                    if (y_collision < 0) {#}
+        {#                        y_collision *= -1#}
+        {#                    }#}
+        {#                    if (y_collision > canvas.height) {#}
+        {#                        y_collision -= canvas.height#}
+        {#                        y_collision = canvas.height - y_collision#}
+        {#                    }#}
+        {##}
+        {#                if (y_collision < left_bar_y + bar_height / 3)#}
+        {#                    left_bar_speed = -bar_speed#}
+        {#                else if (y_collision > left_bar_y + bar_height * 0.7)#}
+        {#                    left_bar_speed = bar_speed#}
+        {#                else#}
+        {#                    left_bar_speed = 0#}
+        {#            } else#}
+        {#                left_bar_speed = 0#}
+        {#        }#}
+        {#        if (ball_active)#}
+        {#        {#}
+        {#        left_bar_y += left_bar_speed * deltaTime#}
+        {#        right_bar_y += right_bar_speed * deltaTime#}
+        {#        }#}
+        {##}
+        {#        if (left_bar_y < 0) {#}
+        {#            left_bar_y = 0#}
+        {#        }#}
+        {#        if (left_bar_y + bar_height > canvas.height) {#}
+        {#            left_bar_y = canvas.height - bar_height#}
+        {#        }#}
+        {#        if (right_bar_y < 0) {#}
+        {#            right_bar_y = 0#}
+        {#        }#}
+        {#        if (right_bar_y + bar_height > canvas.height) {#}
+        {#            right_bar_y = canvas.height - bar_height#}
+        {#        }#}
+        {##}
+        {#        circle_x += x_speed * deltaTime;#}
+        {#        circle_y += y_speed * deltaTime;#}
+        {##}
+        {#        context.clearRect(0, 0, canvas.width, canvas.height);#}
+        {#        do_circle(deltaTime)#}
+        {#        drawRectangle(left_bar_x, left_bar_y, bar_width, bar_height)#}
+        {#        drawRectangle(right_bar_x, right_bar_y, bar_width, bar_height)#}
+        {#        drawText(score_left + ':' + score_right, canvas.width / 2 - 15, 20, 20)#}
+                {#console.log(x_speed, y_speed, deltaTime)#}
+        {#    }#}
+        {#    else#}
+        {#    {#}
+        {#        if (score_right === score_left) {#}
+        {#            let size = 40#}
+        {#            drawText('Press Space to start', canvas.width / 2 - size * 4, canvas.height / 2, size)#}
+        {#        }#}
+        {#        if (score_left > score_right)#}
+        {#         {#}
+        {#             let size = 40#}
+        {#             drawText('Last game was won by left with score', canvas.width / 2 - size * 6, canvas.height / 2, size)#}
+        {#             drawText(score_left + ':' + score_right, canvas.width / 2 - size * 6, canvas.height / 2 + size, size)#}
+        {#             drawText('Press Space to play again', canvas.width / 2 - size * 6, canvas.height / 2 + size * 2, size)#}
+        {#        }#}
+        {#        if (score_left < score_right)#}
+        {#         {#}
+        {#             let size = 40#}
+        {#             drawText('Last game was won by right with score', canvas.width / 2 - size * 6, canvas.height / 2, size)#}
+        {#             drawText(score_left + ':' + score_right, canvas.width / 2 - size * 6, canvas.height / 2 + size, size)#}
+        {#             drawText('Press Space to play again', canvas.width / 2 - size * 6, canvas.height / 2 + size * 2, size)#}
+        {#        }#}
+        {##}
+        {#    }#}
+        {#    requestAnimationFrame(GameLoop);#}
+        {#}#}
+        {#GameLoop();#}
+        {##}
+        {#function calculateYAtX(xTarget, xSpeed, ySpeed, xCurrent, yCurrent) {#}
+        {#    // Calculate the time it takes for the ball to reach the xTarget#}
+        {#    const time = (xTarget - xCurrent) / xSpeed;#}
+        {##}
+        {#    // Calculate the y-coordinate at that time#}
+        {#    return yCurrent + ySpeed * time;#}
+        {##}
+        {#}#}
+        {#function do_circle(delta_time)#}
+        {#{#}
+        {#    if (ball_active) {#}
+        {#    circle_x += x_speed * delta_time;#}
+        {#    circle_y += y_speed * delta_time;#}
+        {#    if (circle_y - ball_size < 0) {#}
+        {#        circle_y = ball_size#}
+        {#        y_speed *= -1#}
+        {#    }#}
+        {#    if (circle_y + ball_size > canvas.height) {#}
+        {#        circle_y = canvas.height - ball_size#}
+        {#        y_speed *= -1#}
+        {#    }#}
+        {##}
+        {#    if (circle_x - ball_size < 0) {#}
+        {#        circle_x = ball_size#}
+        {#        x_speed *= -1#}
+        {#        score_right += 1#}
+        {#        ball_active = false#}
+        {#    }#}
+        {#    if (circle_x + ball_size > canvas.width) {#}
+        {#        circle_x = canvas.width - ball_size#}
+        {#        x_speed *= -1#}
+        {#        score_left += 1#}
+        {#        ball_active = false#}
+        {#    }#}
+        {#    if (bounce_of_left(circle_x, circle_y, ball_size, left_bar_x, left_bar_y, bar_width, bar_height)) {#}
+        {#        circle_x = ball_size + left_bar_x + bar_width#}
+        {#        let angle = (left_bar_y - ball_size - circle_y + 1) / (ball_size  + bar_height / 2) - 0.5;#}
+        {#        let speeds = calculateSpeeds(speed, angle)#}
+        {#        x_speed= speeds.xSpeed#}
+        {##}
+        {##}
+        {#        y_speed= speeds.ySpeed#}
+        {#        if (circle_y < left_bar_y + bar_height / 2)#}
+        {#            y_speed = Math.abs(y_speed) * -1#}
+        {#        else#}
+        {#            y_speed = Math.abs(y_speed)#}
+                {#console.log(x_speed, y_speed)#}
+        {#        x_speed = Math.abs(x_speed)#}
+                {#x_speed *= -1#}
+        {#    }#}
+        {#    if (bounce_of_right(circle_x, circle_y, ball_size, right_bar_x, right_bar_y, bar_width, bar_height)) {#}
+        {#        circle_x = right_bar_x - ball_size#}
+        {#        let angle = (right_bar_y - ball_size - circle_y) / (ball_size  + bar_height / 2 + 0.5);#}
+        {#        let speeds = calculateSpeeds(speed, angle)#}
+        {#        x_speed= speeds.xSpeed#}
+        {##}
+        {##}
+        {#        y_speed= speeds.ySpeed#}
+        {#        if (circle_y < right_bar_y + bar_height / 2)#}
+        {#            y_speed = Math.abs(y_speed) * -1#}
+        {#        else#}
+        {#            y_speed = Math.abs(y_speed)#}
+                {#console.log(x_speed, y_speed)#}
+        {#        x_speed = - Math.abs(x_speed)#}
+                {#x_speed *= -1#}
+                {#console.log(x_speed, y_speed)#}
+        {#    }#}
+        {#}#}
+        {#else#}
+        {#{#}
+        {#    circle_x = canvas.width / 2#}
+        {#    circle_y = canvas.height / 2#}
+        {#}#}
+        {#    drawCircle(circle_x, circle_y)#}
+        {##}
+        {#}#}
+        {#function calculateSpeeds(totalSpeed, angle) {#}
+        {#    // Convert the angle from degrees to radians#}
+        {#    const angleRadians = Math.abs(angle) ;#}
+        {##}
+        {#    // Calculate the x and y components of the speed#}
+        {#    const xSpeed = totalSpeed * Math.sin(angleRadians);#}
+        {#    const ySpeed = totalSpeed * Math.cos(angleRadians);#}
+        {##}
+        {#    return { xSpeed, ySpeed };#}
+        {#}#}
+        {##}
+        {#function drawText(text, x, y, size) {#}
+        {##}
+        {##}
+        {#    context.fillStyle = 'white';#}
+        {#    context.font = size + 'px Arial';#}
+        {#    context.fillText(text, x, y);#}
+        {#}#}
+        {##}
+        {#function bounce_of_left(ballX, ballY, ballRadius, paddleX, paddleY, paddleWidth, paddleHeight) {#}
+        {#    let withinVerticalRange = (ballY + ballRadius >= paddleY) && (ballY - ballRadius <= paddleY + paddleHeight);#}
+        {#    let touchingRightSide = ballX - ballRadius <= paddleX + paddleWidth && ballX >= paddleX + paddleWidth;#}
+        {#    return withinVerticalRange && (touchingRightSide);#}
+        {#}#}
+        {##}
+        {#function bounce_of_right(ballX, ballY, ballRadius, paddleX, paddleY, paddleWidth, paddleHeight) {#}
+        {#    let withinVerticalRange = (ballY + ballRadius >= paddleY) && (ballY - ballRadius <= paddleY + paddleHeight);#}
+        {#    let touchingLeftSide = ballX + ballRadius >= paddleX && ballX <= paddleX;#}
+        {#    return withinVerticalRange && (touchingLeftSide);#}
+        {#}#}
+        {##}
+        {#// Function to draw circle#}
+        {#function drawCircle(x, y) {#}
+        {##}
+        {#    context.beginPath();#}
+        {#    context.arc(x, y, ball_size, 0, Math.PI * 2);#}
+        {#    context.fillStyle = 'white';#}
+        {#    context.fill();#}
+        {#}#}
+        {#function drawRectangle(x, y, width, height) {#}
+        {#    context.fillStyle = 'red';#}
+        {#    context.fillRect(x, y, width, height);#}
+        {#}#}
+        {##}
+        {#// Send mouse movement data to WebSocket#}
+        {#canvas.addEventListener('mousemove', (event) => {#}
+        {#    const data = {#}
+        {#        type: 'mouse_move',#}
+        {#        x: event.clientX,#}
+        {#        y: event.clientY#}
+        {#    };#}
+        {##}
+        {#});#}
+        {##}
+        {#// Send key press data to WebSocket#}
+        {##}
+        {#document.addEventListener('keydown', (event) => {#}
+            {#console.log(event.key)#}
+        {##}
+        {#    if (!ball_active && event.key === ' ' && running)#}
+        {#    {#}
+                {#console.log(event.key)#}
+        {#        ball_active = true#}
+        {#    }#}
+        {#    if (!running && event.key === ' ') {#}
+        {#        running = true#}
+        {#        score_left = 0#}
+        {#        score_right = 0#}
+        {#    }#}
+        {#    if (!bot) {#}
+        {#        if (event.key === 'w') {#}
+        {#            left_bar_speed = -bar_speed#}
+        {#        }#}
+        {#        if (event.key === 's') {#}
+        {#            left_bar_speed = bar_speed#}
+        {#        }#}
+        {#    }#}
+        {#    if (event.key === 'ArrowUp')#}
+        {#    {#}
+        {#        right_bar_speed = -bar_speed#}
+        {#    }#}
+        {#    if (event.key === 'ArrowDown')#}
+        {#    {#}
+        {#        right_bar_speed = bar_speed#}
+        {#    }#}
+            {#console.log(x_speed, y_speed)#}
+        {#});#}
+        {##}
+        {#document.addEventListener('keyup', (event) => {#}
+        {#    if (event.key === 'w')#}
+        {#    {#}
+        {#        left_bar_speed = 0#}
+        {#    }#}
+        {#    if (event.key === 's')#}
+        {#    {#}
+        {#        left_bar_speed = 0#}
+        {#    }#}
+        {#    if (event.key === 'ArrowUp')#}
+        {#    {#}
+        {#        right_bar_speed = 0#}
+        {#    }#}
+        {#    if (event.key === 'ArrowDown')#}
+        {#    {#}
+        {#        right_bar_speed = 0#}
+        {#    }#}
+        {#});#}
+    </script>
+</body>
+{% endblock %}

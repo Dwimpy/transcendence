@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'game',
     'channels',
-    'localgame'
+    'localgame',
+    'sosathui',
 ]
 
 
@@ -110,7 +111,8 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'accounts', 'templates'),
             os.path.join(BASE_DIR, 'chat', 'templates'),
             os.path.join(BASE_DIR, 'game', 'templates'),
-            os.path.join(BASE_DIR, 'localgame', 'templates')
+            os.path.join(BASE_DIR, 'localgame', 'templates'),
+            os.path.join(BASE_DIR, 'sosathui', 'templates'),
         },
         'APP_DIRS': True,
         'OPTIONS': {
