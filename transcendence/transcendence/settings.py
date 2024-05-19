@@ -55,8 +55,17 @@ INSTALLED_APPS = [
     'chat',
     'widget_tweaks',
     'tictac',
+    'game',
+    'channels',
+    'localgame'
 ]
 
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -101,7 +110,12 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'pong', 'templates'),
             os.path.join(BASE_DIR, 'accounts', 'templates'),
             os.path.join(BASE_DIR, 'chat', 'templates'),
+<<<<<<< HEAD
             os.path.join(BASE_DIR, 'tictac', 'templates'),
+=======
+            os.path.join(BASE_DIR, 'game', 'templates'),
+            os.path.join(BASE_DIR, 'localgame', 'templates')
+>>>>>>> d5947f45818f5f580bb0e0cc5daf3b9dc585ad35
         },
         'APP_DIRS': True,
         'OPTIONS': {
@@ -137,7 +151,7 @@ REDIRECT_URI = config('REDIRECT_URI')
 
 # WSGI_APPLICATION = 'transcendence.wsgi.application'
 ASGI_APPLICATION = 'transcendence.asgi.application'
-
+# ASGI_APPLICATION = 'game.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
