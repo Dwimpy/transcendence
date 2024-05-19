@@ -841,10 +841,14 @@ button#friends-list .button-notification {
 
     .list-type-title {
         color: #930077;
-        font-size: 1.5px;
+        font-size: 1.5em;
         position: sticky;
         z-index: 1;
     }
+}
+
+.hidden {
+    visibility: hidden;
 }
 
 .chat-button {

@@ -2,9 +2,6 @@ from asyncio import sleep
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from django.http import HttpResponse
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
 
 from lobby.constants import LOBBY_WS_GROUP_NAME, ROOMS_WS_GROUP_NAME
 from .models import Rooms

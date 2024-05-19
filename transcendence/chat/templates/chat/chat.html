@@ -15,15 +15,15 @@
     })
     
     document.addEventListener('DOMContentLoaded', (e) => {
-        document.getElementById('chat-input').focus()
+
+        let chat_input = document.getElementById('chat-input')
 
         let buttons = document.querySelectorAll('.chat-button')
-
         buttons.forEach(function(button) {
             button.addEventListener('click', function(e) {
                 const btn = button.querySelector('.btn-name')
                 clicked = btn.innerHTML
-                document.getElementById('chat-input').focus()
+                chat_input.focus()
             })
         })
     })
@@ -116,7 +116,7 @@
 {#    </div>#}
 {#</div>#}
 
-<div hx-ext="ws" ws-connect="/ws/chat" class="container clearfix chat-container">
+<div class="container clearfix chat-container">
 <div class="chat-lists">
     <div class="d-flex flex-row justify-content-center align-items-center">
         <i class="fa-brands fa-rocketchat title-icon chat-title"></i>
