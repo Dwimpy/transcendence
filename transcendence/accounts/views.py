@@ -40,6 +40,13 @@ def add_friend(request, username):
     friend.friends.add(user)
     return redirect('profile', username=user.username)
 
+def remove_friend(request, username):
+    user = request.user
+    friend = get_object_or_404(AccountUser, username=username)
+    user.friends.remove(friend)
+    friend.friends.remove(user)
+    return redirect('profile', username=user.username)
+
 @login_required
 def profile(request, username):
     user = get_object_or_404(AccountUser, username=username)
