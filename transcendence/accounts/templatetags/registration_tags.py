@@ -29,3 +29,7 @@ def render_profile_form(title, form, user, path, url_name, logged_user):
 @register.inclusion_tag('accounts/base_templates/friends_field.html')
 def render_friends_view(name, user, logged_user, search_form, search_results):
     return {'title' : name, 'user' : user, 'logged_user' : logged_user, 'search_form': search_form, 'search_results':search_results}
+
+# @register.inclusion_tag('accounts/base_templates/friends_field.html')
+# def render_game_history_view(name, user, logged_user, search_form, search_results):
+#     return {'title' : name, 'user' : user, 'logged_user' : logged_user, 'search_form': search_form, 'search_results':search_results}

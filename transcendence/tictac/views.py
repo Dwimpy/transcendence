@@ -1,7 +1,11 @@
+
+
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.http import JsonResponse
 from .models import Game2
+from django.utils import timezone
+
 # Create your views here.
 # class TictacView(TemplateView):
 #     template_name = 'tictac/tictac.html'
@@ -11,6 +15,23 @@ from .models import Game2
 #
 #     def post(self, request, *args, **kwargs):
 #         return render(request, self.template_name, status=200, context={'messagess': 'wtf'})
+
+    # saving result for user1 and user2
+def update_game_history(user, game):
+    if user.is_authenticated:
+        history = user.history.get('tictac', [])
+        game_record = {
+            'game_name': 'tictac',
+            'player1': user.username,
+            'player2': None,  # Modify this if there's a second player
+            'datetime': timezone.now().strftime('%Y-%m-%d %H:%M'),
+            'winner': game.winner,
+            'score': game.board  # Or any other scoring system you have
+        }
+        history.append(game_record)
+        user.history['tictac'] = history
+        user.save()
+
 def tictacMainQ(request):
     game, created = Game2.objects.get_or_create(id=1)  # For simplicity, we use a single game instance
 
@@ -24,12 +45,20 @@ def tictacMainQ(request):
             game.is_over, game.winner = check_winner(game.board)
             game.save()
 
+            # saveResult()
+            if game.is_over:
+                update_game_history(request.user, game)
+
     # Create a list of tuples (index, value) for the board
     board_with_indices = [(i, game.board[i]) for i in range(9)]
+
+    # Get the user's game history
+    history = request.user.history.get('tictac', []) if request.user.is_authenticated else []
 
     context = {
         'game': game,
         'board_with_indices': board_with_indices,
+        'history': history,
     }
     return render(request, 'tictac/tictac.html', context)
 

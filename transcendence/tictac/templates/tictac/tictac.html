@@ -3,8 +3,8 @@
 {% load chat_tags %}
 {% block content %}
 
-<!-- game/templates/game/index.html -->
-{% load game_filters %}
+{#<!-- game/templates/game/index.html -->#}
+{#{% load game_filters %}#}
 
 <head>
     <title>Tic-Tac-Toe</title>
@@ -13,15 +13,17 @@
             display: grid;
             grid-template-columns: repeat(3, 100px);
             grid-gap: 5px;
+            color:white;
         }
         .cell {
+            color: white;
             width: 100px;
             height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2em;
-            border: 1px solid #000;
+            border: 1px solid whitesmoke;
         }
         .winner {
             font-size: 1.5em;
@@ -52,6 +54,13 @@
         <input type="hidden" name="index" id="move-index">
     </form>
     <button onclick="resetGame()">Reset</button>
+
+    <h2>Game History</h2>
+    <ul>
+        {% for record in history %}
+            <li>{{ record.datetime }}: {{ record.player1 }} vs {{ record.player2 }} - Winner: {{ record.winner }}</li>
+        {% endfor %}
+    </ul>
 
     <script>
         function makeMove(index) {
