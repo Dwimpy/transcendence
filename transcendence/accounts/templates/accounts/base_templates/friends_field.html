@@ -25,7 +25,7 @@
             <li>
                 {{ result.username }}
                 {% if result in user.friends.all %}
-                    <span>(Already a friend)</span>
+                    <span>(Already a friend)</span><a href="{% url 'remove_friend' result.username %}">I don't like you</a>
                 {% else %}
                     <a href="{% url 'add_friend' result.username %}">Add as Friend</a>
                 {% endif %}
