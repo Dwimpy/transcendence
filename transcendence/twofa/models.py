@@ -11,10 +11,13 @@ class UserProfile(models.Model):
     chosen_2fa_method = models.CharField(
         max_length=50, 
         choices=[('qr', 'QR Code'), ('sms', 'SMS'), ('email', 'Email')], 
-        default='qr',
+        default=None,
         blank=True,
         null=True
     )
+
+    def __str__(self):
+        return f"2fa settings for {self.user.username}"
 
 class TwilioSMSDevice(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -36,3 +39,4 @@ class EmailOTPDevice(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     key = models.CharField(max_length=100)
     confirmed = models.BooleanField(default=False)
+    

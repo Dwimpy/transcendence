@@ -160,8 +160,9 @@ class UserLoginView(LoginView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        user = self.request.user
-        return reverse_lazy('profile', args=[user.username])
+        return reverse_lazy('index')
+        # user = self.request.user
+        # return reverse_lazy('profile', args=[user.username])
 
 class RegistrationView(FormView):
     template_name = 'accounts/registration.html'
