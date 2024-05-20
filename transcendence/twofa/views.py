@@ -89,6 +89,7 @@ def setup_sms_2fa(request):
             TwilioSMSDevice.objects.create(user=user, phone_number=phone_number, key=secret)
         user.userprofile.chosen_2fa_method = 'sms'
         user.userprofile.save()
+        request.session['pre_2fa_login'] = True  # Ensure this is set
         return redirect('twofa:send_sms_token')
     return render(request, 'twofa/setup_sms_2fa.html')
 
@@ -96,7 +97,8 @@ def setup_sms_2fa(request):
 def send_sms_token(request):
     user = request.user
     sms_device = TwilioSMSDevice.objects.get(user=user)
-    sms_device.generate_token()
+    token = sms_device.generate_token()
+    print(token)
     return redirect('twofa:verify_2fa')
 
 @login_required
@@ -108,6 +110,7 @@ def setup_email_2fa(request):
             EmailOTPDevice.objects.create(user=user, key=secret)
         user.userprofile.chosen_2fa_method = 'email'
         user.userprofile.save()
+        request.session['pre_2fa_login'] = True  # Ensure this is set
         return redirect('twofa:send_email_token')
     return render(request, 'twofa/setup_email_2fa.html')
 
