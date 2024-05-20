@@ -23,19 +23,33 @@ class ChatView(LoginRequiredMixin, TemplateView):
                 other_user_name = request.GET.get("other")
                 try:
                     user2: AccountUser = AccountUser.objects.get(username=other_user_name)
-                    conversation: PrivateConversation = PrivateConversation.objects.filter(
-                        Q(user1__username=user.username, user2__username=user2.username) |
-                        Q(user1__username=user2.username, user2__username=user.username)
+                    conversation = PrivateConversation.objects.filter(
+                        Q(user1=user, user2=user2) | Q(user1=user2, user2=user)
                     ).first()
+
+                    if not conversation:
+                        conversation = PrivateConversation.objects.create(
+                            user1=user, user2=user2
+                        )
+                        conversation = PrivateConversation.objects.filter(
+                            Q(user1=user, user2=user2) | Q(user1=user2, user2=user)
+                        ).first()
+                    print(conversation)
                     content_type = ContentType.objects.get_for_model(conversation)
                     context['messages'] = Messages.objects.filter(content_type=content_type,
                                                                   object_id=conversation.pk)
+                    context['user'] = request.user
                     context['other'] = user2.username
                     context['initial'] = user2.username[0].capitalize()
+                    context['hidden'] = ""
                     return render(request, 'chat/chat_window.html', context)
                 except AccountUser.DoesNotExist:
                     raise Http404
-        return render(request, self.template_name, status=200, context={})
+        user = AccountUser.objects.get(username=request.user)
+        context = self.get_context_data(**kwargs)
+        context['friends'] = user.friends
+        context['hidden'] = "hidden"
+        return render(request, self.template_name, status=200, context=context)
 
     def post(self, request, *args, **kwargs):
         return render(request, self.template_name, status=200, context={'messagess': 'wtf'})

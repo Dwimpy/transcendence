@@ -42,7 +42,3 @@ class Messages(models.Model):
     sender = models.ForeignKey(AccountUser, on_delete=models.CASCADE)
     content = models.TextField()
     sent_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'Message: {self.content} from {self.sender}'
-

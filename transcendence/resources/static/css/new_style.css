@@ -14,7 +14,11 @@
     /*background-size: cover;*/
     /*background-position: center;*/
     /*margin: 0; !* Remove default margin to ensure full coverage *!*/
+<<<<<<< HEAD
     height: 100vh;
+=======
+    min-height: 100vh;
+>>>>>>> 4ebb8db0d26e09ad2375b6f6fbf1b3e66e498d8f
     padding: 6px;
     color: whitesmoke;
     display: flex;
@@ -38,7 +42,7 @@
 }
 
 .font-size-small {
-    font-size: 12px;
+    font-size: 1em;
 }
 
 .card-overlay {
@@ -60,11 +64,11 @@ button{
 	outline: inherit;
     display: flex;
     /*width: 280px;*/
-    padding: 16px 24px;
+    padding: 1em 2em;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    border-radius: 16px;
+    gap: 1em;
+    border-radius: 1em;
     background: rgba(92, 23, 229, 0.70);
 }
 
@@ -109,12 +113,12 @@ button:active{
 }
 
 .bg-navbar-extend {
-    left: 6px;
+    right: 1px;
 }
 
 .icon{
     padding: 1vw;
-    border-radius: 16px;
+    border-radius: 1em;
     color: inherit;
 }
 
@@ -143,8 +147,10 @@ button:active{
 }
 
 .form-control {
+    width: fit-content;
     display: flex;
-    font-size: 22px;
+    font-size: 1em;
+    padding: 1em;
     align-items: center;
     background-color: inherit;
     color: white;
@@ -186,7 +192,7 @@ button:active{
 .form-control::placeholder {
     -webkit-text-fill-color: #b3e0dc;
     text-align: center;
-    font-size: 18px;
+    font-size: 1.6em;
     /*-webkit-text-fill-color: rgba(16, 0, 50, 1);*/
 }
 
@@ -220,11 +226,11 @@ input[type='file']#registration-file-input::file-selector-button {
 }
 
 .font-size-22 {
-    font-size: 22px;
+    font-size: 1.75em;
 }
 
 .font-size-18 {
-    font-size: 18px;
+    font-size: 1.5em;
 }
 
 
@@ -256,17 +262,26 @@ h6#selected-image-name {
 .selected-image-name {}
 
 .center-img-form {
-    height: 200px;
-    width: 200px;
+    height: 5em;
+    width: 5em;
     border-radius: 50%;
 }
 
+.center-img-form-small{
+    height: 3.125em;
+    width: 3.125em;
+    border-radius: 50%;
+}
+
+<<<<<<< HEAD
 .center-img-form-small{
     height: 50px;
     width: 50px;
     border-radius: 50%;
 }
 
+=======
+>>>>>>> 4ebb8db0d26e09ad2375b6f6fbf1b3e66e498d8f
 
 .field-width {
     max-width: 250px;
@@ -299,7 +314,7 @@ h6#selected-image-name {
 }
 
 #chat .title {
-    font-size: 24px;
+    font-size: 1.5em;
     font-weight: bold;
     color: black;
 }
@@ -427,7 +442,7 @@ h6#selected-image-name {
     top: 50%;
     left: 50%;
     width: 2px;
-    height: 26px;
+    height: 1.5em;
     background-color: white;
     transform: rotate(45deg) translate(-50%, -50%);
     transform-origin: top left;
@@ -631,7 +646,7 @@ button.disabled {
 }
 
 .font-size-14 {
-    font-size: 14px;
+    font-size: 1.375em;
 }
 
 button#friends-list:hover {
@@ -652,8 +667,8 @@ button#friends-list {
 button#friends-list .button-icon {
     right: 0;
     background-color: orange;
-    width: 35px;
-    height: 35px;
+    width: 2em;
+    height: 2em;
     border-radius: 50%;
 }
 
@@ -672,8 +687,8 @@ button#friends-list .button-notification {
     position: absolute;
     right: 0;
     margin-right: 0.2rem;
-    width: 25px;
-    height: 25px;
+    width: 1.2em;
+    height: 1.2em;
     border-radius: 25% !important;
 }
 
@@ -696,9 +711,9 @@ button#friends-list .button-notification {
 .chat-button.chat-input {
     color: lightgray;
     background-color: transparent;
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
+    width: 2em;
+    height: 2em;
+    font-size: 1.75em;
     bottom: 0.8rem;
     right: 0.5rem;
 }
@@ -829,7 +844,7 @@ button#friends-list .button-notification {
 
     .chat-title {
         font-weight: bold;
-        font-size: 28px;
+        font-size: 1.75em;
         color: #3a0088;
     }
 
@@ -839,17 +854,21 @@ button#friends-list .button-notification {
 
     .list-type-title {
         color: #930077;
-        font-size: 24px;
+        font-size: 1.5em;
         position: sticky;
         z-index: 1;
     }
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 .chat-button {
     color: black;
     background-color: transparent;
-    height: 32px;
-    font-size: 24px;
+    height: 2em;
+    font-size: 1.5em;
     position: relative;
 }
 
@@ -871,7 +890,7 @@ button#friends-list .button-notification {
     text-align: center;
     padding: 6px;
     color: black;
-    font-size: 16px;
+    font-size: 1.375em;;
     position: relative;
 }
 
@@ -1042,7 +1061,7 @@ button#friends-list .button-notification {
     }
 
     i.fa-paper-plane {
-        font-size: 22px;
+        font-size: 1.375em;;
     }
 
     .message-align {
@@ -1056,4 +1075,44 @@ button#friends-list .button-notification {
             width: 100%;
         }
 }
+
+@media (max-width: 1300px) {
+    .container {
+        flex-direction: column; /* or 'column-reverse' if needed */
+    }
+    .card{
+        flex-direction: column; /* or 'column-reverse' if needed */
+    }
+    .card-body{
+        flex-direction: column;
+    }
+    .flex-row{
+        flex-direction: column !important; /* or 'column-reverse' if needed */
+    }
+    .row{
+        flex-direction: column !important; /* or 'column-reverse' if needed */
+        align-items: center;
+    }
+    .column{
+        width: 75%;
+    }
+    .flex-column{
+        flex-direction: inherit !important;
+    }
+    .navbar-nav{
+        flex-direction: row !important;
+    }
+    nav.vh-50{
+        height: fit-content !important;
+        top: 0px !important;
+        width: 100%;
+        position: static;
+        z-index: 1 !important;
+        background-color: rgba(16, 0, 50, 1);
+    }
+    body{
+        margin-top: 10em;
+    }
+}
+
 

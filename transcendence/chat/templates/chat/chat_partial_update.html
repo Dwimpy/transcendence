@@ -1,0 +1,17 @@
+<div id="chat-window" class="chat-window">
+{% for message in messages %}
+    {% if message.sender != user %}
+            <div class="window-bubble me">
+                <div class="bubble-me">
+                    {{ message.content }}
+                </div>
+            </div>
+        {% else %}
+    <div class="window-bubble other">
+        <div class="bubble-me">
+            {{ message.content }}
+        </div>
+    </div>
+        {% endif %}
+    {% endfor %}
+</div>

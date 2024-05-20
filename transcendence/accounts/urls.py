@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import ProfileView, RegistrationView, FortyTwoAuthView, FortyTwoAuthCallbackView, UserLoginView, search_users, add_friend
+from .views import (ProfileView, RegistrationView, FortyTwoAuthView, FortyTwoAuthCallbackView, UserLoginView, search_users, add_friend, remove_friend)
 from django.contrib.auth import views as auth_view
 
 urlpatterns = [
@@ -9,7 +9,8 @@ urlpatterns = [
     path('logout/', auth_view.LogoutView.as_view(), name='logout'),
     path('registration/', RegistrationView.as_view(), name='registration'),
     path('profile/<str:username>/', ProfileView.as_view(), name='profile'),
+
     path('search/', search_users, name='search_users'),
     path('add_friend/<str:username>/', add_friend, name='add_friend'),
+    path('remove_friend/<str:username>/', remove_friend, name='remove_friend'),
 ]
-
