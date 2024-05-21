@@ -1,19 +1,14 @@
 from django.conf import settings
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django_otp.plugins.otp_totp.models import TOTPDevice
-from django_otp.plugins.otp_static.models import StaticDevice
 from .models import UserProfile, TwilioSMSDevice, EmailOTPDevice
 import pyotp
 from django.core.mail import send_mail
-from twilio.rest import Client
 
 @login_required
 def setup_2fa(request):
     user = request.user
-    # Ensure the UserProfile exists
     user_profile, created = UserProfile.objects.get_or_create(user=user)
 
     if request.method == 'POST':
@@ -64,6 +59,7 @@ def verify_2fa(request):
             totp = pyotp.TOTP(secret)
 
         if totp.verify(token):
+            request.session['2fa_verified'] = True  # Ensure this line is present
             if method == 'qr':
                 totp_device.confirmed = True
                 totp_device.save()
@@ -89,7 +85,6 @@ def setup_sms_2fa(request):
             TwilioSMSDevice.objects.create(user=user, phone_number=phone_number, key=secret)
         user.userprofile.chosen_2fa_method = 'sms'
         user.userprofile.save()
-        request.session['pre_2fa_login'] = True  # Ensure this is set
         return redirect('twofa:send_sms_token')
     return render(request, 'twofa/setup_sms_2fa.html')
 
@@ -97,8 +92,7 @@ def setup_sms_2fa(request):
 def send_sms_token(request):
     user = request.user
     sms_device = TwilioSMSDevice.objects.get(user=user)
-    token = sms_device.generate_token()
-    print(token)
+    sms_device.generate_token()
     return redirect('twofa:verify_2fa')
 
 @login_required
@@ -110,7 +104,6 @@ def setup_email_2fa(request):
             EmailOTPDevice.objects.create(user=user, key=secret)
         user.userprofile.chosen_2fa_method = 'email'
         user.userprofile.save()
-        request.session['pre_2fa_login'] = True  # Ensure this is set
         return redirect('twofa:send_email_token')
     return render(request, 'twofa/setup_email_2fa.html')
 

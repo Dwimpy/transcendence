@@ -1,4 +1,5 @@
 import json
+import pyotp  # Add this line
 
 from django.contrib.auth import login, get_user
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -21,7 +22,9 @@ from django.conf import settings
 from .forms import UserSearchForm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-from twofa.models import UserProfile
+from twofa.models import UserProfile, TwilioSMSDevice, EmailOTPDevice
+from django_otp.plugins.otp_totp.models import TOTPDevice
+from django.core.mail import send_mail
 
 @login_required
 def search_users(request):
@@ -54,38 +57,6 @@ def profile(request, username):
     user = get_object_or_404(AccountUser, username=username)
     is_friend = request.user.friends.filter(username=username).exists()
     return render(request, 'accounts/profile.html', {'user': user, 'is_friend': is_friend})
-
-# Create your views here.
-# class ProfileView(LoginRequiredMixin, UpdateView):
-#     template_name = 'accounts/profile.html'
-#     model = AccountUser
-#     form_class = ProfileForm
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#
-#     def get(self, *args, **kwargs):
-#         try:
-#             logged_user = self.request.user
-#             user = self.get_object()
-#             form = self.form_class(instance=user)
-#             if not logged_user.username == user.username:
-#                 for field in form.fields:
-#                     form.fields[field].widget.attrs['readonly'] = True
-#             return render(self.request, self.template_name, {'user': user,
-#                                                              'logged_user': logged_user.username,
-#                                                              'form': form})
-#         except AccountUser.DoesNotExist:
-#             raise Http404("User does not exist")
-#
-#     def form_invalid(self, form):
-#         return super().form_invalid(form)
-#
-#     def get_success_url(self):
-#         user = self.request.user
-#         url = reverse_lazy('profile', args=[user.username])
-#         return url
-
 
 class ProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/profile.html'
@@ -138,17 +109,6 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         url = reverse_lazy('profile', args=[user.username])
         return url
 
-
-# class UserLoginView(LoginView):
-#     template_name = 'accounts/login.html'
-
-#     def get(self, request, *args, **kwargs):
-#         return super().get(request, *args, **kwargs)
-
-#     def get_success_url(self):
-#         user = self.request.user
-#         return reverse_lazy('profile', args=[user.username])
-
 class UserLoginView(LoginView):
     template_name = 'accounts/login.html'
 
@@ -162,15 +122,36 @@ class UserLoginView(LoginView):
             user_profile = UserProfile.objects.get(user=user)
             if user_profile.chosen_2fa_method:
                 self.request.session['pre_2fa_login'] = True
+                method = user_profile.chosen_2fa_method
+
+                if method == 'qr':
+                    totp_device = TOTPDevice.objects.get(user=user, name='default')
+                    secret = totp_device.key
+                    totp = pyotp.TOTP(secret)
+                    token = totp.now()
+
+                elif method == 'sms':
+                    sms_device = TwilioSMSDevice.objects.get(user=user)
+                    sms_device.generate_token()
+
+                elif method == 'email':
+                    email_device = EmailOTPDevice.objects.get(user=user)
+                    totp = pyotp.TOTP(email_device.key)
+                    token = totp.now()
+                    send_mail(
+                        'Your authentication token',
+                        f'Your authentication token is {token}',
+                        settings.DEFAULT_FROM_EMAIL,
+                        [user.email]
+                    )
                 return redirect('twofa:verify_2fa')
         except UserProfile.DoesNotExist:
             pass
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('index')
-        # user = self.request.user
-        # return reverse_lazy('profile', args=[user.username])
+        user = self.request.user
+        return reverse_lazy('profile', args=[user.username])
 
 class RegistrationView(FormView):
     template_name = 'accounts/registration.html'
