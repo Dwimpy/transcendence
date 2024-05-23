@@ -1,10 +1,14 @@
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages  # Add this import
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from .models import UserProfile, TwilioSMSDevice, EmailOTPDevice
 import pyotp
 from django.core.mail import send_mail
+import logging
+
+logger = logging.getLogger(__name__)
 
 @login_required
 def setup_2fa(request):
@@ -38,46 +42,53 @@ def qr_code(request):
 @login_required
 def verify_2fa(request):
     user = request.user
+    logger.debug(f"User {user.username} is trying to access verify_2fa page")
+    
     if not request.session.get('pre_2fa_login'):
+        logger.debug("pre_2fa_login not in session, redirecting to index")
         return redirect('index')
 
     if request.method == 'POST':
         token = request.POST.get('otp_token')
         user_profile = UserProfile.objects.get(user=user)
         method = user_profile.chosen_2fa_method
+        totp = None
+        device = None
+
+        logger.debug(f"User {user.username} is trying to verify token for method {method}")
+
         if method == 'qr':
-            totp_device = TOTPDevice.objects.get(user=user, name='default')
-            secret = totp_device.key
-            totp = pyotp.TOTP(secret)
+            device = TOTPDevice.objects.get(user=user, name='default')
+            secret = device.key
+            totp = pyotp.TOTP(secret, interval=30)
         elif method == 'sms':
-            totp_device = TwilioSMSDevice.objects.get(user=user)
-            secret = totp_device.key
-            totp = pyotp.TOTP(secret)
+            device = TwilioSMSDevice.objects.get(user=user)
+            secret = device.key
+            totp = pyotp.TOTP(secret, interval=30)
         elif method == 'email':
-            email_device = EmailOTPDevice.objects.get(user=user)
-            secret = email_device.key
-            totp = pyotp.TOTP(secret)
+            device = EmailOTPDevice.objects.get(user=user)
+            secret = device.key
+            totp = pyotp.TOTP(secret, interval=30)
 
         if totp.verify(token):
-            request.session['2fa_verified'] = True  # Ensure this line is present
-            if method == 'qr':
-                totp_device.confirmed = True
-                totp_device.save()
-            elif method == 'sms':
-                totp_device.confirmed = True
-                totp_device.save()
-            elif method == 'email':
-                email_device.confirmed = True
-                email_device.save()
+            request.session['2fa_verified'] = True
+            logger.info(f"Token verified for user {user.username}")
+            if device and not device.confirmed:
+                device.confirmed = True
+                device.save()
             del request.session['pre_2fa_login']
             return redirect('index')
         else:
+            logger.warning(f"Invalid token for user {user.username}")
+            messages.error(request, 'Invalid token. Please try again.')
             return render(request, 'twofa/verify_2fa.html', {'error': 'Invalid token'})
     return render(request, 'twofa/verify_2fa.html')
 
 @login_required
 def setup_sms_2fa(request):
     user = request.user
+    logger.debug(f"User {user.username} is setting up SMS 2FA")
+
     if request.method == 'POST':
         phone_number = request.POST.get('phone_number')
         if not TwilioSMSDevice.objects.filter(user=user).exists():
@@ -85,6 +96,7 @@ def setup_sms_2fa(request):
             TwilioSMSDevice.objects.create(user=user, phone_number=phone_number, key=secret)
         user.userprofile.chosen_2fa_method = 'sms'
         user.userprofile.save()
+        request.session['pre_2fa_login'] = True
         return redirect('twofa:send_sms_token')
     return render(request, 'twofa/setup_sms_2fa.html')
 
@@ -93,17 +105,21 @@ def send_sms_token(request):
     user = request.user
     sms_device = TwilioSMSDevice.objects.get(user=user)
     sms_device.generate_token()
+    logger.debug(f"Generated SMS token for user {user.username}")
     return redirect('twofa:verify_2fa')
 
 @login_required
 def setup_email_2fa(request):
     user = request.user
+    logger.debug(f"User {user.username} is setting up Email 2FA")
+
     if request.method == 'POST':
         if not EmailOTPDevice.objects.filter(user=user).exists():
             secret = pyotp.random_base32()
             EmailOTPDevice.objects.create(user=user, key=secret)
         user.userprofile.chosen_2fa_method = 'email'
         user.userprofile.save()
+        request.session['pre_2fa_login'] = True
         return redirect('twofa:send_email_token')
     return render(request, 'twofa/setup_email_2fa.html')
 
@@ -119,4 +135,5 @@ def send_email_token(request):
         settings.DEFAULT_FROM_EMAIL,
         [user.email]
     )
+    logger.debug(f"Sent email token to user {user.username}: {token}")
     return redirect('twofa:verify_2fa')
