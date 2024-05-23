@@ -6,5 +6,11 @@
     <h2>Enable Two-Factor Authentication</h2>
     <p>Scan the QR code with your authenticator app:</p>
     <img src="{{ qr_code_url }}" alt="QR Code">
+    <form method="post" action="{% url 'twofa:verify_2fa' %}">
+        {% csrf_token %}
+        <label for="otp_token">Enter the code from your authentication app:</label>
+        <input type="text" name="otp_token" id="otp_token" required>
+        <button type="submit" class="btn btn-primary">Verify</button>
+    </form>
 </div>
 {% endblock %}

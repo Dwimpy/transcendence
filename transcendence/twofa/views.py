@@ -7,6 +7,7 @@ from .models import UserProfile, TwilioSMSDevice, EmailOTPDevice
 import pyotp
 from django.core.mail import send_mail
 import logging
+import urllib.parse
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +28,7 @@ def setup_2fa(request):
         elif method == 'email':
             return redirect('twofa:setup_email_2fa')
         user_profile.save()
+        request.session['pre_2fa_login'] = True
         return redirect('twofa:qr_code' if method == 'qr' else 'twofa:verify_2fa')
     return render(request, 'twofa/setup_2fa.html')
 
@@ -37,13 +39,21 @@ def qr_code(request):
     secret = totp_device.key
     totp = pyotp.TOTP(secret)
     qr_code_url = totp.provisioning_uri(user.email, issuer_name="transcendence")
-    return render(request, 'twofa/enable_2fa.html', {'qr_code_url': qr_code_url})
+    
+    # Use a different QR code generator to verify
+    google_qr_code_url = f"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={urllib.parse.quote(qr_code_url)}"
+    
+    # Print the QR code URL for debugging
+    print("QR Code URL:", google_qr_code_url)
+    
+    return render(request, 'twofa/enable_2fa.html', {'qr_code_url': google_qr_code_url})
 
 @login_required
 def verify_2fa(request):
     user = request.user
     logger.debug(f"User {user.username} is trying to access verify_2fa page")
-    
+
+    # Check if pre_2fa_login is in session
     if not request.session.get('pre_2fa_login'):
         logger.debug("pre_2fa_login not in session, redirecting to index")
         return redirect('index')
@@ -60,15 +70,18 @@ def verify_2fa(request):
         if method == 'qr':
             device = TOTPDevice.objects.get(user=user, name='default')
             secret = device.key
-            totp = pyotp.TOTP(secret, interval=30)
+            totp = pyotp.TOTP(secret, interval=30)  # Ensure matching interval
         elif method == 'sms':
             device = TwilioSMSDevice.objects.get(user=user)
             secret = device.key
-            totp = pyotp.TOTP(secret, interval=30)
+            totp = pyotp.TOTP(secret, interval=30)  # Ensure matching interval
         elif method == 'email':
             device = EmailOTPDevice.objects.get(user=user)
             secret = device.key
-            totp = pyotp.TOTP(secret, interval=30)
+            totp = pyotp.TOTP(secret, interval=30)  # Ensure matching interval
+
+        current_token = totp.now()
+        logger.debug(f"Expected token: {current_token}, User provided token: {token}")
 
         if totp.verify(token):
             request.session['2fa_verified'] = True
@@ -76,10 +89,12 @@ def verify_2fa(request):
             if device and not device.confirmed:
                 device.confirmed = True
                 device.save()
-            del request.session['pre_2fa_login']
+            if 'pre_2fa_login' in request.session:
+                del request.session['pre_2fa_login']
+            logger.debug(f"User {user.username} successfully verified, redirecting to index")
             return redirect('index')
         else:
-            logger.warning(f"Invalid token for user {user.username}")
+            logger.warning(f"Invalid token for user {user.username}. Expected token: {current_token}, User provided token: {token}")
             messages.error(request, 'Invalid token. Please try again.')
             return render(request, 'twofa/verify_2fa.html', {'error': 'Invalid token'})
     return render(request, 'twofa/verify_2fa.html')

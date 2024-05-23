@@ -12,9 +12,7 @@ class TwoFAMiddleware:
         if request.user.is_authenticated:
             user_profile = getattr(request.user, 'userprofile', None)
             if user_profile and user_profile.chosen_2fa_method:
-                # Check if the 2FA is verified
                 if not request.session.get('2fa_verified', False):
-                    # Define paths that don't require 2FA
                     allowed_paths = [
                         reverse('twofa:verify_2fa'),
                         reverse('twofa:send_sms_token'),
