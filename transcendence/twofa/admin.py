@@ -25,6 +25,14 @@ class UserProfileAdmin(admin.ModelAdmin):
     form = UserProfileForm
     list_display = ('user', 'chosen_2fa_method')
 
+class EmailOTPDeviceAdmin(admin.ModelAdmin):
+    list_display = ('user', 'email', 'confirmed', 'key')
+    search_fields = ('user__username', 'user__email')
+
+class TwilioSMSDeviceAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone_number', 'confirmed', 'key')
+    search_fields = ('user__username', 'phone_number')
+
 admin.site.register(UserProfile, UserProfileAdmin)
-admin.site.register(TwilioSMSDevice)
-admin.site.register(EmailOTPDevice)
+admin.site.register(TwilioSMSDevice, TwilioSMSDeviceAdmin)
+admin.site.register(EmailOTPDevice, EmailOTPDeviceAdmin)

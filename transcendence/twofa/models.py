@@ -30,7 +30,7 @@ class TwilioSMSDevice(models.Model):
 
     def generate_token(self):
         client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-        totp = pyotp.TOTP(self.key, interval=30)
+        totp = pyotp.TOTP(self.key, interval=60)
         token = totp.now()
         client.messages.create(
             body=f'Your authentication token is {token}',
@@ -41,9 +41,12 @@ class TwilioSMSDevice(models.Model):
 
 class EmailOTPDevice(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    key = models.CharField(max_length=100)
+    key = models.CharField(max_length=100, unique=True)
     confirmed = models.BooleanField(default=False)
+
+    @property
+    def email(self):
+        return self.user.email
 
     def __str__(self):
         return f"{self.user.username}"
-    

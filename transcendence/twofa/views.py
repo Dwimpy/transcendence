@@ -70,20 +70,20 @@ def verify_2fa(request):
         if method == 'qr':
             device = TOTPDevice.objects.get(user=user, name='default')
             secret = device.key
-            totp = pyotp.TOTP(secret, interval=30)  # Ensure matching interval
+            totp = pyotp.TOTP(secret, interval=60)
         elif method == 'sms':
             device = TwilioSMSDevice.objects.get(user=user)
             secret = device.key
-            totp = pyotp.TOTP(secret, interval=30)  # Ensure matching interval
+            totp = pyotp.TOTP(secret, interval=60)
         elif method == 'email':
             device = EmailOTPDevice.objects.get(user=user)
             secret = device.key
-            totp = pyotp.TOTP(secret, interval=30)  # Ensure matching interval
+            totp = pyotp.TOTP(secret, interval=60)
 
         current_token = totp.now()
         logger.debug(f"Expected token: {current_token}, User provided token: {token}")
 
-        if totp.verify(token):
+        if totp.verify(token, valid_window=1):
             request.session['2fa_verified'] = True
             logger.info(f"Token verified for user {user.username}")
             if device and not device.confirmed:
