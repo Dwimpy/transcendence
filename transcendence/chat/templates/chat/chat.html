@@ -7,15 +7,16 @@
 
     let clicked;
 
+
+    document.addEventListener('DOMContentLoaded', (e) => {
+
     document.addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
             htmx.trigger(document.getElementById('chat-button'), 'send-message')
             document.getElementById('chat-input').value = ""
+            setTimeout(scrollToBottom, 50)
         }
     })
-    
-    document.addEventListener('DOMContentLoaded', (e) => {
-
         let chat_input = document.getElementById('chat-input')
 
         let buttons = document.querySelectorAll('.chat-button')
@@ -28,103 +29,38 @@
         })
     })
 
+
         // Function to scroll to the bottom of the chat window
         function scrollToBottom() {
-            var chatWindow = document.getElementById('chat-window');
-            chatWindow.scrollTop = chatWindow.scrollHeight;
+            let chatWindow = document.getElementById('messages-update');
+                let lastMessage = chatWindow.lastElementChild;
+                if (lastMessage) {
+                    lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }
         }
 
-        // Scroll to the bottom when the page loads
-        document.addEventListener("DOMContentLoaded", function() {
-            scrollToBottom();
-        });
 
+        function send_message() {
+            let btn = document.getElementById('chat-button');
+            let chat_input = document.getElementById('chat-input')
+            htmx.trigger(btn, 'send-message')
+            chat_input.value = ""
+            chat_input.focus()
+            setTimeout(scrollToBottom, 100)
+        }
+
+
+    // Add HTMX event listener for when the content is swapped
+            document.body.addEventListener('htmx:afterSwap', (event) => {
+                    scrollToBottom();
+            });
+
+            document.addEventListener('DOMContentLoaded', (event) => {
+                // Scroll to bottom on initial load
+                scrollToBottom();
+            });
 
 </script>
-    
-{#<div class="container chat border-radius-24">#}
-{#    <div class="d-flex flex-row h-100 gap-3">#}
-{#        <div id="chat-list" class="d-flex flex-column w-25 chat-list align-items-center">#}
-{#            <div class="d-flex flex-row align-items-center">#}
-{#                <button class="chat-list-btn"> Friends </button>#}
-{#                <button id="chat-btn-2" class="chat-list-btn"> Groups </button>#}
-{#            </div>#}
-{#            <table class="">#}
-{#                <tbody>#}
-{#                    <tr class="d-flex flex-column align-items-center justify-content-center">#}
-{#                        <td>what</td>#}
-{#                        <td>what</td>#}
-{#                        <td>what</td>#}
-{#                        <td>what</td>#}
-{#                    </tr>#}
-{#                </tbody>#}
-{#            </table>#}
-{#        </div>#}
-{#        <div hx-ext="ws" ws-connect="/ws/chat" id="chat" class="d-flex flex-column-reverse w-75 chat-list p-4 overflow-auto">#}
-{#            <div class="d-flex flex-column w-100 align-items-center">#}
-{#                <div class="user-me mw-50 position-relative left-25">#}
-{#                    <p class="m-2"> thisthis is a messagethis is a messagethis is a messagethis is a messagethis is a message is a message</p>#}
-{#                    <div id="triangle" class="triangle-container"></div>#}
-{#                </div>#}
-{#                <div class="user-you mw-50 position-relative right-25">#}
-{#                    <p class="m-2">is a messagethis is a messagethis is a messagemessageis a messagethis is a messagethis is a messagemessageis a messagethis is a messagethis is a messagemessage</p>#}
-{#                    <div id="triangle" class="triangle-container"></div>#}
-{#                </div>#}
-{#                <form hx-post="{% url 'chat' %}" id="chat-form" class="d-flex flex-row w-100 mt-4 gap-2 align-items-center">#}
-{#                    <label class="w-100">#}
-{#                        <input id="chat-input" type="text" class="d-flex form-control" placeholder="chat here" name="message"/>#}
-{#                    </label>#}
-{#                    <button hx-ws="send" id="chat-button" type="button"#}
-{#                        class="chat-button position-relative" hx-trigger="send-message from:chat">#}
-{#                        <i class="fa-solid fa-paper-plane "></i>#}
-{#                    </button>#}
-{#                </form>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>  #}
-{#</div>#}
-
-{#<div id="chat" class="d-flex h-50 w-75 text-black">#}
-{#    <div class="d-flex p-3 h-100 flex-row chat">#}
-{#        <div class="d-flex flex-column flex-shrink-0 border-solid-gray-1 w-25">#}
-{#            <div class="d-flex flex-column align-items-center justify-content-center w-100">#}
-{#                <div class="d-flex flex-row">#}
-{#                    <button class="chat-button"><i class="fa-brands fa-rocketchat"></i></button>#}
-{#                    <div class="text-center title"> Pong Chat</div>#}
-{#                </div>#}
-{#                <div class="d-flex flex-column mt-2 gap-1 chat-items">#}
-{#                    <div class="d-flex flex-row justify-content-between gap-8">#}
-{#                        <span class="font-bold p-1"> Friends </span>#}
-{#                        <span class="d-flex align-items-center font-bold font-size-14 rounded-circle bg-gray justify-content-center align-items-center p-1">25 </span>#}
-{#                    </div>#}
-{#                    <div class="d-flex flex-column mt-2 gap-1 mh-50 overflow-y-auto">#}
-{#                        <button id="friends-list" class="d-flex position-relative p-1 flex-row align-items-center gap-2 flex-grow-0">#}
-{#                            <span class="button-icon d-flex align-items-center justify-content-center"> T </span>#}
-{#                            <span class="button-name"> Te Rup Fradfgdfgdgdfgdfgdfgdgdfgte</span>#}
-{#                            <span class="button-notification d-flex align-items-center font-bold font-size-14 rounded-circle bg-red justify-content-center align-items-center">25 </span>#}
-{#                        </button>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="d-flex flex-column mt-2 gap-1 chat-items">#}
-{#                    <div class="d-flex flex-row justify-content-between gap-8">#}
-{#                        <span class="font-bold p-1"> Groups </span>#}
-{#                        <span class="d-flex align-items-center font-bold font-size-14 rounded-circle bg-gray justify-content-center align-items-center p-1">25 </span>#}
-{#                    </div>#}
-{#                    <div class="d-flex flex-column mt-2 gap-1 mh-50 overflow-y-auto">#}
-{#                        <button id="friends-list" class="d-flex position-relative p-1 flex-row align-items-center gap-2 flex-grow-0">#}
-{#                            <span class="button-icon d-flex align-items-center justify-content-center"> T </span>#}
-{#                            <span class="button-name"> Te Rup Fradfgdfgdgdfgdfgdfgdgdfgte</span>#}
-{#                            <span class="button-notification d-flex align-items-center font-bold font-size-14 rounded-circle bg-red justify-content-center align-items-center">25 </span>#}
-{#                        </button>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#        <div id="chat-window" class="d-flex flex-column h-100 w-75 p-2">#}
-{#            {% include 'chat/chat_window.html' %}#}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
 
 <div class="container clearfix chat-container">
 <div class="chat-lists">
