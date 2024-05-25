@@ -21,6 +21,8 @@ from django.conf import settings
 from .forms import UserSearchForm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+
+
 @login_required
 def search_users(request):
     form = UserSearchForm()
@@ -32,6 +34,7 @@ def search_users(request):
             results = AccountUser.objects.filter(username__icontains=query).exclude(username=request.user.username)
     return render(request, 'accounts/search_users.html', {'form': form, 'results': results})
 
+
 @login_required
 def add_friend(request, username):
     user = request.user
@@ -40,6 +43,7 @@ def add_friend(request, username):
     friend.friends.add(user)
     return redirect('profile', username=user.username)
 
+
 def remove_friend(request, username):
     user = request.user
     friend = get_object_or_404(AccountUser, username=username)
@@ -47,11 +51,25 @@ def remove_friend(request, username):
     friend.friends.remove(user)
     return redirect('profile', username=user.username)
 
+
 @login_required
 def profile(request, username):
     user = get_object_or_404(AccountUser, username=username)
     is_friend = request.user.friends.filter(username=username).exists()
     return render(request, 'accounts/profile.html', {'user': user, 'is_friend': is_friend})
+
+
+def profile_view(request, username):
+    user = get_object_or_404(AccountUser, username=username)
+    history = user.history.get('tictac', [])
+
+    context = {
+        'user': user,
+        'history': history,
+        # Add other context variables if needed
+    }
+    return render(request, 'accounts/profile.html', context)
+
 
 # Create your views here.
 # class ProfileView(LoginRequiredMixin, UpdateView):
@@ -106,7 +124,8 @@ class ProfileView(LoginRequiredMixin, UpdateView):
                 search_form = UserSearchForm(self.request.GET)
                 if search_form.is_valid():
                     query = search_form.cleaned_data['query']
-                    search_results = AccountUser.objects.filter(username__icontains=query).exclude(username=self.request.user.username)
+                    search_results = AccountUser.objects.filter(username__icontains=query).exclude(
+                        username=self.request.user.username)
                 else:
                     search_results = []
             else:
