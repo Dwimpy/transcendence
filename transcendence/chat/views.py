@@ -28,16 +28,14 @@ class ChatView(LoginRequiredMixin, TemplateView):
                     ).first()
 
                     if not conversation:
-                        conversation = PrivateConversation.objects.create(
-                            user1=user, user2=user2
-                        )
+                        conversation = PrivateConversation.objects.create(user1=user, user2=user2)
                         conversation = PrivateConversation.objects.filter(
                             Q(user1=user, user2=user2) | Q(user1=user2, user2=user)
-                        ).first()
+                        )
                     print(conversation)
                     content_type = ContentType.objects.get_for_model(conversation)
                     context['messages'] = Messages.objects.filter(content_type=content_type,
-                                                                  object_id=conversation.pk)
+                                                                  object_id=conversation.pk).order_by('sent_at')
                     context['user'] = request.user
                     context['other'] = user2.username
                     context['initial'] = user2.username[0].capitalize()
@@ -52,4 +50,4 @@ class ChatView(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name, status=200, context=context)
 
     def post(self, request, *args, **kwargs):
-        return render(request, self.template_name, status=200, context={'messagess': 'wtf'})
+        return render(request, self.template_name, status=200)

@@ -28,6 +28,16 @@
         })
     })
 
+        // Function to scroll to the bottom of the chat window
+        function scrollToBottom() {
+            var chatWindow = document.getElementById('chat-window');
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        // Scroll to the bottom when the page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            scrollToBottom();
+        });
 
 
 </script>
