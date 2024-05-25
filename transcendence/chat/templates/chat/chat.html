@@ -14,7 +14,7 @@
         if (event.key === 'Enter') {
             htmx.trigger(document.getElementById('chat-button'), 'send-message')
             document.getElementById('chat-input').value = ""
-            setTimeout(scrollToBottom, 50)
+            {#setTimeout(scrollToBottom, 50)#}
         }
     })
         let chat_input = document.getElementById('chat-input')
@@ -46,19 +46,17 @@
             htmx.trigger(btn, 'send-message')
             chat_input.value = ""
             chat_input.focus()
-            setTimeout(scrollToBottom, 100)
+            {#setTimeout(scrollToBottom, 100)#}
         }
 
-
+            htmx.on('htmx:wsAfterMessage', (event) => {
+            scrollToBottom()
+    });
     // Add HTMX event listener for when the content is swapped
             document.body.addEventListener('htmx:afterSwap', (event) => {
                     scrollToBottom();
             });
 
-            document.addEventListener('DOMContentLoaded', (event) => {
-                // Scroll to bottom on initial load
-                scrollToBottom();
-            });
 
 </script>
 
