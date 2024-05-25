@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Ball with THREE.js</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.139.2/build/three.min.js"></script>
+    <script>
+        // Scene
+        const scene = new THREE.Scene();
+
+        // Camera
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Geometry
+        const geometry = new THREE.SphereGeometry(1, 32, 32);
+
+        // Material
+        const material = new THREE.MeshBasicMaterial({ color: 0x0077ff });
+
+        // Mesh
+        const sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
+
+        // Resize handling
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        // Render loop
+        const animate = () => {
+            requestAnimationFrame(animate);
+
+            // Rotate the sphere for some simple animation
+            sphere.rotation.x += 0.01;
+            sphere.rotation.y += 0.01;
+
+            renderer.render(scene, camera);
+        };
+        animate();
+    </script>
+</body>
+</html>

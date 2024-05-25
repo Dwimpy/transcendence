@@ -34,7 +34,11 @@ urlpatterns = ([
     path('api/', include(router.urls)),
     path('api/', include('api.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('chat', include('chat.urls'))
+    path('chat', include('chat.urls')),
+    path('tictac', include('tictac.urls')),
+    path('game', include('game.urls')),
+    path('localgame', include('localgame.urls')),
+    path('sosathui', include('sosathui.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
 

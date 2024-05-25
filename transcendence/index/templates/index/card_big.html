@@ -18,16 +18,32 @@
                 {% if user.is_authenticated %}
                 <div class="btn btn-primary rounded-4 border-0 w-3 bg-transparent">
                     <a class="text-whitesmoke text-decoration-none">
-{#                    <a class="text-whitesmoke" href="{% url 'game_menu' %}">#}
-                        <button class="text-center">Play Now!</button>
+                    <a class="text-whitesmoke" href="{% url 'game' %}">
+                        <button class="text-center">Play Now game!</button>
+                    </a>
                     </a>
                 </div>
                 {% else %}
                 <a class="text-whitesmoke text-decoration-none">
-{#                <a class="text-whitesmoke" href="{% url 'game_menu' %}">#}
-                    <button class="text-center">Play Now!</button>
+                <a class="text-whitesmoke" href="{% url 'tictac' %}">
+                    <button class="text-center">Play Now tictac!</button>
+                </a>
+                {% if title == 'Not Pong' %}
+                    <a class="text-whitesmoke" href="{% url 'localgame' %}">
+                        <button class="text-center">Play Now game local!</button>
+                    </a>
+                {% else %}
+                    <a class="text-whitesmoke" href="{% url 'game' %}">
+                        <button class="text-center">Play Now online!</button>
+                    </a>
+                    <a class="text-whitesmoke" href="{% url 'hui' %}">
+                        <button class="text-center">Sosat hui online!</button>
+                    </a>
+                {% endif %}
+
                 </a>
                 {% endif %}
+
             </div>
         </div>
     </div>
