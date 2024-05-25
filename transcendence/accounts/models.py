@@ -34,6 +34,7 @@ class AccountUser(AbstractUser):
     bio = models.CharField(max_length=255, default="")
     picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     friends = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='friend_set')
-
+    # history = (gameName{game1{player1, player2, winner, score}});
+    history = models.JSONField(default=dict, blank=True)
     def get_picture_url(self):
         return self.picture.url if hasattr(self, 'picture') and self.picture else None
