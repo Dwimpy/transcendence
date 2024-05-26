@@ -1,0 +1,11 @@
+<div class="card rounded-6 flex flex-column border-solid-gray-1 bg-image m-lg-2">
+    <div class="card-overlay rounded-6 z-0"></div>
+    <div class="card-body z-1 text-center me-5 ms-5 align-items-center">
+        <h2 class="mt-1 mb-5 pt-2 color-white">{{ username }}'s Game History</h2>
+        <ul class="mt-1 mb-5 pt-2 color-white">
+            {% for record in history %}
+                <li>{{ record.datetime }}: {{ record.player1 }} vs {{ record.player2 }} - Winner: {{ record.winner }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

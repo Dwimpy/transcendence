@@ -1,0 +1,346 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; background-color: black;}
+    </style>
+        <style>
+        .text {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: Arial, sans-serif;
+            font-size: 3rem;
+            color: red;
+            white-space: pre-line;
+            text-align: center;
+            {#max-width: 100px; /* Max width for two digits */#}
+        }
+        @media (max-width: 768px) {
+            .text {
+                font-size: 1em; /* Set font size to 1em for viewport width up to 768px */
+            }
+        }
+    </style>
+        <div class="text" id="textElement"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.139.2/build/three.min.js"></script>
+    <script>
+        let mem = true
+
+
+        // Scene
+        let RADIUS = 0.1
+        let WIDTH_SEGMENTS = 32
+        let HEIGHT_SEGMENTS = 32
+
+        let ball_x_speed = 0;
+        let ball_z_speed = 4
+        let ball_speed = 1;
+
+
+
+
+        let score_top = 0
+        let score_bottom = 0
+        let max_score = 3
+        let running = false
+        let bot = true
+        let ball_active = false
+
+
+        let bar_speed = 0
+        let bot_speed = 0
+        let bar_max_speed = 10
+
+        let bot_bar_z = -10
+        let bar_z = 9
+
+        let left_bar_x = -10
+        let right_bar_x = 10
+        let side_len = 1
+        let side_height = 1
+
+
+        let bar_length = 3
+        let bar_width = 0.2
+        let bar_height = 0.2
+
+
+        const scene = new THREE.Scene();
+
+        let body = document.getElementById('background-image')
+
+        // Camera
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.lookAt(0, -45, -90)
+        camera.position.z = 15;
+        camera.position.y = 10;
+
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        body.appendChild(renderer.domElement);
+        // Geometry
+        const geometry = new THREE.SphereGeometry(RADIUS, WIDTH_SEGMENTS, HEIGHT_SEGMENTS);
+
+        // Material
+        const material = new THREE.MeshBasicMaterial({ color: 0x0077ff });
+
+        // Mesh
+
+            const sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
+            sphere.position.z = 0
+            sphere.position.y = 0
+            sphere.position.x = 0
+
+
+        const barGeometry = new THREE.BoxGeometry(bar_length, bar_width, bar_height);
+        const sideGeometry = new THREE.BoxGeometry(side_len, side_height, bar_z - bot_bar_z + bar_width);
+        // Bar Material
+        const materialArray = [
+            new THREE.MeshBasicMaterial({ color: 0xff0000 }), // Right side - Red
+            new THREE.MeshBasicMaterial({ color: 0x00ff00 }), // Left side - Green
+            new THREE.MeshBasicMaterial({ color: 0x0000ff }), // Top side - Blue
+            new THREE.MeshBasicMaterial({ color: 0xffff00 }), // Bottom side - Yellow
+            new THREE.MeshBasicMaterial({ color: 0xff00ff }), // Front side - Magenta
+            new THREE.MeshBasicMaterial({ color: 0x00ffff })  // Back side - Cyan
+        ];
+
+        // Bar Mesh
+
+        const bar = new THREE.Mesh(barGeometry, materialArray);
+        const bot_bar = new THREE.Mesh(barGeometry, materialArray);
+        const left_bar = new THREE.Mesh(sideGeometry, materialArray);
+        const right_bar = new THREE.Mesh(sideGeometry, materialArray);
+
+
+
+        bar.position.z = bar_z;
+        bot_bar.position.z = bot_bar_z
+        left_bar.position.x = left_bar_x
+        left_bar.position.z = (bar_z + bot_bar_z) / 2
+        right_bar.position.x = right_bar_x
+        right_bar.position.z = (bar_z + bot_bar_z) / 2
+
+
+
+
+        scene.add(bar);
+        scene.add(bot_bar);
+        scene.add(left_bar);
+        scene.add(right_bar);
+
+        // Resize handling
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        // Render loop
+        let lastTime = performance.now()
+
+
+        function changeText(newText) {
+            const textElement = document.getElementById('textElement');
+            if (textElement) {
+                // Format the text into two lines, each containing two digits
+                newText = newText.toString().padStart(2, '0'); // Ensure newText is two digits
+                textElement.textContent = newText.substring(0, 2) + '\n' + newText.substring(2, 4);
+            }
+
+        }
+        function changeLongText(newText) {
+            const textElement = document.getElementById('textElement');
+            if (textElement) {
+                // Format the text into two lines, each containing two digits
+                textElement.textContent = newText;
+                const contentLength = newText.length;
+                const maxWidth = 50 + contentLength * 20; // Adjust width based on font size
+                {#textElement.style.maxWidth = maxWidth + 'px';#}
+            }
+
+        }
+        changeText(0 + ' ' + 0)
+
+        let cam_angle = 0
+        const animate = () => {
+            if (mem) {
+                camera.lookAt(0, -90, 0)
+
+                camera.position.x = sphere.position.x
+                camera.position.z = sphere.position.z
+            }
+            requestAnimationFrame(animate);
+            if (score_top >= max_score || score_bottom >= max_score)
+            {
+                running = false
+            }
+            if (running)
+            {
+                if (ball_active) {
+                    const currentTime = performance.now();
+                    const deltaTime = (currentTime - lastTime) / 1000; // Convert milliseconds to seconds
+                    lastTime = currentTime;
+                    // Rotate the sphere for some simple animation
+                    sphere.position.x += ball_x_speed * deltaTime
+                    sphere.position.z += ball_z_speed * deltaTime
+                    {
+                        bar.position.x += bar_speed * deltaTime
+                        if (bar.position.x < left_bar_x + side_len / 2 + bar_length / 2)
+                            bar.position.x = left_bar_x + side_len / 2 + bar_length / 2
+                        if (bar.position.x > right_bar_x - side_len / 2 - bar_length / 2)
+                            bar.position.x = right_bar_x - side_len / 2 - bar_length / 2
+                    }
+
+                    {
+                        bot_bar.position.x += bot_speed * deltaTime
+                        if (bot_bar.position.x < left_bar_x + side_len / 2 + bar_length / 2)
+                            bot_bar.position.x = left_bar_x + side_len / 2 + bar_length / 2
+                        if (bot_bar.position.x > right_bar_x - side_len / 2 - bar_length / 2)
+                            bot_bar.position.x = right_bar_x - side_len / 2 - bar_length / 2
+                    }
+                    {
+                        sphere.position.x += ball_x_speed * deltaTime
+                        sphere.position.z += ball_z_speed * deltaTime
+                        if (sphere.position.x < left_bar_x + side_len / 2 + RADIUS / 2) {
+                            sphere.position.x = left_bar_x + side_len / 2 + RADIUS / 2
+                            ball_x_speed *= -1
+                        }
+                        if (sphere.position.x > right_bar_x - side_len / 2 - RADIUS / 2) {
+                            sphere.position.x = right_bar_x - side_len / 2 - RADIUS / 2
+                            ball_x_speed *= -1
+                        }
+                        if (bounce_of_bottom()) {
+                            ball_z_speed *= -1
+                            sphere.position.z = bar.position.z - bar_width / 2 - RADIUS / 2
+                            ball_x_speed += bar_speed / 2
+                        }
+                        if (bounce_of_top()) {
+                            ball_z_speed *= -1
+                            ball_x_speed += bot_speed / 2
+                            sphere.position.z = bot_bar.position.z + bar_width / 2 + RADIUS / 2
+                        }
+                        if (sphere.position.z + RADIUS > bar_z + bar_width) {
+                            ball_z_speed *= -1
+                            ball_x_speed = 0
+                            sphere.position.x = 0
+                            sphere.position.z = 0
+                            ball_active = false
+                            score_top ++
+                            changeText(score_top + " " + score_bottom)
+                        }
+                        if (sphere.position.z - RADIUS < bot_bar_z - bar_width) {
+                            ball_z_speed *= -1
+                            ball_x_speed = 0
+                            sphere.position.x = 0
+                            sphere.position.z = 0
+                            ball_active = false
+                            score_bottom ++
+                            changeText(score_top + " " + score_bottom)
+                        }
+
+                    }
+                }
+            }
+            else if (score_bottom === score_top)
+            {
+                changeLongText("Please press Space to start game")
+            }
+            else
+            {
+                if (score_top > score_bottom)
+                {
+                    changeLongText("Last game won by top with score " + score_bottom + ":" + score_top + " press Space to play again")
+                }
+                else
+                {
+                    changeLongText("Last game won by bottom with score " + score_bottom + ":" + score_top + " press Space to play again")
+                }
+            }
+            renderer.render(scene, camera);
+
+
+            {#console.log('here')#}
+        };
+        function bounce_of_bottom() {
+            let withinHorizontalRange = (sphere.position.x + RADIUS / 2 >= bar.position.x - bar_length / 2) && (sphere.position.x - RADIUS / 2 <= bar.position.x + bar_length / 2);
+            let touchingTopSide = sphere.position.z - RADIUS / 2 <= bar.position.z + bar_width && sphere.position.z >= bar.position.z - bar_width / 2;
+            {#console.log(withinHorizontalRange)#}
+            return withinHorizontalRange && (touchingTopSide);
+        }
+        function bounce_of_top() {
+            let withinHorizontalRange = (sphere.position.x + RADIUS / 2 >= bot_bar.position.x - bar_length / 2) && (sphere.position.x - RADIUS / 2 <= bot_bar.position.x + bar_length / 2);
+            let touchingTopSide = sphere.position.z + RADIUS / 2 >= bot_bar.position.z - bar_width && sphere.position.z <= bot_bar.position.z + bar_width / 2;
+            {#console.log(withinHorizontalRange)#}
+            return withinHorizontalRange && (touchingTopSide);
+        }
+        document.addEventListener('keydown', (event) => {
+            {#console.log(event.key)#}
+
+            if (!ball_active && event.key === ' ' && running)
+            {
+                {#console.log(event.key)#}
+                ball_active = true
+                lastTime = performance.now()
+            }
+            if (!running && event.key === ' ') {
+                running = true
+                score_top = 0
+                score_bottom = 0
+                changeText(score_bottom + " " + score_top)
+            }
+
+            if (event.key === 'ArrowRight')
+            {
+                bar_speed = bar_max_speed;
+            }
+            if (event.key === 'ArrowLeft')
+            {
+                bar_speed = -bar_max_speed;
+            }
+            if (event.key === 'a')
+            {
+                if (mem)
+                    bot_speed = bar_max_speed;
+                else
+                    bot_speed = -bar_max_speed;
+            }
+            if (event.key === 'd')
+            {
+                if (mem)
+                    bot_speed = -bar_max_speed;
+                else
+                bot_speed = bar_max_speed;
+            }
+
+
+        });
+        document.addEventListener('keyup', (event) => {
+            if (event.key === 'ArrowRight')
+            {
+                bar_speed = 0;
+            }
+            if (event.key === 'ArrowLeft')
+            {
+                bar_speed = 0;
+            }
+            if (event.key === 'a')
+            {
+                bot_speed = 0;
+            }
+            if (event.key === 'd')
+            {
+                bot_speed = 0;
+            }
+        });
+
+        animate();
+    </script>
+{% endblock %}

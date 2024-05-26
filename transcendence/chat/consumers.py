@@ -58,7 +58,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def update_chat(self, event):
-        msg = [msg async for msg in Messages.objects.filter(content_type=event['message']['type'], object_id=event['message']['id']).select_related('sender')]
+        msg = [msg async for msg in Messages.objects.filter(content_type=event['message']['type'], object_id=event['message']['id']).order_by('sent_at').select_related('sender')]
         context = {'user': self.user, 'other': self.other, 'hidden': "", 'messages': msg}
         html = (get_template('chat/chat_partial_update.html')
                 .render(context=context))

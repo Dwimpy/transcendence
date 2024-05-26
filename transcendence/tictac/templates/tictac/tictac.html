@@ -1,0 +1,54 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+{% block content %}
+
+{#<!-- game/templates/game/index.html -->#}
+{#{% load game_filters %}#}
+
+<head>
+    <title>Tic-Tac-Toe</title>
+</head>
+<body>
+    <h1>Tic-Tac-Toe</h1>
+    <div class="board">
+        {% for index, value in board_with_indices %}
+            <div class="cell" data-index="{{ index }}" onclick="makeMove({{ index }})">{{ value }}</div>
+        {% endfor %}
+    </div>
+    <div class="winner">
+        {% if game.is_over %}
+            {% if game.winner == 'Draw' %}
+                It's a draw!
+            {% else %}
+                Winner: {{ game.winner }}
+            {% endif %}
+        {% else %}
+            Current turn: {{ game.current_turn }}
+        {% endif %}
+    </div>
+    <form id="move-form" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="index" id="move-index">
+    </form>
+    <button onclick="resetGame()">Reset</button>
+
+    <h2>Game History</h2>
+    <ul>
+        {% for record in history %}
+            <li>{{ record.datetime }}: {{ record.player1 }} vs {{ record.player2 }} - Winner: {{ record.winner }}</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        function makeMove(index) {
+            document.getElementById('move-index').value = index;
+            document.getElementById('move-form').submit();
+        }
+        function resetGame() {
+            window.location.href = "{% url 'reset' %}";
+        }
+    </script>
+</body>
+
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        canvas { background: black; display: block; margin: auto; width: 50vw; height: 50vh}
+    </style>
+    <body>
+    <canvas id="pongCanvas" ></canvas>
+    <script>
+        const canvas = document.getElementById('pongCanvas');
+        const context = canvas.getContext('2d');
+        let x_speed = 0
+        let y_speed = 0
+        let circle_x = 0;
+        let circle_y = 0;
+
+        let lastTime = performance.now();
+
+        const ws = new WebSocket('ws://' + window.location.host + '/ws/game/');
+
+        ws.onmessage = function(event) {
+
+            const data = JSON.parse(event.data);
+            // Handle incoming data
+            if (data.type === 'circle_position') {
+                const circleX = data.circle_x;
+                const circleY = data.circle_y;
+                x_speed = data.circle_x_speed;
+                y_speed = data.circle_y_speed;
+                {#console.log(x_speed, y_speed, data)#}
+                // Clear canvas and draw circle at new position
+                {#context.clearRect(0, 0, canvas.width, canvas.height);#}
+                {#drawCircle(circleX, circleY);#}
+            }
+        };
+
+        function GameLoop()
+        {
+            const currentTime = performance.now();
+            const deltaTime = (currentTime - lastTime) / 1000; // Convert milliseconds to seconds
+            lastTime = currentTime;
+            circle_x += x_speed * deltaTime;
+            circle_y += y_speed * deltaTime;
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            drawCircle(circle_x, circle_y);
+            console.log(x_speed, y_speed, deltaTime)
+            requestAnimationFrame(GameLoop);
+        }
+        GameLoop();
+
+        // Function to draw circle
+        function drawCircle(x, y) {
+
+            context.beginPath();
+            context.arc(x, y, 10, 0, Math.PI * 2);
+            context.fillStyle = 'white';
+            context.fill();
+        }
+
+        // Send mouse movement data to WebSocket
+        canvas.addEventListener('mousemove', (event) => {
+            const data = {
+                type: 'mouse_move',
+                x: event.clientX,
+                y: event.clientY
+            };
+            ws.send(JSON.stringify(data));
+        });
+
+        // Send key press data to WebSocket
+
+        document.addEventListener('keydown', (event) => {
+            const data = {
+                type: 'key_down',
+                key: event.key
+            };
+            ws.send(JSON.stringify(data));
+        });
+
+        document.addEventListener('keyup', (event) => {
+            const data = {
+                type: 'key_up',
+                key: event.key
+            };
+            ws.send(JSON.stringify(data));
+        });
+    </script>
+</body>
+{% endblock %}

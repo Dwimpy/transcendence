@@ -53,14 +53,24 @@ INSTALLED_APPS = [
     'pong',
     'lobby',
     'chat',
-	'twofa',
+    'widget_tweaks',
+    'tictac',
+    'game',
+    'channels',
+    'localgame',
+    'sosathui',
+    'twofa',
     'django_otp',
     'django_otp.plugins.otp_totp',
-    'django_otp.plugins.otp_static',
     'django_otp.plugins.otp_email',
-    'widget_tweaks',
 ]
 
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -123,7 +133,11 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'index', 'templates'),
             os.path.join(BASE_DIR, 'pong', 'templates'),
             os.path.join(BASE_DIR, 'accounts', 'templates'),
-            os.path.join(BASE_DIR, 'chat', 'templates')
+            os.path.join(BASE_DIR, 'chat', 'templates'),
+            os.path.join(BASE_DIR, 'tictac', 'templates'),
+            os.path.join(BASE_DIR, 'game', 'templates'),
+            os.path.join(BASE_DIR, 'localgame', 'templates'),
+            os.path.join(BASE_DIR, 'sosathui', 'templates'),
         },
         'APP_DIRS': True,
         'OPTIONS': {
@@ -159,7 +173,7 @@ REDIRECT_URI = config('REDIRECT_URI')
 
 # WSGI_APPLICATION = 'transcendence.wsgi.application'
 ASGI_APPLICATION = 'transcendence.asgi.application'
-
+# ASGI_APPLICATION = 'game.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

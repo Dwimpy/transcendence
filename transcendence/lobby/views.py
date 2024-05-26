@@ -23,6 +23,22 @@ def is_htmx(request):
     return request.META.get('HTTP_HX_REQUEST') is not None
 
 
+class SelectView(LoginRequiredMixin, TemplateView):
+    template_name = 'lobby/select_game.html'
+    model = Rooms
+
+    def get(self, request, *args, **kwargs):
+        if is_htmx(request):
+            lobby = reverse_lazy('lobby', args=[request.headers.get('HX-Target')])
+            return HttpResponse(
+                status=200,
+                headers={
+                    'HX-Redirect': lobby,
+                }
+            )
+        return render(request, self.template_name)
+
+
 class LobbyView(LoginRequiredMixin, TemplateView):
     model = Rooms
     form_class = RoomForm
@@ -30,6 +46,7 @@ class LobbyView(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
+        game_name = kwargs['game_lobby']
         if is_htmx(request):
             hx_target = request.headers.get('HX-Target')
             if hx_target == 'dialog':

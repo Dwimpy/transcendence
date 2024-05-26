@@ -1,18 +1,18 @@
 <div hx-ext="ws" ws-connect="/ws/chat/{{ other }}" class="chat-window-items">
     <div class="chat-window-title">
-        <div class="chat-title-icon">{{ initial }}</div>
+        <div class="chat-title-icon {{ hidden }}">{{ initial }}</div>
         <div class="chat-title-name"> {{ other }} </div>
-        <div class="chat-title-info"></div>
     </div>
-    {% include 'chat/chat_partial_update.html' %}
+    <div id="chat-window" class="chat-window {{ hidden }}">
+        {% include 'chat/chat_partial_update.html' %}
+    </div>
     <div class="chat-window-message" id="chat-window-message">
-        <div>{{ message }}</div>
         <button id="chat-button" type="button" hx-ws="send"
                 hx-include="[name='message']" hx-vals='js:{values: {"user": "{{ request.user.username }}", "other": clicked }}'
-                hx-trigger="send-message from:chat-button"
+                hx-trigger="send-message from:chat-button" onclick="send_message()"
                 class="message-align {{ hidden }}"><i class="fa fa-paper-plane"></i></button>
         <label style="width: 100%">
-            <input id="chat-input" name="message" class="message-align chat-message {{ hidden }}">
+            <input id="chat-input" autocomplete="off" name="message" class="message-align chat-message {{ hidden }}">
         </label>
     </div>
 </div>

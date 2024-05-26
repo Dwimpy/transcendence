@@ -1,0 +1,15 @@
+{% extends 'transcendence/base.html' %}
+
+
+{% block content %}
+
+<div class="container d-flex flex-column border-solid-rebecca-purple-1">
+
+    <button id="pong" type="button" hx-get="{% url 'select' %}"> Play Pong Game </button>
+
+    <button id="tictactoe" type="button" hx-get="{% url 'select' %}" > Play TicTacToe Game </button>
+
+{#    <button id="leave-room-btn" hx-get="{% url 'room' room_name %}" type="button"> Leave Lobby </button>#}
+
+</div>
+{% endblock %}

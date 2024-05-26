@@ -26,6 +26,14 @@ def render_profile_form(title, form, user, path, url_name, logged_user):
     url = reverse_lazy(url_name, args=[user.username])
     return {'title': title, 'form': form, 'user': user, 'url': url, 'content_path': path, 'logged_user': logged_user}
 
+
 @register.inclusion_tag('accounts/base_templates/friends_field.html')
 def render_friends_view(name, user, logged_user, search_form, search_results):
-    return {'title' : name, 'user' : user, 'logged_user' : logged_user, 'search_form': search_form, 'search_results':search_results}
+    return {'title': name, 'user': user, 'logged_user': logged_user, 'search_form': search_form,
+            'search_results': search_results}
+
+
+@register.inclusion_tag('accounts/base_templates/history_field.html')
+def render_game_history_view(username, user):
+    history = user.history.get('tictac', [])
+    return {'username': username, 'history': history}
