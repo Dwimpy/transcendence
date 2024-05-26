@@ -9,22 +9,18 @@
 
 
     document.addEventListener('DOMContentLoaded', (e) => {
-
     document.addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
             htmx.trigger(document.getElementById('chat-button'), 'send-message')
-            document.getElementById('chat-input').value = ""
-            {#setTimeout(scrollToBottom, 50)#}
+            
         }
     })
-        let chat_input = document.getElementById('chat-input')
 
         let buttons = document.querySelectorAll('.chat-button')
         buttons.forEach(function(button) {
             button.addEventListener('click', function(e) {
                 const btn = button.querySelector('.btn-name')
                 clicked = btn.innerHTML
-                chat_input.focus()
             })
         })
     })
@@ -49,12 +45,21 @@
             {#setTimeout(scrollToBottom, 100)#}
         }
 
-            htmx.on('htmx:wsAfterMessage', (event) => {
-            scrollToBottom()
+            htmx.on('htmx:wsAfterMessage', () => {
+                scrollToBottom()
+                let chat_input = document.getElementById('chat-input')
+                chat_input.value = ""
+                chat_input.focus()
     });
     // Add HTMX event listener for when the content is swapped
-            document.body.addEventListener('htmx:afterSwap', (event) => {
-                    scrollToBottom();
+            document.body.addEventListener('htmx:afterSwap', () => {
+                scrollToBottom();
+                 setTimeout(() => {
+                    let chat_input = document.getElementById('chat-input');
+                    if (chat_input) {
+                        chat_input.focus();
+                    }
+                }, 50);
             });
 
 

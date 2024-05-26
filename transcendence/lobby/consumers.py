@@ -9,6 +9,9 @@ from .forms import RoomForm
 from .models import Rooms
 from channels.db import database_sync_to_async
 
+from .signals import user_left_a_room
+from .views import RoomView
+
 
 class LobbyConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -51,6 +54,13 @@ class RoomConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
+        user = self.scope['user']
+        await sync_to_async(user_left_a_room.send)(
+            sender=RoomView,
+            action=f"{user.username} has left room {self.room_name}",
+            room_name=self.room_name,
+            user=user
+        )
         await self.channel_layer.group_discard(
             ROOMS_WS_GROUP_NAME + self.room_name,
             self.channel_name,
