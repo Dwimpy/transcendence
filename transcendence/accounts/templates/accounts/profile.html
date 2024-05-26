@@ -5,7 +5,6 @@
 {% load registration_tags %}
 {% block content %}
 
-
 <div class="container z-1 d-flex justify-content-center align-items-center flex-row">
 
     {% render_profile_form user.username form user 'accounts/base_templates/profile_form.html' 'profile' request.user %}
@@ -17,7 +16,9 @@
 </div>
 
 <div class="mt-3 d-flex flex-column align-items-center">
-    <a href="{% url 'twofa:setup_2fa' %}" class="btn btn-primary mt-3">Manage 2FA</a>
+    {% if not third_party_auth %}
+        <a href="{% url 'twofa:setup_2fa' %}" class="btn btn-primary mt-3">Manage 2FA</a>
+    {% endif %}
 </div>
 
 {% endblock %}

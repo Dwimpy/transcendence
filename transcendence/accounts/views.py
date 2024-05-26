@@ -143,6 +143,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
                 'form': form,
                 'search_form': search_form,
                 'search_results': search_results,
+                'third_party_auth': user.third_party_auth,
             }
 
             return render(self.request, self.template_name, context)
@@ -299,7 +300,8 @@ class FortyTwoAuthCallbackView(View):
                         user, created = AccountUser.objects.get_or_create(username=user_login,
                                                                           nickname=user_nickname,
                                                                           email=user_email,
-                                                                          bio=user_bio)
+                                                                          bio=user_bio,
+                                                                          third_party_auth=True)
 
                         if created:
                             user_image_url = user_data['image']['versions']['large']
