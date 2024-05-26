@@ -40,7 +40,7 @@ observer.observe(targetNode, config);
 
 function join_room() {
     room_name = htmx.find('.table-active').querySelector('td#room_name').innerText;
-    htmx.ajax('GET', '{% url 'lobby' %}', {
+    htmx.ajax('GET', '{% url 'lobby' game_lobby%}', {
         headers: {
           "HX-Target": "join-room-btn"
         },
@@ -52,7 +52,7 @@ function join_room() {
 
 function delete_room() {
     room_name = htmx.find('.table-active').querySelector('td#room_name').innerText;
-    htmx.ajax('GET', '{% url 'lobby' %}', {
+    htmx.ajax('GET', '{% url 'lobby' game_lobby%}', {
         headers: {
           "HX-Target": "delete-room-btn"
         },
@@ -64,9 +64,14 @@ function delete_room() {
 
 </script>
 
-<script src="{% static 'lobby/js/selected-room.js' %}"></script>
-<script src="{% static 'lobby/js/scroll_to_bottom.js' %}"></script>
-<div hx-ext="ws" ws-connect="/ws/lobby" class="container lobby d-flex border-solid-rebecca-purple-1">
+<script>
+
+    if (window.location.pathname === '/lobby/{{ game_lobby }}/') {
+    addEventListener("DOMContentLoaded", hide_modal)
+}
+</script>
+
+<div hx-ext="ws" ws-connect="/ws/lobby/{{ game_lobby }}" class="container lobby d-flex border-solid-rebecca-purple-1">
     <div class="d-flex flex-1 position-relative flex-column align-items-center m-4">
         <div class="styled-lobby d-flex bg-black flex-column w-100 h-100 text-center align-items-center">
             <table id="lobby_table" class="">
@@ -84,7 +89,7 @@ function delete_room() {
         </div>
         <div class="d-flex flex-row gap-5 mt-4 lobby-btn">
             <button id="create_room_button" class="" type="button"
-                    hx-get="{% url 'lobby' %}"
+                    hx-get="{% url 'lobby' game_lobby %}"
                     hx-target="#dialog">
                     Create Room
             </button>
@@ -104,7 +109,7 @@ function delete_room() {
      class="modal lobby-modal"
      aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-     <div hx-ext="ws" ws-connect="/ws/lobby" id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
+     <div hx-ext="ws" ws-connect="/ws/lobby/{{ game_lobby }}" id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
 </div>
 
 {% endblock %}

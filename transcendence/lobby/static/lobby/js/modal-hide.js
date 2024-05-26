@@ -1,8 +1,3 @@
-
-if (window.location.pathname === '/lobby/') {
-    addEventListener("DOMContentLoaded", hide_modal)
-}
-
 function hide_modal() {
     const modal = new bootstrap.Modal(document.getElementById("create_room_modal"))
 

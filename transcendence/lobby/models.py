@@ -17,6 +17,7 @@ class Rooms(models.Model):
                                             related_name='assigned_room',
                                             blank=True)
     player_count = models.IntegerField(default=0)
+    type = models.CharField(max_length=150, blank=True)
     is_full = models.BooleanField(default=False)
 
     @database_sync_to_async
