@@ -22,13 +22,9 @@ from django.conf import settings
 from .forms import UserSearchForm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-<<<<<<< HEAD
 from twofa.models import UserProfile, TwilioSMSDevice, EmailOTPDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from django.core.mail import send_mail
-=======
-
->>>>>>> 6c088b45f727df1e0d14af55f278b538cd756d0d
 
 @login_required
 def search_users(request):
@@ -64,9 +60,6 @@ def profile(request, username):
     user = get_object_or_404(AccountUser, username=username)
     is_friend = request.user.friends.filter(username=username).exists()
     return render(request, 'accounts/profile.html', {'user': user, 'is_friend': is_friend})
-
-<<<<<<< HEAD
-=======
 
 def profile_view(request, username):
     user = get_object_or_404(AccountUser, username=username)
@@ -112,7 +105,6 @@ def profile_view(request, username):
 #         return url
 
 
->>>>>>> 6c088b45f727df1e0d14af55f278b538cd756d0d
 class ProfileView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/profile.html'
     model = AccountUser
@@ -183,7 +175,7 @@ class UserLoginView(LoginView):
                 if method == 'qr':
                     totp_device = TOTPDevice.objects.get(user=user, name='default')
                     secret = totp_device.key
-                    totp = pyotp.TOTP(secret)
+                    totp = pyotp.TOTP(secret, interval=60)
                     token = totp.now()
 
                 elif method == 'sms':
@@ -192,14 +184,8 @@ class UserLoginView(LoginView):
 
                 elif method == 'email':
                     email_device = EmailOTPDevice.objects.get(user=user)
-                    totp = pyotp.TOTP(email_device.key)
-                    token = totp.now()
-                    send_mail(
-                        'Your authentication token',
-                        f'Your authentication token is {token}',
-                        settings.DEFAULT_FROM_EMAIL,
-                        [user.email]
-                    )
+                    email_device.generate_token()
+
                 return redirect('twofa:verify_2fa')
         except UserProfile.DoesNotExist:
             pass

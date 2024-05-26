@@ -19,6 +19,7 @@ class TwoFAMiddleware:
                         reverse('twofa:setup_2fa'),
                         reverse('twofa:setup_sms_2fa'),
                         reverse('twofa:setup_email_2fa'),
+                        reverse('twofa:send_email_token'),
                         reverse('twofa:qr_code'),
                         reverse('logout'),
                     ]

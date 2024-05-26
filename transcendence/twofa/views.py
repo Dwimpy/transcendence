@@ -37,15 +37,10 @@ def qr_code(request):
     user = request.user
     totp_device = TOTPDevice.objects.get(user=user, name='default')
     secret = totp_device.key
-    totp = pyotp.TOTP(secret)
+    totp = pyotp.TOTP(secret, interval=60)
     qr_code_url = totp.provisioning_uri(user.email, issuer_name="transcendence")
-    
-    # Use a different QR code generator to verify
     google_qr_code_url = f"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={urllib.parse.quote(qr_code_url)}"
-    
-    # Print the QR code URL for debugging
-    print("QR Code URL:", google_qr_code_url)
-    
+    #print("QR Code URL:", google_qr_code_url)
     return render(request, 'twofa/enable_2fa.html', {'qr_code_url': google_qr_code_url})
 
 @login_required
@@ -64,9 +59,7 @@ def verify_2fa(request):
         method = user_profile.chosen_2fa_method
         totp = None
         device = None
-
         logger.debug(f"User {user.username} is trying to verify token for method {method}")
-
         if method == 'qr':
             device = TOTPDevice.objects.get(user=user, name='default')
             secret = device.key
@@ -91,11 +84,10 @@ def verify_2fa(request):
                 device.save()
             if 'pre_2fa_login' in request.session:
                 del request.session['pre_2fa_login']
-            logger.debug(f"User {user.username} successfully verified, redirecting to index")
             return redirect('index')
         else:
             logger.warning(f"Invalid token for user {user.username}. Expected token: {current_token}, User provided token: {token}")
-            messages.error(request, 'Invalid token. Please try again.')
+            #messages.error(request, 'Invalid token. Please try again.')
             return render(request, 'twofa/verify_2fa.html', {'error': 'Invalid token'})
     return render(request, 'twofa/verify_2fa.html')
 
@@ -136,19 +128,12 @@ def setup_email_2fa(request):
         user.userprofile.save()
         request.session['pre_2fa_login'] = True
         return redirect('twofa:send_email_token')
-    return render(request, 'twofa/setup_email_2fa.html')
+    return render(request, 'twofa/setup_email_2fa.html', {'email': user.email})
 
 @login_required
 def send_email_token(request):
     user = request.user
     email_device = EmailOTPDevice.objects.get(user=user)
-    totp = pyotp.TOTP(email_device.key)
-    token = totp.now()
-    send_mail(
-        'Your authentication token',
-        f'Your authentication token is {token}',
-        settings.DEFAULT_FROM_EMAIL,
-        [user.email]
-    )
-    logger.debug(f"Sent email token to user {user.username}: {token}")
+    email_device.generate_token()
+    logger.debug(f"Generated email token for user {user.username}")
     return redirect('twofa:verify_2fa')

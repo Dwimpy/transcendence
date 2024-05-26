@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.db import models
 from django_otp.plugins.otp_totp.models import TOTPDevice
-from django_otp.plugins.otp_static.models import StaticDevice
 import pyotp
 from twilio.rest import Client
+from django.core.mail import send_mail
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -50,3 +50,14 @@ class EmailOTPDevice(models.Model):
 
     def __str__(self):
         return f"{self.user.username}"
+    
+    def generate_token(self):
+        totp = pyotp.TOTP(self.key, interval=60)
+        token = totp.now()
+        send_mail(
+            'Your authentication token',
+            f'Your authentication token is {token}',
+            settings.DEFAULT_FROM_EMAIL,
+            [self.email]
+        )
+        return token

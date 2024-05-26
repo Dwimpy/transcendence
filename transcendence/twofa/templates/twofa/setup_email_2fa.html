@@ -6,6 +6,10 @@
     <h2>Setup Email Two-Factor Authentication</h2>
     <form method="post">
         {% csrf_token %}
+        <div class="form-group">
+            <label for="email">A token will be sent to this email address:</label>
+            <input type="text" id="email" name="email" class="form-control" value="{{ email }}" readonly>
+        </div>
         <button type="submit" class="btn btn-primary mt-3">Setup Email 2FA</button>
     </form>
 </div>
