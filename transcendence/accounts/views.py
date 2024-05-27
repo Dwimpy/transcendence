@@ -1,6 +1,4 @@
 import json
-import pyotp  # Add this line
-
 from django.contrib.auth import login, get_user
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
@@ -24,7 +22,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from twofa.models import UserProfile, TwilioSMSDevice, EmailOTPDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
-from django.core.mail import send_mail
+from binascii import unhexlify
+import pyotp
 
 @login_required
 def search_users(request):
@@ -175,7 +174,8 @@ class UserLoginView(LoginView):
 
                 if method == 'qr':
                     totp_device = TOTPDevice.objects.get(user=user, name='default')
-                    secret = totp_device.key
+                    hex_key = totp_device.key
+                    secret = unhexlify(hex_key).decode('utf-8')
                     totp = pyotp.TOTP(secret, interval=60)
                     token = totp.now()
 

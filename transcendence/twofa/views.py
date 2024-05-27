@@ -1,13 +1,11 @@
-from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages  # Add this import
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from .models import UserProfile, TwilioSMSDevice, EmailOTPDevice
 import pyotp
-from django.core.mail import send_mail
 import logging
 import urllib.parse
+from binascii import hexlify, unhexlify
 
 logger = logging.getLogger(__name__)
 
@@ -35,12 +33,27 @@ def setup_2fa(request):
 @login_required
 def qr_code(request):
     user = request.user
-    totp_device = TOTPDevice.objects.get(user=user, name='default')
-    secret = totp_device.key
+    totp_device, created = TOTPDevice.objects.get_or_create(user=user, name='default')
+    
+    if created:
+        secret = pyotp.random_base32()
+        hex_key = hexlify(secret.encode('utf-8')).decode('utf-8')
+        totp_device.key = hex_key
+        totp_device.save()
+    else:
+        hex_key = totp_device.key
+        try:
+            int(hex_key, 16)
+        except ValueError:
+            secret = hex_key
+            hex_key = hexlify(secret.encode('utf-8')).decode('utf-8')
+            totp_device.key = hex_key
+            totp_device.save()
+        else:
+            secret = unhexlify(hex_key).decode('utf-8')
     totp = pyotp.TOTP(secret, interval=60)
     qr_code_url = totp.provisioning_uri(user.email, issuer_name="transcendence")
     google_qr_code_url = f"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={urllib.parse.quote(qr_code_url)}"
-    #print("QR Code URL:", google_qr_code_url)
     return render(request, 'twofa/enable_2fa.html', {'qr_code_url': google_qr_code_url})
 
 @login_required
@@ -62,7 +75,8 @@ def verify_2fa(request):
         logger.debug(f"User {user.username} is trying to verify token for method {method}")
         if method == 'qr':
             device = TOTPDevice.objects.get(user=user, name='default')
-            secret = device.key
+            hex_key = device.key
+            secret = unhexlify(hex_key).decode('utf-8')
             totp = pyotp.TOTP(secret, interval=60)
         elif method == 'sms':
             device = TwilioSMSDevice.objects.get(user=user)

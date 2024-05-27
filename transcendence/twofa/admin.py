@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django import forms
 from django_otp.plugins.otp_totp.models import TOTPDevice
-
 from .models import UserProfile, TwilioSMSDevice, EmailOTPDevice
 
 class UserProfileForm(forms.ModelForm):
