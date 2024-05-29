@@ -196,6 +196,7 @@ class UserLoginView(LoginView):
         refresh = RefreshToken.for_user(user)
         self.request.session['jwt_refresh'] = str(refresh)
         self.request.session['jwt_access'] = str(refresh.access_token)
+        print(f"Issued JWT tokens for {user.username}")
 
         return super().form_valid(form)
 
@@ -322,10 +323,11 @@ class FortyTwoAuthCallbackView(View):
                         login(request, user)
                         messages.success(request, f'Welcome, {user.username}')
 
-                        # JWT
+                      # Issue JWT tokens
                         refresh = RefreshToken.for_user(user)
                         request.session['jwt_refresh'] = str(refresh)
                         request.session['jwt_access'] = str(refresh.access_token)
+                        print(f"Issued JWT tokens for {user.username}")
 
                         response = redirect('profile', user.username)
                         return response
