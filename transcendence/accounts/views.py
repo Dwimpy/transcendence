@@ -24,6 +24,7 @@ from twofa.models import UserProfile, TwilioSMSDevice, EmailOTPDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from binascii import unhexlify
 import pyotp
+from rest_framework_simplejwt.tokens import RefreshToken
 
 @login_required
 def search_users(request):
@@ -190,6 +191,12 @@ class UserLoginView(LoginView):
                 return redirect('twofa:verify_2fa')
         except UserProfile.DoesNotExist:
             pass
+        
+        # JWT
+        refresh = RefreshToken.for_user(user)
+        self.request.session['jwt_refresh'] = str(refresh)
+        self.request.session['jwt_access'] = str(refresh.access_token)
+
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -314,6 +321,12 @@ class FortyTwoAuthCallbackView(View):
                                                       save=True)
                         login(request, user)
                         messages.success(request, f'Welcome, {user.username}')
+
+                        # JWT
+                        refresh = RefreshToken.for_user(user)
+                        request.session['jwt_refresh'] = str(refresh)
+                        request.session['jwt_access'] = str(refresh.access_token)
+
                         response = redirect('profile', user.username)
                         return response
                     else:

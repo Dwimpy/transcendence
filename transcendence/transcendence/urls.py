@@ -40,6 +40,7 @@ urlpatterns = ([
     path('localgame', include('localgame.urls')),
     path('sosathui', include('sosathui.urls')),
     path('twofa/', include('twofa.urls')),
+    path('jwtauth/', include('jwtauth.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
 
