@@ -3,7 +3,8 @@ from django.db import models
 from django_otp.plugins.otp_totp.models import TOTPDevice
 import pyotp
 from twilio.rest import Client
-from django.core.mail import send_mail
+from django.core.mail import send_mail, get_connection
+import ssl
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -54,10 +55,27 @@ class EmailOTPDevice(models.Model):
     def generate_token(self):
         totp = pyotp.TOTP(self.key, interval=60)
         token = totp.now()
+
+        ssl_context = ssl._create_unverified_context()
+
+        connection = get_connection(
+            backend=settings.EMAIL_BACKEND,
+            host=settings.EMAIL_HOST,
+            port=settings.EMAIL_PORT,
+            username=settings.EMAIL_HOST_USER,
+            password=settings.EMAIL_HOST_PASSWORD,
+            use_tls=settings.EMAIL_USE_TLS,
+            use_ssl=settings.EMAIL_USE_SSL,
+        )
+        connection.ssl_context = ssl_context
+
         send_mail(
             'Your authentication token',
             f'Your authentication token is {token}',
             settings.DEFAULT_FROM_EMAIL,
-            [self.email]
+            [self.email],
+            connection=connection,
         )
+
         return token
+    
