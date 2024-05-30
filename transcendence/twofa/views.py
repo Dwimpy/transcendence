@@ -6,6 +6,7 @@ import pyotp
 import logging
 import urllib.parse
 from binascii import hexlify, unhexlify
+from accounts.views import issue_jwt_tokens_for_user
 
 logger = logging.getLogger(__name__)
 
@@ -98,6 +99,10 @@ def verify_2fa(request):
                 device.save()
             if 'pre_2fa_login' in request.session:
                 del request.session['pre_2fa_login']
+            
+            # JWT
+            issue_jwt_tokens_for_user(user, request)
+            
             return redirect('index')
         else:
             logger.warning(f"Invalid token for user {user.username}. Expected token: {current_token}, User provided token: {token}")

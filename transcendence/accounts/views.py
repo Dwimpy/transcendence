@@ -26,6 +26,15 @@ from binascii import unhexlify
 import pyotp
 from rest_framework_simplejwt.tokens import RefreshToken
 
+def issue_jwt_tokens_for_user(user, request):
+    refresh = RefreshToken.for_user(user)
+    request.session['jwt_refresh'] = str(refresh)
+    request.session['jwt_access'] = str(refresh.access_token)
+    jwt_refresh = request.session.get('jwt_refresh')
+    jwt_access = request.session.get('jwt_access')
+    print(f"Refresh Token: {jwt_refresh}")
+    print(f"Access Token: {jwt_access}")
+
 @login_required
 def search_users(request):
     form = UserSearchForm()
@@ -193,10 +202,7 @@ class UserLoginView(LoginView):
             pass
         
         # JWT
-        refresh = RefreshToken.for_user(user)
-        self.request.session['jwt_refresh'] = str(refresh)
-        self.request.session['jwt_access'] = str(refresh.access_token)
-        print(f"Issued JWT tokens for {user.username}")
+        issue_jwt_tokens_for_user(user, self.request)
 
         return super().form_valid(form)
 
@@ -323,12 +329,9 @@ class FortyTwoAuthCallbackView(View):
                         login(request, user)
                         messages.success(request, f'Welcome, {user.username}')
 
-                      # Issue JWT tokens
-                        refresh = RefreshToken.for_user(user)
-                        request.session['jwt_refresh'] = str(refresh)
-                        request.session['jwt_access'] = str(refresh.access_token)
-                        print(f"Issued JWT tokens for {user.username}")
-
+                        # JWT
+                        issue_jwt_tokens_for_user(user, request)
+                    
                         response = redirect('profile', user.username)
                         return response
                     else:
