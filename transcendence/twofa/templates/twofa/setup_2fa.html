@@ -2,19 +2,30 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Setup Two-Factor Authentication</h2>
+<div class="form-group">
+    {% if chosen_method %}
+        <h2>Chosen 2FA method
+            <h4>
+            {{ chosen_method }}</h2>
+            </h4>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="disable" class="btn btn-danger">Disable 2FA</button>
+        </form>
+    {% else %}
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
             <label for="method">Choose 2FA method:</label>
-            <select id="method" name="method" class="form-control">
+            <select id="method" name="method" class="form-control custom-select">
+                <option value="" disabled selected>Select...</option>
                 <option value="qr">QR Code</option>
                 <option value="sms">SMS</option>
                 <option value="email">Email</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Setup 2FA</button>
+        <button type="submit" class="mb-2 mt-4">Setup 2FA</button>
     </form>
+    {% endif %}
 </div>
 {% endblock %}

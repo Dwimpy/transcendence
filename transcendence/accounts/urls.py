@@ -1,6 +1,13 @@
 from django.urls import path, include
 from .views import (ProfileView, RegistrationView, FortyTwoAuthView, FortyTwoAuthCallbackView, UserLoginView, search_users, add_friend, remove_friend)
 from django.contrib.auth import views as auth_view
+from django.conf.urls import handler403
+from django.shortcuts import render
+
+def custom_403_view(request, exception=None):
+    return render(request, '403.html', status=403)
+
+handler403 = custom_403_view
 
 urlpatterns = [
     path('login/', UserLoginView.as_view(), name='login'),

@@ -6,7 +6,7 @@ import pyotp
 import logging
 import urllib.parse
 from binascii import hexlify, unhexlify
-from accounts.views import issue_jwt_tokens_for_user
+from jwtauth.views import issue_jwt as jwt
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +16,15 @@ def setup_2fa(request):
     user_profile, created = UserProfile.objects.get_or_create(user=user)
 
     if request.method == 'POST':
+        # Disable 2fa
+        if 'disable' in request.POST:
+            user_profile.chosen_2fa_method = ''
+            user_profile.save()
+            TOTPDevice.objects.filter(user=user).delete()
+            TwilioSMSDevice.objects.filter(user=user).delete()
+            EmailOTPDevice.objects.filter(user=user).delete()
+            return redirect('index')
+
         method = request.POST.get('method')
         if method == 'qr':
             if not TOTPDevice.objects.filter(user=user).exists():
@@ -29,7 +38,18 @@ def setup_2fa(request):
         user_profile.save()
         request.session['pre_2fa_login'] = True
         return redirect('twofa:qr_code' if method == 'qr' else 'twofa:verify_2fa')
-    return render(request, 'twofa/setup_2fa.html')
+    
+    method_display_map = {
+        'qr': 'QR-Code Verification',
+        'sms': 'SMS Verification',
+        'email': 'Email Verification'
+    }
+    chosen_method_display = method_display_map.get(user_profile.chosen_2fa_method, '')
+    context = {
+        'chosen_method': chosen_method_display
+    }
+
+    return render(request, 'twofa/setup_2fa.html', context)
 
 @login_required
 def qr_code(request):
@@ -101,7 +121,7 @@ def verify_2fa(request):
                 del request.session['pre_2fa_login']
             
             # JWT
-            issue_jwt_tokens_for_user(user, request)
+            jwt(user, request)
             
             return redirect('index')
         else:

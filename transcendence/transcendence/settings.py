@@ -84,6 +84,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_otp.middleware.OTPMiddleware',
     'twofa.middleware.TwoFAMiddleware',
+    'jwtauth.middleware.JWTMiddleware',
 ]
 
 # Twilio settings
