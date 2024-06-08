@@ -3,6 +3,7 @@
 {% block content %}
 <div class="container">
     <h2>Verify Your Identity</h2>
+    <p>{{ method_detail }}</p>
     <form method="post">
         {% csrf_token %}
         <div class="form-group">

@@ -26,9 +26,6 @@ from binascii import unhexlify
 import pyotp
 from jwtauth.views import JWTAuthMixin
 from jwtauth.views import issue_jwt as jwt
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.exceptions import PermissionDenied
 
 @login_required

@@ -22,10 +22,10 @@ def issue_jwt(user, request):
     request.session['jwt_refresh'] = str(refresh)
     request.session['jwt_access'] = str(refresh.access_token)
     print(f"Access + Refresh tokens were issued.")
-    #jwt_refresh = request.session.get('jwt_refresh')
-    #jwt_access = request.session.get('jwt_access')
-    #print(f"Refresh Token issued: {jwt_refresh}")
-    #print(f"Access Token issued: {jwt_access}")
+    jwt_refresh = request.session.get('jwt_refresh')
+    jwt_access = request.session.get('jwt_access')
+    print(f"Refresh Token issued: {jwt_refresh}")
+    print(f"Access Token issued: {jwt_access}")
 
 class JWTAuthMixin:
     @method_decorator(csrf_exempt)

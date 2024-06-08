@@ -75,7 +75,10 @@ def qr_code(request):
     totp = pyotp.TOTP(secret, interval=60)
     qr_code_url = totp.provisioning_uri(user.email, issuer_name="transcendence")
     google_qr_code_url = f"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={urllib.parse.quote(qr_code_url)}"
-    return render(request, 'twofa/enable_2fa.html', {'qr_code_url': google_qr_code_url})
+    return render(request, 'twofa/enable_2fa.html', {
+        'qr_code_url': google_qr_code_url,
+        'auth_app_info': 'Scan this QR code with Google Authenticator app.'
+    })
 
 @login_required
 def verify_2fa(request):
@@ -87,10 +90,20 @@ def verify_2fa(request):
         logger.debug("pre_2fa_login not in session, redirecting to index")
         return redirect('index')
 
+    user_profile = UserProfile.objects.get(user=user)
+    method = user_profile.chosen_2fa_method
+    method_detail = ""
+
+    if method == 'qr':
+        method_detail = "Check your Google Authenticator app"
+    elif method == 'sms':
+        device = TwilioSMSDevice.objects.get(user=user)
+        method_detail = f"Check your phone number {device.phone_number[:3]}****{device.phone_number[-2:]}"
+    elif method == 'email':
+        method_detail = f"Check your email {user.email[0]}****@{user.email.split('@')[1]}"
+
     if request.method == 'POST':
         token = request.POST.get('otp_token')
-        user_profile = UserProfile.objects.get(user=user)
-        method = user_profile.chosen_2fa_method
         totp = None
         device = None
         logger.debug(f"User {user.username} is trying to verify token for method {method}")
@@ -127,8 +140,8 @@ def verify_2fa(request):
         else:
             logger.warning(f"Invalid token for user {user.username}. Expected token: {current_token}, User provided token: {token}")
             #messages.error(request, 'Invalid token. Please try again.')
-            return render(request, 'twofa/verify_2fa.html', {'error': 'Invalid token'})
-    return render(request, 'twofa/verify_2fa.html')
+            return render(request, 'twofa/verify_2fa.html', {'error': 'Invalid token', 'method_detail': method_detail})
+    return render(request, 'twofa/verify_2fa.html', {'method_detail': method_detail})
 
 @login_required
 def setup_sms_2fa(request):
