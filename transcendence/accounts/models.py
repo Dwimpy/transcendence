@@ -36,5 +36,7 @@ class AccountUser(AbstractUser):
     friends = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='friend_set')
     # history = (gameName{game1{player1, player2, winner, score}});
     history = models.JSONField(default=dict, blank=True)
+    third_party_auth = models.BooleanField(default=False)
+
     def get_picture_url(self):
         return self.picture.url if hasattr(self, 'picture') and self.picture else None

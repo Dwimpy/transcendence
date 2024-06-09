@@ -14,7 +14,11 @@
     /*background-size: cover;*/
     /*background-position: center;*/
     /*margin: 0; !* Remove default margin to ensure full coverage *!*/
+<<<<<<< HEAD
+    height: 100vh;
+=======
     min-height: 100vh;
+>>>>>>> 4ebb8db0d26e09ad2375b6f6fbf1b3e66e498d8f
     padding: 6px;
     color: whitesmoke;
     display: flex;
@@ -269,6 +273,15 @@ h6#selected-image-name {
     border-radius: 50%;
 }
 
+<<<<<<< HEAD
+.center-img-form-small{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+=======
+>>>>>>> 4ebb8db0d26e09ad2375b6f6fbf1b3e66e498d8f
 
 .field-width {
     max-width: 250px;

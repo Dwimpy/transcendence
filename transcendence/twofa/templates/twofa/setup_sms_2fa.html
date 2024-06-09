@@ -1,0 +1,16 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Setup SMS Two-Factor Authentication</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="phone_number">Enter your phone number:</label>
+            <input type="text" id="phone_number" name="phone_number" class="form-control" required>
+        </div>
+        <button type="submit" class="mb-2 mt-4">Setup SMS 2FA</button>
+    </form>
+</div>
+{% endblock %}

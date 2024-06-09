@@ -4,28 +4,32 @@
 <div class="text-whitesmoke">
     {% if user.get_picture_url %}
         <img class="center-img-form mb-5" src="{{ user.picture.url }}" alt="Uploaded Image">
-    {% else %}
-        <h4>Upload picture (TODO)</h4>
     {% endif %}
-        <div class="container mb-3">
-            <h5> Nickname </h5>
-            {% render_base_field form "nickname" "" %}
+    <div class="gap-0 d-flex-align-center-col w-100 mb-3">
+        <div class="col field-width font-size-18 d-inline-flex login-input-color border-radius-18 flex-row text-center align-items-center container-label-border-radius-solid">
+            <label for="registration-file-input" class="btn btn-label-profile-picture flex-shrink-0 w-45" id="btn-label-picture"> Upload </label>
+            <span id="selected-image-name" class="border-0 mx-auto"> Profile Picture </span>
+            <input type="file" name="{{ form.picture.name }}" id="registration-file-input" class="d-none">
         </div>
-        <div class="container mb-3">
-            <h5> Bio </h5>
-            {% render_base_field form "bio" "" %}
+    </div>
+    <div class="container mb-3">
+        <h5> Nickname </h5>
+        {% render_base_field form "nickname" "" %}
+    </div>
+    <div class="container mb-3">
+        <h5> Bio </h5>
+        {% render_base_field form "bio" "" %}
+    </div>
+    <div class="container mb-3">
+        <h5>Email</h5>
+        {% render_base_field form "email" "" %}
+    </div>
+    {% if user.username == logged_user.username %}
+        <div class="mt-3 d-flex flex-column align-items-center">
+            <button type="submit" class="mb-2 mt-4"> Update Profile </button>
+            <a class="text-decoration-none text-whitesmoke" href="{% url 'logout' %}">
+                <button type="button"> Logout </button>
+            </a>
         </div>
-        <div class="container mb-3">
-            <h5>Email</h5>
-            {% render_base_field form "email" "" %}
-        </div>
-        {% if user.username == logged_user.username %}
-            <div class="mt-3 d-flex flex-column align-items-center">
-                <button type="submit" class="mb-2 mt-4"> Update Profile </button>
-                <a class="text-decoration-none text-whitesmoke" href="{% url 'logout' %}">
-                    <button type="button"> Logout </button>
-                </a>
-            </div>
-        {% endif %}
+    {% endif %}
 </div>
-

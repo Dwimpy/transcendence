@@ -1,10 +1,9 @@
 import json
-
 from django.contrib.auth import login, get_user
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.files.base import ContentFile
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import UpdateView
@@ -21,7 +20,13 @@ from django.conf import settings
 from .forms import UserSearchForm
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-
+from twofa.models import UserProfile, TwilioSMSDevice, EmailOTPDevice
+from django_otp.plugins.otp_totp.models import TOTPDevice
+from binascii import unhexlify
+import pyotp
+from jwtauth.views import JWTAuthMixin
+from jwtauth.views import issue_jwt as jwt
+from django.core.exceptions import PermissionDenied
 
 @login_required
 def search_users(request):
@@ -34,7 +39,6 @@ def search_users(request):
             results = AccountUser.objects.filter(username__icontains=query).exclude(username=request.user.username)
     return render(request, 'accounts/search_users.html', {'form': form, 'results': results})
 
-
 @login_required
 def add_friend(request, username):
     user = request.user
@@ -43,7 +47,7 @@ def add_friend(request, username):
     friend.friends.add(user)
     return redirect('profile', username=user.username)
 
-
+@login_required
 def remove_friend(request, username):
     user = request.user
     friend = get_object_or_404(AccountUser, username=username)
@@ -51,14 +55,13 @@ def remove_friend(request, username):
     friend.friends.remove(user)
     return redirect('profile', username=user.username)
 
-
 @login_required
 def profile(request, username):
     user = get_object_or_404(AccountUser, username=username)
     is_friend = request.user.friends.filter(username=username).exists()
     return render(request, 'accounts/profile.html', {'user': user, 'is_friend': is_friend})
 
-
+@login_required
 def profile_view(request, username):
     user = get_object_or_404(AccountUser, username=username)
     history = user.history.get('tictac', [])
@@ -70,40 +73,7 @@ def profile_view(request, username):
     }
     return render(request, 'accounts/profile.html', context)
 
-
-# Create your views here.
-# class ProfileView(LoginRequiredMixin, UpdateView):
-#     template_name = 'accounts/profile.html'
-#     model = AccountUser
-#     form_class = ProfileForm
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#
-#     def get(self, *args, **kwargs):
-#         try:
-#             logged_user = self.request.user
-#             user = self.get_object()
-#             form = self.form_class(instance=user)
-#             if not logged_user.username == user.username:
-#                 for field in form.fields:
-#                     form.fields[field].widget.attrs['readonly'] = True
-#             return render(self.request, self.template_name, {'user': user,
-#                                                              'logged_user': logged_user.username,
-#                                                              'form': form})
-#         except AccountUser.DoesNotExist:
-#             raise Http404("User does not exist")
-#
-#     def form_invalid(self, form):
-#         return super().form_invalid(form)
-#
-#     def get_success_url(self):
-#         user = self.request.user
-#         url = reverse_lazy('profile', args=[user.username])
-#         return url
-
-
-class ProfileView(LoginRequiredMixin, UpdateView):
+class ProfileView(JWTAuthMixin, UpdateView):
     template_name = 'accounts/profile.html'
     model = AccountUser
     form_class = ProfileForm
@@ -113,23 +83,24 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def get(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         try:
-            logged_user = self.request.user
+            username = self.kwargs.get('username')
+            logged_user = request.user
+
+            if logged_user.username != username:
+                raise PermissionDenied("You do not have permission to access this profile.")
+
             user = self.get_object()
             form = self.form_class(instance=user)
             search_form = UserSearchForm()
 
+            search_results = []
             if 'query' in self.request.GET:
                 search_form = UserSearchForm(self.request.GET)
                 if search_form.is_valid():
                     query = search_form.cleaned_data['query']
-                    search_results = AccountUser.objects.filter(username__icontains=query).exclude(
-                        username=self.request.user.username)
-                else:
-                    search_results = []
-            else:
-                search_results = []
+                    search_results = AccountUser.objects.filter(username__icontains=query).exclude(username=request.user.username)
 
             if logged_user.username != user.username:
                 for field in form.fields:
@@ -141,6 +112,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
                 'form': form,
                 'search_form': search_form,
                 'search_results': search_results,
+                'third_party_auth': user.third_party_auth,
             }
 
             return render(self.request, self.template_name, context)
@@ -152,20 +124,49 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         user = self.request.user
-        url = reverse_lazy('profile', args=[user.username])
-        return url
-
+        return reverse_lazy('profile', args=[user.username])
 
 class UserLoginView(LoginView):
     template_name = 'accounts/login.html'
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+    def form_valid(self, form):
+        """
+        Security check complete. Log the user in.
+        """
+        user = form.get_user()
+        login(self.request, user)
+        try:
+            user_profile = UserProfile.objects.get(user=user)
+            if user_profile.chosen_2fa_method:
+                self.request.session['pre_2fa_login'] = True
+                method = user_profile.chosen_2fa_method
+
+                if method == 'qr':
+                    totp_device = TOTPDevice.objects.get(user=user, name='default')
+                    hex_key = totp_device.key
+                    secret = unhexlify(hex_key).decode('utf-8')
+                    totp = pyotp.TOTP(secret, interval=60)
+
+                elif method == 'sms':
+                    sms_device = TwilioSMSDevice.objects.get(user=user)
+                    sms_device.generate_token()
+
+                elif method == 'email':
+                    email_device = EmailOTPDevice.objects.get(user=user)
+                    email_device.generate_token()
+
+                return redirect('twofa:verify_2fa')
+        except UserProfile.DoesNotExist:
+            pass
+        
+        # JWT
+        jwt(user, self.request)
+
+        return super().form_valid(form)
 
     def get_success_url(self):
         user = self.request.user
         return reverse_lazy('profile', args=[user.username])
-
 
 class RegistrationView(FormView):
     template_name = 'accounts/registration.html'
@@ -271,7 +272,8 @@ class FortyTwoAuthCallbackView(View):
                         user, created = AccountUser.objects.get_or_create(username=user_login,
                                                                           nickname=user_nickname,
                                                                           email=user_email,
-                                                                          bio=user_bio)
+                                                                          bio=user_bio,
+                                                                          third_party_auth=True)
 
                         if created:
                             user_image_url = user_data['image']['versions']['large']
@@ -284,6 +286,10 @@ class FortyTwoAuthCallbackView(View):
                                                       save=True)
                         login(request, user)
                         messages.success(request, f'Welcome, {user.username}')
+
+                        # JWT
+                        jwt(user, request)
+                    
                         response = redirect('profile', user.username)
                         return response
                     else:
