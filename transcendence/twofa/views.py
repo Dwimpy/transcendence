@@ -72,12 +72,13 @@ def qr_code(request):
             totp_device.save()
         else:
             secret = unhexlify(hex_key).decode('utf-8')
+    secret = unhexlify(hex_key).decode('utf-8')
     totp = pyotp.TOTP(secret, interval=60)
     qr_code_url = totp.provisioning_uri(user.email, issuer_name="transcendence")
     google_qr_code_url = f"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={urllib.parse.quote(qr_code_url)}"
     return render(request, 'twofa/enable_2fa.html', {
         'qr_code_url': google_qr_code_url,
-        'auth_app_info': 'Scan this QR code with Google Authenticator app.'
+        'auth_app_info': 'Scan this QR code with Google Authenticator.'
     })
 
 @login_required
@@ -95,7 +96,7 @@ def verify_2fa(request):
     method_detail = ""
 
     if method == 'qr':
-        method_detail = "Check your Google Authenticator app"
+        method_detail = "Check your Google Authenticator appp"
     elif method == 'sms':
         device = TwilioSMSDevice.objects.get(user=user)
         method_detail = f"Check your phone number {device.phone_number[:3]}****{device.phone_number[-2:]}"
@@ -139,7 +140,6 @@ def verify_2fa(request):
             return redirect('index')
         else:
             logger.warning(f"Invalid token for user {user.username}. Expected token: {current_token}, User provided token: {token}")
-            #messages.error(request, 'Invalid token. Please try again.')
             return render(request, 'twofa/verify_2fa.html', {'error': 'Invalid token', 'method_detail': method_detail})
     return render(request, 'twofa/verify_2fa.html', {'method_detail': method_detail})
 

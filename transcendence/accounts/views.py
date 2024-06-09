@@ -146,7 +146,6 @@ class UserLoginView(LoginView):
                     hex_key = totp_device.key
                     secret = unhexlify(hex_key).decode('utf-8')
                     totp = pyotp.TOTP(secret, interval=60)
-                    token = totp.now()
 
                 elif method == 'sms':
                     sms_device = TwilioSMSDevice.objects.get(user=user)

@@ -8,6 +8,7 @@
     <img src="{{ qr_code_url }}" alt="QR Code">
     <form method="post" action="{% url 'twofa:verify_2fa' %}">
         {% csrf_token %}
+        <p>Download Google Authenticator from the <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_blank">Google Play Store</a> or <a href="https://apps.apple.com/us/app/google-authenticator/id388497605" target="_blank">Apple App Store</a>.</p>
         <label for="otp_token">Enter the code from your authentication app:</label>
         <input type="text" name="otp_token" id="otp_token" required>
         <button type="submit" class="mb-2 mt-4">Verify</button>
