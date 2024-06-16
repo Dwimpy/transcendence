@@ -176,8 +176,8 @@ class RegistrationView(FormView):
     def form_valid(self, form):
         user = form.save(commit=True)
         login(self.request, user=user)
+        jwt(user, self.request)
         return super().form_valid(form)
-
 
 class FortyTwoAuthView(View):
 

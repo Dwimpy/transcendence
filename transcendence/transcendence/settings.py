@@ -12,12 +12,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from datetime import timedelta
 import os.path
 from pathlib import Path
-from decouple import Config
+from decouple import config
 from django.template.context_processors import media
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-config = Config(str(BASE_DIR.parent / '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
