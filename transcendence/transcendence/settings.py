@@ -12,12 +12,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from datetime import timedelta
 import os.path
 from pathlib import Path
-from decouple import config
+from decouple import Config
 from django.template.context_processors import media
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+config = Config(str(BASE_DIR.parent / '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -30,7 +30,13 @@ SECRET_KEY = 'django-insecure-&95rh562@s-za%5_ngf6a*7*@2i=ue%+3if@^lb49iq)56a0=u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'websocketking.com']
+ALLOWED_HOSTS = [
+	'127.0.0.1', 
+	'localhost', 
+	'websocketking.com',
+	'0.0.0.0',
+]
+
 AUTH_USER_MODEL = 'accounts.AccountUser'
 
 
@@ -222,7 +228,7 @@ DATABASES = {
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASS'),
-        'HOST': 'localhost',  # or your database host
+        'HOST': 'db',  # or your database host
         'PORT': '5432',  # or your database port
     }
 }
