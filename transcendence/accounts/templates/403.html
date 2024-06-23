@@ -1,0 +1,15 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% load widget_tweaks %}
+{% load registration_tags %}
+
+{% block content %}
+<div class="error-page">
+    <h1>Forbidden</h1>
+    <p>Sorry, you do not have permission to access this page.</p>
+    <a href="{% url 'index' %}" class="text-decoration-none text-whitesmoke">
+        <button type="button">Home</button>
+    </a>
+</div>
+{% endblock %}

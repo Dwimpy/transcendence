@@ -1,0 +1,19 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <h2>Verify Your Identity</h2>
+    <p>{{ method_detail }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="token">Enter your verification token:</label>
+            <input type="text" name="otp_token" id="token" class="form-control" required>
+        </div>
+        <button type="submit" class="mb-2 mt-4">Verify</button>
+    </form>
+    {% if error %}
+    <div class="alert alert-danger mt-3">{{ error }}</div>
+    {% endif %}
+</div>
+{% endblock %}
