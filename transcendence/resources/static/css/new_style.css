@@ -9,6 +9,10 @@
     z-index: -1;
 }
 
+body{
+    overflow: hidden;
+}
+
 .main-container {
     /*background-image: url('../background.png');*/
     /*background-size: cover;*/

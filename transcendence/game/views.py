@@ -9,5 +9,4 @@ class GameView(TemplateView):
         super().__init__(*args, **kwargs)
 
     def get(self, request):
-        print("hui")
-        return render(request, self.template_name, status=200, context={})
+        return render(request, self.template_name, status=200, context={"user": request.user})

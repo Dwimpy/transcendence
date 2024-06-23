@@ -1,89 +1,97 @@
 {% extends 'transcendence/base.html' %}
 {% load static %}
 {% block content %}
-    <style>
-        canvas { background: black; display: block; margin: auto; width: 50vw; height: 50vh}
-    </style>
-    <body>
-    <canvas id="pongCanvas" ></canvas>
-    <script>
-        const canvas = document.getElementById('pongCanvas');
-        const context = canvas.getContext('2d');
-        let x_speed = 0
-        let y_speed = 0
-        let circle_x = 0;
-        let circle_y = 0;
+<style>
+    canvas {
+        background: black;
+        display: block;
+        margin: auto;
+        width: 50vw;
+        height: 50vh
+    }
+</style>
 
-        let lastTime = performance.now();
+<canvas id="pongCanvas"></canvas>
+<script>
 
-        const ws = new WebSocket('ws://' + window.location.host + '/ws/game/');
+    const canvas = document.getElementById('pongCanvas');
+    const context = canvas.getContext('2d');
+    let x_speed = 0
+    let y_speed = 0
+    // let circle_x = 0;
+    // let circle_y = 0;
 
-        ws.onmessage = function(event) {
+    let lastTime = performance.now();
 
-            const data = JSON.parse(event.data);
-            // Handle incoming data
-            if (data.type === 'circle_position') {
-                const circleX = data.circle_x;
-                const circleY = data.circle_y;
-                x_speed = data.circle_x_speed;
-                y_speed = data.circle_y_speed;
-                {#console.log(x_speed, y_speed, data)#}
-                // Clear canvas and draw circle at new position
-                {#context.clearRect(0, 0, canvas.width, canvas.height);#}
-                {#drawCircle(circleX, circleY);#}
-            }
-        };
+    const ws = new WebSocket('ws://' + window.location.host + '/ws/game/');
 
-        function GameLoop()
-        {
-            const currentTime = performance.now();
-            const deltaTime = (currentTime - lastTime) / 1000; // Convert milliseconds to seconds
-            lastTime = currentTime;
-            circle_x += x_speed * deltaTime;
-            circle_y += y_speed * deltaTime;
+    function drawText(text, x, y, size) {
+
+
+        context.fillStyle = 'white';
+        context.font = size + 'px Arial';
+        context.fillText(text, x, y);
+    }
+
+    ws.onmessage = function (event) {
+
+        const data = JSON.parse(event.data);
+        // Handle incoming data
+        console.log(data)
+        if (data.type === 'game') {
+
+
+
             context.clearRect(0, 0, canvas.width, canvas.height);
-            drawCircle(circle_x, circle_y);
-            console.log(x_speed, y_speed, deltaTime)
-            requestAnimationFrame(GameLoop);
+            drawBar(data.left_bar_x, data.left_bar_y, 10, canvas.height / 10)
+            drawBar(data.right_bar_x, data.right_bar_y, 10, canvas.height / 10)
+
+            drawCircle(data.circle_x, data.circle_y);
+            drawText(data.score_left + ':' + data.score_right, canvas.width / 2 - 15, 20, 20)
+
+
         }
-        GameLoop();
+    };
 
-        // Function to draw circle
-        function drawCircle(x, y) {
 
-            context.beginPath();
-            context.arc(x, y, 10, 0, Math.PI * 2);
-            context.fillStyle = 'white';
-            context.fill();
-        }
 
-        // Send mouse movement data to WebSocket
-        canvas.addEventListener('mousemove', (event) => {
-            const data = {
-                type: 'mouse_move',
-                x: event.clientX,
-                y: event.clientY
-            };
-            ws.send(JSON.stringify(data));
-        });
+    // Function to draw circle
+    function drawCircle(x, y) {
 
-        // Send key press data to WebSocket
+        context.beginPath();
+        context.arc(x / 100 * canvas.width, y / 100 * canvas.height, canvas.height / 20, 0, Math.PI * 2);
+        context.fillStyle = 'white';
+        context.fill();
+    }
 
-        document.addEventListener('keydown', (event) => {
-            const data = {
-                type: 'key_down',
-                key: event.key
-            };
-            ws.send(JSON.stringify(data));
-        });
+    function drawBar(x, y, width, height) {
+        context.beginPath();
+        context.rect(x / 100 * canvas.width, y / 100 * canvas.height, canvas.width / 50, canvas.height / 10);
+        context.fillStyle = 'white';
+        context.fill();
+    }
 
-        document.addEventListener('keyup', (event) => {
-            const data = {
-                type: 'key_up',
-                key: event.key
-            };
-            ws.send(JSON.stringify(data));
-        });
-    </script>
+    // Send key press data to WebSocket
+
+    document.addEventListener('keydown', (event) => {
+        const data = {
+            type: 'key_down',
+            key: event.key
+        };
+        ws.send(JSON.stringify(data));
+    });
+
+    setInterval(() => {
+        ws.send(JSON.stringify({"type": "update"}));
+    }, 5);
+
+    document.addEventListener('keyup', (event) => {
+        const data = {
+            type: 'key_up',
+            key: event.key
+        };
+        ws.send(JSON.stringify(data));
+    });
+</script>
 </body>
 {% endblock %}
