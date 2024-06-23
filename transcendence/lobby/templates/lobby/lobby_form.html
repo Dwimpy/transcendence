@@ -17,15 +17,16 @@
     });
 </script>
 
-<div class="modal-content bg-primary">
+<div class="modal-content color-white" style="background-color: #702670">
     <div class="modal-header">
         <h1 class="modal-title fs-5 text-white mx-auto" id="exampleModalLabel">Create Room</h1>
         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
-    <div id="modal-body" class="modal-body">
+    <div id="modal-body" class="modal-body mx-auto">
         <form id="create_room_form" name="form-create" hx-post="{% url 'lobby' game_lobby %}">
-            <div class="m-1">
+            <div class="d-flex flex-column gap-3 p-1">
                 {% render_field_placeholder form "room_name" "" "Room Name" %}
+                {% render_field_placeholder form "game_type" "" "Game Type" %}
             </div>
         </form>
             <div id="key-up" hx-ws="send" hx-trigger="keyup from:dialog, keydown" hx-vals="js:{keyPressed: event.type}"></div>

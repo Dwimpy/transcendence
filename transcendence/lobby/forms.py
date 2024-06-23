@@ -8,3 +8,4 @@ class RoomForm(forms.ModelForm):
         fields = ['room_name']
 
     room_name = forms.CharField(max_length=150, required=True, error_messages={'unique': 'Duplicate name'})
+    game_type = forms.ChoiceField(choices=[('normal', 'Normal'), ('tournament', 'Tournament')])

@@ -54,7 +54,7 @@ class LobbyView(LoginRequiredMixin, TemplateView):
                 context['form'] = RoomForm()
                 return render(request, 'lobby/lobby_form.html', context)
             elif hx_target == 'join-room-btn':
-                return LobbyView.join_room(request)
+                return LobbyView.join_room(request, kwargs['game_lobby'])
             elif hx_target == 'delete-room-btn':
                 return LobbyView.delete_room(room_name=request.GET.get("room-name"))
         return render(request, self.template_name, context)
@@ -70,20 +70,21 @@ class LobbyView(LoginRequiredMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         form = RoomForm(request.POST)
+        game_name = kwargs['game_lobby']
         # if is_htmx(request):
         #     hx_target = request.headers.get('HX-Target')
         if form.is_valid():
-            return LobbyView.create_room(form, request)
+            return LobbyView.create_room(form, request, game_name)
         else:
             return self.update_form_invalid(form, request, **kwargs)
 
     @staticmethod
-    def create_room(form, request):
+    def create_room(form, request, game_name):
         form.save()
         room_name = form.data.get('room_name')
-        room_url = reverse_lazy('room', args=[room_name])
+        room_url = reverse_lazy('room', args=[game_name, room_name])
         room_created.send(sender=LobbyView, action='Room created',
-                          room_name=room_name, user=request.user)
+                          room_name=room_name, game_name=game_name, user=request.user)
         return HttpResponse(status=200, headers={
             'HX-Redirect': room_url
         })
@@ -101,7 +102,7 @@ class LobbyView(LoginRequiredMixin, TemplateView):
         return context
 
     @staticmethod
-    def join_room(request):
+    def join_room(request, game_name):
         try:
             room_name = request.GET.get('room-name')
             room = Rooms.objects.get(room_name=room_name)
@@ -119,7 +120,8 @@ class LobbyView(LoginRequiredMixin, TemplateView):
                 return HttpResponse(html, status=200, headers={
                     'HX-Retarget': '#alert-messages',
                 })
-            room_url = reverse_lazy('room', args=[room_name])
+            room_url = reverse_lazy('room', args=[game_name, room_name])
+            print(room_url)
             return HttpResponse(status=200, headers={
                 'HX-Redirect': room_url
             })
@@ -135,16 +137,17 @@ class RoomView(LoginRequiredMixin, TemplateView):
         try:
             context = self.get_context_data(**kwargs)
         except Rooms.DoesNotExist:
-            return redirect("lobby")
+            return redirect('lobby', kwargs['game_lobby'])
         if is_htmx(request):
             hx_target = request.headers.get('HX-Target')
             room_name = kwargs['room_name']
+            game_name = kwargs['game_lobby']
             if hx_target == 'leave-room-btn':
-                return RoomView.leave_room(room_name, request.user)
+                return RoomView.leave_room(room_name, game_name, request.user)
         return render(request, self.template_name, context)
 
     @staticmethod
-    def leave_room(room_name: str, user: AccountUser):
+    def leave_room(room_name: str, game_name: str, user: AccountUser):
         user_left_a_room.send(
             sender=RoomView,
             action=f"{user.username} has left room {room_name}",
@@ -152,7 +155,7 @@ class RoomView(LoginRequiredMixin, TemplateView):
             user=user
         )
         return HttpResponse(status=200, headers={
-            'HX-Redirect': reverse_lazy('lobby')
+            'HX-Redirect': reverse_lazy('lobby', args=[game_name])
         })
 
     def get_context_data(self, **kwargs):
@@ -162,3 +165,7 @@ class RoomView(LoginRequiredMixin, TemplateView):
         context['room_name'] = room.room_name
         context['assigned_users'] = room.assigned_users.all()
         return context
+
+    # # Used to select the normal or tournament room template
+    # def get_template_names(self):
+    #     return NotImplementedError

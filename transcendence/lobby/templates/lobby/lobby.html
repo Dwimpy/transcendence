@@ -4,10 +4,53 @@
 {% load static %}
 
 {% block content %}
+
+<div hx-ext="ws" ws-connect="/ws/lobby/{{ game_lobby }}" class="container lobby d-flex border-solid-rebecca-purple-1">
+    <div class="d-flex flex-1 position-relative flex-column align-items-center m-4">
+        <div class="styled-lobby d-flex bg-black flex-column w-100 h-100 text-center align-items-center">
+            <table id="lobby_table" class="">
+                <caption class="text-center text-white" style="caption-side: top; bottom: 1rem; font-size: 18px;"> Rooms </caption>
+                <thead>
+                <tr>
+                    <th scope="col">Room Name</th>
+                    <th scope="col">Player Count</th>
+                    <th scope="col">Full</th>
+                </tr>
+                </thead>
+                {% include 'lobby/lobby_room_partial_update.html' %}
+            </table>
+            <span class="container h-100"></span>
+        </div>
+        <div class="d-flex flex-row gap-5 mt-4 lobby-btn">
+            <button id="create_room_button" class="" type="button"
+                    hx-get="{% url 'lobby' game_lobby %}"
+                    hx-target="#dialog">
+                    Create Room
+            </button>
+            <button id="join-room-btn" onclick="join_room()" type="button"> Join Room </button>
+            <button id="join-room-btn" onclick="delete_room()" type="button"> Delete Room </button>
+        </div>
+    </div>
+</div>
+
+
+<div
+     id="create_room_modal"
+     class="modal lobby-modal"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+     <div hx-ext="ws" ws-connect="/ws/lobby/{{ game_lobby }}" id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
 // Get the parent element that contains the td elements you want to observe
+    hide_modal();
+    select_room();
     const targetNode = document.getElementById('lobby_table');
     const button = htmx.find('#join-room-btn');
     htmx.addClass(button, 'disabled');
@@ -62,54 +105,52 @@ function delete_room() {
     })
 }
 
-</script>
+        function hide_modal() {
+        const modal = new bootstrap.Modal(document.getElementById("create_room_modal"))
 
-<script>
+        htmx.on("htmx:afterSwap", (e) => {
+        if (e.detail.target.id === "dialog") {
+            modal.show();
+        }
+    })
 
-    if (window.location.pathname === '/lobby/{{ game_lobby }}/') {
-    addEventListener("DOMContentLoaded", hide_modal)
+        htmx.on("htmx:beforeSwap", (e) => {
+        if (e.detail.target.id === "dialog" && !e.detail.xhr.response) {
+            modal.hide();
+            e.detail.shouldSwap = false;
+        }
+    })
+
+        // Remove dialog content after hiding
+        htmx.on("hidden.bs.modal", () => {
+        document.getElementById("dialog").innerHTML = "";
+    })
 }
+
+
+
+
+
+function select_room() {
+    // Delegate the click event to the tbody element (or a parent element that doesn't get replaced)
+    const table = document.querySelector('table');
+    table.addEventListener('click', function(event) {
+        const target = event.target;
+        // Check if the clicked element is a tr inside the tbody
+            targettr = target.closest('tr')
+        if (targettr && targettr.tagName === 'TR') {
+            // Remove 'table-active' class from all tr elements
+            table.querySelectorAll('tr').forEach(function(innerItem) {
+                innerItem.classList.remove('table-active');
+            });
+
+            // Add 'table-active' class to the clicked tr element
+            targettr.classList.add('table-active');
+        }
+    });
+}
+
+
+
 </script>
-
-<div hx-ext="ws" ws-connect="/ws/lobby/{{ game_lobby }}" class="container lobby d-flex border-solid-rebecca-purple-1">
-    <div class="d-flex flex-1 position-relative flex-column align-items-center m-4">
-        <div class="styled-lobby d-flex bg-black flex-column w-100 h-100 text-center align-items-center">
-            <table id="lobby_table" class="">
-                <caption class="text-center text-white" style="caption-side: top; bottom: 1rem; font-size: 18px;"> Rooms </caption>
-                <thead>
-                <tr>
-                    <th scope="col">Room Name</th>
-                    <th scope="col">Player Count</th>
-                    <th scope="col">Full</th>
-                </tr>
-                </thead>
-                {% include 'lobby/lobby_room_partial_update.html' %}
-            </table>
-            <span class="container h-100"></span>
-        </div>
-        <div class="d-flex flex-row gap-5 mt-4 lobby-btn">
-            <button id="create_room_button" class="" type="button"
-                    hx-get="{% url 'lobby' game_lobby %}"
-                    hx-target="#dialog">
-                    Create Room
-            </button>
-            <button id="join-room-btn" onclick="join_room()" type="button"> Join Room </button>
-            <button id="join-room-btn" onclick="delete_room()" type="button"> Delete Room </button>
-        </div>
-    </div>
-</div>
-
-{% endblock %}
-
-
-{% block modal_content %}
-
-<div
-     id="create_room_modal"
-     class="modal lobby-modal"
-     aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-     <div hx-ext="ws" ws-connect="/ws/lobby/{{ game_lobby }}" id="dialog" class="modal-dialog modal-dialog-centered modal-sm" hx-target="this" style="right: 5rem;"></div>
-</div>
-
 {% endblock %}

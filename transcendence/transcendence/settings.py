@@ -17,21 +17,17 @@ from django.template.context_processors import media
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-&95rh562@s-za%5_ngf6a*7*@2i=ue%+3if@^lb49iq)56a0=u'
 
-
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'websocketking.com']
 AUTH_USER_MODEL = 'accounts.AccountUser'
-
 
 # Application definition
 
@@ -61,12 +57,6 @@ INSTALLED_APPS = [
     'sosathui',
 ]
 
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    },
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -145,9 +135,6 @@ CLIENT_ID = config('FT_CLIENT_ID')
 CLIENT_SECRET = config('FT_CLIENT_SECRET')
 REDIRECT_URI = config('REDIRECT_URI')
 
-
-
-
 # WSGI_APPLICATION = 'transcendence.wsgi.application'
 ASGI_APPLICATION = 'transcendence.asgi.application'
 # ASGI_APPLICATION = 'game.asgi.application'
@@ -167,7 +154,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -186,7 +172,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -197,7 +182,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -214,7 +198,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'resources', 'media/')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'resources', 'static/'),
-    os.path.join(BASE_DIR, 'lobby', 'static/'),
     os.path.join(BASE_DIR, 'resources', 'media/')
 ]
 

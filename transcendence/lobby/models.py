@@ -20,10 +20,6 @@ class Rooms(models.Model):
     type = models.CharField(max_length=150, blank=True)
     is_full = models.BooleanField(default=False)
 
-    @database_sync_to_async
-    def adelete(self):
-        return self.delete()
-
     def add_user_to_room(self, user):
         self.player_count += 1
         self.assigned_users.add(user)
