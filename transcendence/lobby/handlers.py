@@ -2,18 +2,20 @@ from asyncio import sleep
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.urls import reverse_lazy
 
 from lobby.constants import LOBBY_WS_GROUP_NAME, ROOMS_WS_GROUP_NAME
 from .models import Rooms
 
 
-def send_message_to_consumer(consumer_channel, action_type, action):
+def send_message_to_consumer(consumer_channel, action_type, action, data=None):
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(
         consumer_channel,
         {
             'type': action_type,
-            'message': action
+            'message': action,
+            'data': data
         }
     )
 
@@ -61,3 +63,13 @@ def delete_room_handler(sender, action, **kwargs):
         send_message_to_consumer(LOBBY_WS_GROUP_NAME, 'update_lobby_view', action)
     except Rooms.DoesNotExist as e:
         pass
+
+
+def start_game_handler(sender, action, **kwargs):
+    game_name = kwargs.get("game_name")
+    room_name = kwargs.get("room_name")
+    game_url = reverse_lazy('game', args=[game_name, room_name])
+    data = {
+        'url': game_url
+    }
+    send_message_to_consumer(ROOMS_WS_GROUP_NAME + room_name, 'send_redirect', action, data)

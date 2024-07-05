@@ -4,13 +4,32 @@
 {% block content %}
 
 
+<div hx-ext="ws" ws-connect="/ws/rooms/{{ room_name }}" class="container d-flex flex-column border-solid-rebecca-purple-1">
+    {% include 'lobby/room_partial_update.html' %}
+    <button id="play-game-btn" type="button" hx-get="{% url 'room' game_lobby room_name %}"> Play Game </button>
+    <button id="leave-room-btn" hx-get="{% url 'room' game_lobby room_name %}" type="button"> Leave Room </button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
 <script>
+
+    const socket = new WebSocket('ws://' + window.location.host + '/ws/rooms/{{ room_name }}/test');
+
+
+   socket.onmessage = function (event) {
+       let data = JSON.parse(event.data)
+       if (data['type'] === 'redirect') {
+           window.location.href = data.url;
+       }
+   }
+
+    socket.onopen = function (event) {
+       console.log ("OPENED")
+    }
+
 
 </script>
 
-<div hx-ext="ws" ws-connect="/ws/rooms/{{ room_name }}" class="container d-flex flex-column border-solid-rebecca-purple-1">
-    {% include 'lobby/room_partial_update.html' %}
-    <button type="button"> Play Game </button>
-    <button id="leave-room-btn" hx-get="{% url 'room' game_lobby room_name %}" type="button"> Leave Room </button>
-</div>
 {% endblock %}

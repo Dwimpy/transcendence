@@ -13,7 +13,7 @@ from django.contrib import messages
 from accounts.models import AccountUser
 from .models import Rooms
 from .forms import RoomForm
-from .signals import room_created, user_joined_a_room, user_left_a_room
+from .signals import room_created, user_joined_a_room, user_left_a_room, start_game
 from .signals import delete_room
 
 
@@ -144,6 +144,13 @@ class RoomView(LoginRequiredMixin, TemplateView):
             game_name = kwargs['game_lobby']
             if hx_target == 'leave-room-btn':
                 return RoomView.leave_room(room_name, game_name, request.user)
+            if hx_target == 'play-game-btn':
+                game_url = reverse_lazy('game', args=[game_name, room_name])
+                start_game.send(sender=RoomView, action='Room created',
+                                  room_name=room_name, game_name=game_name, user=request.user)
+                return HttpResponse(status=200, headers={
+                    'HX-Redirect': game_url
+                })
         return render(request, self.template_name, context)
 
     @staticmethod

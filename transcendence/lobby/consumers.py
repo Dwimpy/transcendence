@@ -4,6 +4,8 @@ from asgiref.sync import sync_to_async, async_to_sync
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from django.shortcuts import redirect
 from django.template.loader import get_template, render_to_string
+from django.urls import reverse_lazy
+
 from .constants import LOBBY_WS_GROUP_NAME, ROOMS_WS_GROUP_NAME
 from .forms import RoomForm
 from .models import Rooms
@@ -37,6 +39,8 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=html)
 
 
+
+
 class RoomConsumer(AsyncWebsocketConsumer):
 
     def __init__(self):
@@ -54,17 +58,18 @@ class RoomConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        user = self.scope['user']
-        await sync_to_async(user_left_a_room.send)(
-            sender=RoomView,
-            action=f"{user.username} has left room {self.room_name}",
-            room_name=self.room_name,
-            user=user
-        )
-        await self.channel_layer.group_discard(
-            ROOMS_WS_GROUP_NAME + self.room_name,
-            self.channel_name,
-        )
+        pass
+        # user = self.scope['user']
+        # await sync_to_async(user_left_a_room.send)(
+        #     sender=RoomView,
+        #     action=f"{user.username} has left room {self.room_name}",
+        #     room_name=self.room_name,
+        #     user=user
+        # )
+        # await self.channel_layer.group_discard(
+        #     ROOMS_WS_GROUP_NAME + self.room_name,
+        #     self.channel_name,
+        # )
 
     async def update_room_view(self, event):
         try:
@@ -77,3 +82,9 @@ class RoomConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=html)
         except Rooms.DoesNotExist as e:
             print(str(e))
+
+    async def send_redirect(self, event):
+        url = event['data']['url']
+        data = {'type': 'redirect', 'url': str(url)}
+        json_data = json.dumps(data)
+        await self.send(text_data=json_data)

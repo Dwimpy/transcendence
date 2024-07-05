@@ -63,10 +63,10 @@ class HuiGame:
         self.left_bar = Bar(10, 0, 30)
         self.right_bar = Bar(80, 0, 30)
         self.ball = Ball()
-        self.ball.x = 50
-        self.ball.y = 50
-        self.ball.y_speed = -30
-        self.ball.x_speed = -30
+        self.ball.x = 30
+        self.ball.y = 30
+        self.ball.y_speed = -50
+        self.ball.x_speed = -50
         self.user1 = ''
         self.user2 = ''
         self.last_update = time.time()
@@ -81,7 +81,7 @@ class HuiGame:
             winner = self.user1
         elif self.score_right > self.max_score:
             winner = self.user2
-        
+
         # Save the game result to the database
         game = Game.objects.create(
             player1=self.user1,
@@ -176,7 +176,7 @@ class HuiGame:
             'score_right': self.score_right,
             'second_user': self.user2 == user,
             'running': self.running
-        
+
         }
     def restart(self):
         self.score_right = 0

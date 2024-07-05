@@ -1,7 +1,0 @@
-
-FT_CLIENT_ID=u-s4t2ud-4ca9b16084b5a8cc3d3273b6db68ffa56943bf4c7652decc31d30653c4ca1295
-FT_CLIENT_SECRET=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
-DB_NAME=trans_db
-DB_USER=admin
-DB_PASS=adminpas
-REDIRECT_URI=http://localhost:8000/accounts/login/42/callback/
