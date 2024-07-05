@@ -37,16 +37,21 @@
 
         const data = JSON.parse(event.data);
         // Handle incoming data
-        console.log(data)
+        // console.log(data)
         if (data.type === 'game') {
 
+            console.log(data.second_user, data.running)
 
 
             context.clearRect(0, 0, canvas.width, canvas.height);
+            if (data.second_user && !data.running)
+                drawText("please press space to start", canvas.width / 2 - 130, 80, 20)
+            else
+                drawCircle(data.circle_x, data.circle_y);
             drawBar(data.left_bar_x, data.left_bar_y, 10, canvas.height / 10)
             drawBar(data.right_bar_x, data.right_bar_y, 10, canvas.height / 10)
 
-            drawCircle(data.circle_x, data.circle_y);
+            
             drawText(data.score_left + ':' + data.score_right, canvas.width / 2 - 15, 20, 20)
 
 

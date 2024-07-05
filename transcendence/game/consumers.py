@@ -2,6 +2,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 import time
+from .models import Game
+from django.contrib.auth import get_user_model
 
 
 class Bar:
@@ -61,17 +63,34 @@ class HuiGame:
         self.left_bar = Bar(10, 0, 30)
         self.right_bar = Bar(80, 0, 30)
         self.ball = Ball()
-        self.ball.x = 30
-        self.ball.y = 30
-        self.ball.y_speed = -50
-        self.ball.x_speed = -50
+        self.ball.x = 50
+        self.ball.y = 50
+        self.ball.y_speed = -30
+        self.ball.x_speed = -30
         self.user1 = ''
         self.user2 = ''
         self.last_update = time.time()
         self.score_left = 0
         self.score_right = 0
         self.max_score = 10
-        self.running = True
+        self.running = False
+
+    def save_game_result(self):
+        winner = None
+        if self.score_left > self.max_score:
+            winner = self.user1
+        elif self.score_right > self.max_score:
+            winner = self.user2
+        
+        # Save the game result to the database
+        game = Game.objects.create(
+            player1=self.user1,
+            player2=self.user2,
+            winner=winner,
+            score_left=self.score_left,
+            score_right=self.score_right
+        )
+        game.save()
 
     def receive_command(self, data, user):
         if user == self.user1:
@@ -93,10 +112,11 @@ class HuiGame:
                     self.right_bar.go_up()
                 if key == 'ArrowDown':
                     self.right_bar.go_down()
+                if key == " ":
+                    self.running = True
+                print (key)
             if event_type == 'key_up':
                 self.right_bar.stop()
-        print(self.left_bar.x, self.left_bar.y)
-        print(user, " hui ", self.user1, " hui ", self.user2)
 
     def bounce_of_left(self):
         within_vertical_range = (self.ball.y + self.ball.size >= self.left_bar.y) and (
@@ -129,6 +149,8 @@ class HuiGame:
                 self.score_left += 1
                 if self.score_left > self.max_score:
                     self.running = False
+                    self.save_game_result()
+
             if self.ball.x < 0:
                 self.ball.x_speed *= -1
                 self.ball.x = 50
@@ -137,9 +159,11 @@ class HuiGame:
 
                 if self.score_right > self.max_score:
                     self.running = False
+                    self.save_game_result()
+
             self.last_update = cur_time
 
-    def return_command(self):
+    def return_command(self, user):
         return {
             'type': 'game',
             'circle_x': self.ball.x,  # Add circle position data here
@@ -150,7 +174,9 @@ class HuiGame:
             'right_bar_y': self.right_bar.y,
             'score_left': self.score_left,
             'score_right': self.score_right,
-
+            'second_user': self.user2 == user,
+            'running': self.running
+        
         }
     def restart(self):
         self.score_right = 0
@@ -196,7 +222,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         # print(self.scope["user"])
         data = json.loads(text_data)
         user = self.scope["user"]
-        print(user, data, time.time())
+        # print(user, data, time.time())
         event_type = data.get('type')
         speed = 10
         self.gamehui.receive_command(data, user)
@@ -206,7 +232,7 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         # Send circle position to the group
         await self.send(text_data=json.dumps(
-            self.gamehui.return_command()
+            self.gamehui.return_command(user)
         ))
 
     async def pong_message(self, event):
