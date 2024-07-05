@@ -15,7 +15,7 @@ from .models import Rooms
 from .forms import RoomForm
 from .signals import room_created, user_joined_a_room, user_left_a_room, start_game
 from .signals import delete_room
-
+from game.models import Game
 
 # Create your views here.
 
@@ -145,12 +145,13 @@ class RoomView(LoginRequiredMixin, TemplateView):
             if hx_target == 'leave-room-btn':
                 return RoomView.leave_room(room_name, game_name, request.user)
             if hx_target == 'play-game-btn':
-                game_url = reverse_lazy('game', args=[game_name, room_name])
-                start_game.send(sender=RoomView, action='Room created',
-                                  room_name=room_name, game_name=game_name, user=request.user)
-                return HttpResponse(status=200, headers={
-                    'HX-Redirect': game_url
-                })
+                assigned_users: list[AccountUser] = list(context['assigned_users'])
+                if len(assigned_users) < 2:
+                    return HttpResponse(status=204)
+                game = Game.objects.create(player1=assigned_users[0], player2=assigned_users[1])
+                game_url = reverse_lazy('game', args=[game_name, room_name, game.game_id])
+                start_game.send(sender=RoomView, action='Game Started',
+                                url=game_url, room_name=room_name, user=request.user)
         return render(request, self.template_name, context)
 
     @staticmethod

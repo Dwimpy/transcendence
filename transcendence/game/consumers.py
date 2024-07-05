@@ -74,6 +74,7 @@ class HuiGame:
         self.score_right = 0
         self.max_score = 10
         self.running = False
+        self.new = True
 
     def save_game_result(self):
         winner = None
@@ -184,14 +185,12 @@ class HuiGame:
         self.running = True
 
 
-class HuiGameasd:
+class HuiGamasd:
 
     def __init__(self):
         pass
 
-
 ggame = HuiGame()
-
 
 class PongConsumer(AsyncWebsocketConsumer):
 

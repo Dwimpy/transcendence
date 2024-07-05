@@ -21,7 +21,7 @@
    socket.onmessage = function (event) {
        let data = JSON.parse(event.data)
        if (data['type'] === 'redirect') {
-           window.location.href = data.url;
+            window.location.href = data.url;
        }
    }
 

@@ -66,10 +66,8 @@ def delete_room_handler(sender, action, **kwargs):
 
 
 def start_game_handler(sender, action, **kwargs):
-    game_name = kwargs.get("game_name")
     room_name = kwargs.get("room_name")
-    game_url = reverse_lazy('game', args=[game_name, room_name])
     data = {
-        'url': game_url
+        'url': kwargs.get("url")
     }
     send_message_to_consumer(ROOMS_WS_GROUP_NAME + room_name, 'send_redirect', action, data)
