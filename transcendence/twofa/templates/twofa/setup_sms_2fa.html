@@ -7,8 +7,9 @@
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
-            <label for="phone_number">Enter your phone number:</label>
-            <input type="text" id="phone_number" name="phone_number" class="form-control" required>
+            <label for="phone_number">Enter your phone number (E.164 format):</label>
+            <input type="text" id="phone_number" name="phone_number" class="form-control" 
+                   placeholder="+491741234567" pattern="^\+?[1-9]\d{1,14}$" required>
         </div>
         <button type="submit" class="mb-2 mt-4">Setup SMS 2FA</button>
     </form>

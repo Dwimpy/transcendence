@@ -7,6 +7,11 @@ import logging
 import urllib.parse
 from binascii import hexlify, unhexlify
 from jwtauth.views import issue_jwt as jwt
+import re
+
+def is_valid_phone_number(phone_number):
+    # E.164 format validation
+    return re.match(r'^\+?[1-9]\d{1,14}$', phone_number)
 
 logger = logging.getLogger(__name__)
 
@@ -150,6 +155,9 @@ def setup_sms_2fa(request):
 
     if request.method == 'POST':
         phone_number = request.POST.get('phone_number')
+        if not is_valid_phone_number(phone_number):
+            logger.warning(f"Invalid phone number format provided by user {user.username}")
+            return render(request, 'twofa/setup_sms_2fa.html', {'error': 'Invalid phone number format. Please use E.164 format.'})
         if not TwilioSMSDevice.objects.filter(user=user).exists():
             secret = pyotp.random_base32()
             TwilioSMSDevice.objects.create(user=user, phone_number=phone_number, key=secret)

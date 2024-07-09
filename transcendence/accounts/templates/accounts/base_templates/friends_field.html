@@ -40,6 +40,7 @@
             {% for friend in user.friends.all %}
             <li class="mt-1 mb-5 pt-2 color-white">
                 {{ friend.username }}
+                <a href="{% url 'remove_friend' friend.username %}">I don't like you</a>
                 {% if friend.get_picture_url %}
                     <img class="center-img-form-small mb-3" src="{{ friend.picture.url }}" alt="Uploaded Image">
                 {% else %}
