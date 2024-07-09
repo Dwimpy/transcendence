@@ -24,7 +24,11 @@
     let lastTime = performance.now();
 
     const ws = new WebSocket('ws://' + window.location.host + '/ws/game/');
-
+    let currentUrl = window.location.href;
+    console.log(currentUrl);
+    setInterval(() => {
+        ws.send(JSON.stringify({"type": "update", "url": currentUrl}));
+    }, 5);
     function drawText(text, x, y, size) {
 
 
@@ -86,9 +90,7 @@
         ws.send(JSON.stringify(data));
     });
 
-    setInterval(() => {
-        ws.send(JSON.stringify({"type": "update"}));
-    }, 5);
+
 
     document.addEventListener('keyup', (event) => {
         const data = {
