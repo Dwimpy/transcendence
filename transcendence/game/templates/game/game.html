@@ -23,7 +23,8 @@
 
     let lastTime = performance.now();
 
-    const ws = new WebSocket('ws://' + window.location.host + '/ws/game/');
+    {% comment %} const ws = new WebSocket('ws://' + window.location.host + '/ws/game/'); {% endcomment %}
+    const ws = new WebSocket('wss://' + window.location.host + '/ws/game/');
 
     function drawText(text, x, y, size) {
 
