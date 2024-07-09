@@ -195,7 +195,6 @@ ggame = HuiGame()
 class PongConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
-        print(self.scope[''])
         self.room_name = 'pong_room'
         self.room_group_name = 'pong_group'
         self.gamehui = ggame
