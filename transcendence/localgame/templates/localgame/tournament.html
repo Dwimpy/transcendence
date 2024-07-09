@@ -1,0 +1,378 @@
+{% extends 'transcendence/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    canvas { background: black; display: block; margin: auto; width: 50vw; height: 50vh}
+    #tournament-setup, #matches, #winner { text-align: center; margin-top: 20px; }
+</style>
+
+<div id="tournament-setup">
+    <label for="numPlayers">Enter the number of players (must be an even number): </label>
+    <input type="number" id="numPlayers" min="2" step="2" />
+    <button onclick="setupTournament()">Next</button>
+    <div id="player-names"></div>
+</div>
+
+<div id="matches" style="display: none;">
+    <h2>Matches:</h2>
+    <div id="match-list"></div>
+</div>
+
+<div id="winner" style="display: none;">
+    <h2>Tournament Winner:</h2>
+    <div id="winner-name"></div>
+</div>
+
+<canvas id="pongCanvasLocal"></canvas>
+
+<script>
+    const canvas = document.getElementById('pongCanvasLocal');
+    const context = canvas.getContext('2d');
+    canvas.width = 1200;
+    canvas.height = 600;
+    let left_bar_x = 10;
+    let left_bar_y = 10;
+    let right_bar_x = canvas.width -  20;
+    let right_bar_y = 10;
+    let bar_height = 100;
+    let bar_width = 10;
+    let left_bar_speed = 0;
+    let right_bar_speed = 0;
+    let bar_speed = 200;
+
+    let x_speed = 200;
+    let y_speed = 200;
+    let circle_x = 0;
+    let circle_y = 0;
+    let speed = 300;
+    let ball_size = 20;
+    let ball_active = false;
+
+    let score_left = 0;
+    let score_right = 0;
+    let running = false;
+    let max_score = 1;
+    let bot = false;
+
+    let lastTime = performance.now();
+
+    let players = [];
+    let currentMatch = 0;
+    let currentRound = [];
+    let winners = [];
+    let tournamentActive = false;
+    let firstMatch = true
+
+
+    {#const updateWinnersEvent = new Event('updatewinners')#}
+
+    function setupTournament() {
+        const numPlayers = document.getElementById("numPlayers").value;
+        const playerNamesDiv = document.getElementById("player-names");
+
+        if (numPlayers % 2 !== 0 || numPlayers < 1)
+            return ;
+
+        playerNamesDiv.innerHTML = '';
+        for (let i = 0; i < numPlayers; i++) {
+            playerNamesDiv.innerHTML += `
+                <div>
+                    <label for="player${i}">Player ${i + 1} Name: </label>
+                    <input type="text" id="player${i}" />
+                </div>
+            `;
+        }
+        playerNamesDiv.innerHTML += `<button onclick="startTournament()">Start Tournament</button>`;
+    }
+
+
+    function startTournament() {
+        const numPlayers = document.getElementById("numPlayers").value;
+        players = [];
+        for (let i = 0; i < numPlayers; i++) {
+            const playerName = document.getElementById(`player${i}`).value;
+            players.push(playerName);
+        }
+
+        setupNextRound(players);
+        tournamentActive = true;
+        running = true;
+
+        document.getElementById('tournament-setup').style.display = 'none';
+        document.getElementById('matches').style.display = 'block';
+        document.getElementById('winners').style.display = 'block';
+    }
+
+    function setupNextRound(participants) {
+        currentRound = [];
+        for (let i = 0; i < participants.length; i += 2) {
+            currentRound.push([participants[i], participants[i + 1]]);
+        }
+        currentMatch = 0;
+        displayMatches();
+    }
+
+    function displayMatches() {
+        const matchListDiv = document.getElementById('match-list');
+        matchListDiv.innerHTML = '';
+        for (let i = 0; i < currentRound.length; i++) {
+            const match = currentRound[i];
+            matchListDiv.innerHTML += `<p id="match${i}">${match[0]} vs ${match[1]}</p>`;
+        }
+    }
+
+    function startMatch() {
+        if (currentMatch >= currentRound.length) {
+            if (winners.length === 1) {
+                document.getElementById('winner-name').innerText = winners[0];
+                document.getElementById('winner').style.display = 'block';
+                tournamentActive = false;
+                return;
+            }
+            setupNextRound(winners);
+            winners = [];
+        }
+
+        displayMatches();
+        score_left = 0;
+        score_right = 0;
+        running = true;
+        ball_active = false;
+    }
+
+    function GameLoop() {
+        if (score_right >= max_score || score_left >= max_score) {
+            running = false;
+            let winner = score_left > score_right ? currentRound[currentMatch][0] : currentRound[currentMatch][1];
+            winners.push(winner);
+            currentRound[currentMatch].winner = winner;
+            let updateWinnersEvent = new CustomEvent('updatewinners', {
+                detail: {
+                    winner: winner,
+                }
+            });
+            document.dispatchEvent(updateWinnersEvent)
+            updateMatchDisplay(currentMatch, winner);
+            currentMatch++;
+            startMatch();
+        }
+        if (running) {
+            const currentTime = performance.now();
+            const deltaTime = (currentTime - lastTime) / 1000; // Convert milliseconds to seconds
+            lastTime = currentTime;
+            if (bot) {
+                if (x_speed < 0) {
+                    let y_collision = calculateYAtX(left_bar_x + bar_width, x_speed, y_speed, circle_x, circle_y);
+                    if (y_collision < 0) {
+                        y_collision *= -1;
+                    }
+                    if (y_collision > canvas.height) {
+                        y_collision -= canvas.height;
+                        y_collision = canvas.height - y_collision;
+                    }
+
+                    if (y_collision < left_bar_y + bar_height / 3)
+                        left_bar_speed = -bar_speed;
+                    else if (y_collision > left_bar_y + bar_height * 0.7)
+                        left_bar_speed = bar_speed;
+                    else
+                        left_bar_speed = 0;
+                } else
+                    left_bar_speed = 0;
+            }
+            if (ball_active) {
+                left_bar_y += left_bar_speed * deltaTime;
+                right_bar_y += right_bar_speed * deltaTime;
+            }
+
+            if (left_bar_y < 0) {
+                left_bar_y = 0;
+            }
+            if (left_bar_y + bar_height > canvas.height) {
+                left_bar_y = canvas.height - bar_height;
+            }
+            if (right_bar_y < 0) {
+                right_bar_y = 0;
+            }
+            if (right_bar_y + bar_height > canvas.height) {
+                right_bar_y = canvas.height - bar_height;
+            }
+
+            circle_x += x_speed * deltaTime;
+            circle_y += y_speed * deltaTime;
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            do_circle(deltaTime);
+            drawRectangle(left_bar_x, left_bar_y, bar_width, bar_height);
+            drawRectangle(right_bar_x, right_bar_y, bar_width, bar_height);
+            drawText(score_left + ':' + score_right, canvas.width / 2 - 15, 20, 20);
+        } else if (tournamentActive) {
+            displayMatches();
+        } else {
+        }
+        requestAnimationFrame(GameLoop);
+    }
+    GameLoop();
+
+    function calculateYAtX(xTarget, xSpeed, ySpeed, xCurrent, yCurrent) {
+        const time = (xTarget - xCurrent) / xSpeed;
+        return yCurrent + ySpeed * time;
+    }
+
+    function do_circle(delta_time) {
+        if (ball_active) {
+            circle_x += x_speed * delta_time;
+            circle_y += y_speed * delta_time;
+            if (circle_y - ball_size < 0) {
+                circle_y = ball_size;
+                y_speed *= -1;
+            }
+            if (circle_y + ball_size > canvas.height) {
+                circle_y = canvas.height - ball_size;
+                y_speed *= -1;
+            }
+
+            if (circle_x - ball_size < 0) {
+                circle_x = ball_size;
+                x_speed *= -1;
+                score_right += 1;
+                ball_active = false;
+            }
+            if (circle_x + ball_size > canvas.width) {
+                circle_x = canvas.width - ball_size;
+                x_speed *= -1;
+                score_left += 1;
+                ball_active = false;
+            }
+            if (bounce_of_left(circle_x, circle_y, ball_size, left_bar_x, left_bar_y, bar_width, bar_height)) {
+                circle_x = ball_size + left_bar_x + bar_width;
+                let angle = (left_bar_y - ball_size - circle_y + 1) / (ball_size  + bar_height / 2) - 0.5;
+                let speeds = calculateSpeeds(speed, angle);
+                x_speed = speeds.xSpeed;
+                y_speed = speeds.ySpeed;
+                if (circle_y < left_bar_y + bar_height / 2)
+                    y_speed = Math.abs(y_speed) * -1;
+                else
+                    y_speed = Math.abs(y_speed);
+                x_speed = Math.abs(x_speed);
+            }
+            if (bounce_of_right(circle_x, circle_y, ball_size, right_bar_x, right_bar_y, bar_width, bar_height)) {
+                circle_x = right_bar_x - ball_size;
+                let angle = (right_bar_y - ball_size - circle_y) / (ball_size  + bar_height / 2 + 0.5);
+                let speeds = calculateSpeeds(speed, angle);
+                x_speed = speeds.xSpeed;
+                y_speed = speeds.ySpeed;
+                if (circle_y < right_bar_y + bar_height / 2)
+                    y_speed = Math.abs(y_speed) * -1;
+                else
+                    y_speed = Math.abs(y_speed);
+                x_speed = -Math.abs(x_speed);
+            }
+        } else {
+            circle_x = canvas.width / 2;
+            circle_y = canvas.height / 2;
+        }
+        drawCircle(circle_x, circle_y);
+    }
+
+    function calculateSpeeds(totalSpeed, angle) {
+        const angleRadians = Math.abs(angle);
+        const xSpeed = totalSpeed * Math.sin(angleRadians);
+        const ySpeed = totalSpeed * Math.cos(angleRadians);
+        return { xSpeed, ySpeed };
+    }
+
+    function drawText(text, x, y, size) {
+        context.fillStyle = 'white';
+        context.font = size + 'px Arial';
+        context.fillText(text, x, y);
+    }
+
+    function bounce_of_left(ballX, ballY, ballRadius, paddleX, paddleY, paddleWidth, paddleHeight) {
+        let withinVerticalRange = (ballY + ballRadius >= paddleY) && (ballY - ballRadius <= paddleY + paddleHeight);
+        let touchingRightSide = ballX - ballRadius <= paddleX + paddleWidth && ballX >= paddleX + paddleWidth;
+        return withinVerticalRange && (touchingRightSide);
+    }
+
+    function bounce_of_right(ballX, ballY, ballRadius, paddleX, paddleY, paddleWidth, paddleHeight) {
+        let withinVerticalRange = (ballY + ballRadius >= paddleY) && (ballY - ballRadius <= paddleY + paddleHeight);
+        let touchingLeftSide = ballX + ballRadius >= paddleX && ballX <= paddleX;
+        return withinVerticalRange && (touchingLeftSide);
+    }
+
+    function drawCircle(x, y) {
+        context.beginPath();
+        context.arc(x, y, ball_size, 0, Math.PI * 2);
+        context.fillStyle = 'white';
+        context.fill();
+    }
+
+    function drawRectangle(x, y, width, height) {
+        context.fillStyle = 'red';
+        context.fillRect(x, y, width, height);
+    }
+
+    function updateMatchDisplay(matchIndex, winner) {
+        const matchListDiv = document.getElementById('match-list');
+        const matches = matchListDiv.getElementsByTagName('p');
+        matches[matchIndex].innerText += ` - Winner: ${winner}`;
+    }
+
+    canvas.addEventListener('mousemove', (event) => {
+        const data = {
+            type: 'mouse_move',
+            x: event.clientX,
+            y: event.clientY
+        };
+    });
+
+
+    document.addEventListener("updatewinners", (event) => {
+            let winner = event.detail.winner;
+            alert("Game won by " + winner)
+});
+
+    document.addEventListener('keydown', (event) => {
+        if (!ball_active && event.key === ' ' && running) {
+            ball_active = true;
+        }
+        if (!running && event.key === ' ') {
+            if (!tournamentActive) {
+                setupTournament();
+            } else {
+                startMatch();
+            }
+        }
+        if (!bot) {
+            if (event.key === 'w') {
+                left_bar_speed = -bar_speed;
+            }
+            if (event.key === 's') {
+                left_bar_speed = bar_speed;
+            }
+        }
+        if (event.key === 'ArrowUp') {
+            right_bar_speed = -bar_speed;
+        }
+        if (event.key === 'ArrowDown') {
+            right_bar_speed = bar_speed;
+        }
+    });
+
+    document.addEventListener('keyup', (event) => {
+        if (event.key === 'w') {
+            left_bar_speed = 0;
+        }
+        if (event.key === 's') {
+            left_bar_speed = 0;
+        }
+        if (event.key === 'ArrowUp') {
+            right_bar_speed = 0;
+        }
+        if (event.key === 'ArrowDown') {
+            right_bar_speed = 0;
+        }
+    });
+</script>
+
+{% endblock %}
