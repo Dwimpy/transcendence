@@ -11,7 +11,7 @@ services:
     depends_on:
       - db
     ports:
-      - "443:443"  # Expose port 443 for SSL
+      - "443:443"
     volumes:
       - django-files:/server
     networks:
