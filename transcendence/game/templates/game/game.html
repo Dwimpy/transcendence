@@ -87,7 +87,9 @@
         ws.send(JSON.stringify(data));
     });
 
-
+    setInterval(() => {
+        ws.send(JSON.stringify({"type": "update"}));
+    }, 5);
 
     document.addEventListener('keyup', (event) => {
         const data = {

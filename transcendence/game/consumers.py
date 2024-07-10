@@ -60,7 +60,6 @@ class Ball:
 
 class HuiGame:
     def __init__(self):
-        self.name = ""
         self.left_bar = Bar(10, 0, 30)
         self.right_bar = Bar(80, 0, 30)
         self.ball = Ball()
@@ -192,19 +191,18 @@ class HuiGamasd:
         pass
 
 ggame = HuiGame()
-games = dict()
+
 class PongConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.room_name = 'pong_room'
         self.room_group_name = 'pong_group'
         self.gamehui = ggame
-        self.games = games
-        print(self.scope)
-        # if self.gamehui.user1 == '':
-        #     self.gamehui.user1 = self.scope["user"]
-        # elif self.gamehui.user2 == '' and self.gamehui.user1 != self.scope["user"]:
-        #     self.gamehui.user2 = self.scope["user"]
+
+        if self.gamehui.user1 == '':
+            self.gamehui.user1 = self.scope["user"]
+        elif self.gamehui.user2 == '' and self.gamehui.user1 != self.scope["user"]:
+            self.gamehui.user2 = self.scope["user"]
 
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -226,28 +224,15 @@ class PongConsumer(AsyncWebsocketConsumer):
         # print(user, data, time.time())
         event_type = data.get('type')
         speed = 10
-        for i in self.games.values():
-            if i.user1 == self.scope["user"] or i.user2 == self.scope["user"]:
-                i.receive_command(data, user)
-
+        self.gamehui.receive_command(data, user)
         if (event_type == "update"):
-             # self.gamehui.run()
-            if (data.get('url') in self.games.keys()):
-                self.games[data.get('url')].run()
-            else:
-                self.games[data.get('url')] = HuiGame()
-            if self.games[data.get('url')].user1 == '':
-                print(self.scope["user"])
-                self.games[data.get('url')].user1 = self.scope["user"]
-            elif self.games[data.get('url')].user2 == '' and self.games[data.get('url')].user1 != self.scope["user"]:
-                self.games[data.get('url')].user2 = self.scope["user"]
-            print(len(self.games), self.games[data.get('url')].user2, self.games[data.get('url')].user1)
+            self.gamehui.run()
         # print(f"Key pressed: {data}")
 
         # Send circle position to the group
-            await self.send(text_data=json.dumps(
-                self.games[data.get('url')].return_command(user)
-            ))
+        await self.send(text_data=json.dumps(
+            self.gamehui.return_command(user)
+        ))
 
     async def pong_message(self, event):
         message = event['message']
