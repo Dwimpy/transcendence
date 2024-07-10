@@ -10,11 +10,11 @@ from .models import Game
 # Create your views here.
 class GameView(TemplateView):
     template_name = 'game/game.html'
-    print("game view init")
+    # print("game view init")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        print('hello')
+        # print('hello')
         return render(request, self.template_name, status=200, context={"user": request.user})
