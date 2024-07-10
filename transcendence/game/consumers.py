@@ -2,7 +2,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 import time
-from .models import Game
+# from .models import Game
 from django.contrib.auth import get_user_model
 
 
@@ -75,6 +75,7 @@ class HuiGame:
         self.max_score = 10
         self.running = False
         self.new = True
+        self.winner = ''
 
     def save_game_result(self):
         winner = None
@@ -84,14 +85,14 @@ class HuiGame:
             winner = self.user2
 
         # Save the game result to the database
-        game = Game.objects.create(
-            player1=self.user1,
-            player2=self.user2,
-            winner=winner,
-            score_left=self.score_left,
-            score_right=self.score_right
-        )
-        game.save()
+        # game = Game.objects.create(
+        #     player1=self.user1,
+        #     player2=self.user2,
+        #     winner=winner,
+        #     score_left=self.score_left,
+        #     score_right=self.score_right
+        # )
+        # game.save()
 
     def receive_command(self, data, user):
         if user == self.user1:
@@ -151,6 +152,8 @@ class HuiGame:
                 if self.score_left > self.max_score:
                     self.running = False
                     self.save_game_result()
+                    self.winner = self.user1
+                    print("here1")
 
             if self.ball.x < 0:
                 self.ball.x_speed *= -1
@@ -161,6 +164,8 @@ class HuiGame:
                 if self.score_right > self.max_score:
                     self.running = False
                     self.save_game_result()
+                    self.winner = self.user2
+                    print("here2")
 
             self.last_update = cur_time
 
@@ -176,7 +181,8 @@ class HuiGame:
             'score_left': self.score_left,
             'score_right': self.score_right,
             'second_user': self.user2 == user,
-            'running': self.running
+            'running': self.running,
+            'winner': str(self.winner)
 
         }
     def restart(self):
@@ -191,13 +197,14 @@ class HuiGamasd:
         pass
 
 ggame = HuiGame()
-
+games = dict()
 class PongConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.room_name = 'pong_room'
         self.room_group_name = 'pong_group'
         self.gamehui = ggame
+        self.games = games
 
         if self.gamehui.user1 == '':
             self.gamehui.user1 = self.scope["user"]
@@ -224,15 +231,27 @@ class PongConsumer(AsyncWebsocketConsumer):
         # print(user, data, time.time())
         event_type = data.get('type')
         speed = 10
-        self.gamehui.receive_command(data, user)
+        for i in self.games.values():
+            if i.user1 == self.scope["user"] or i.user2 == self.scope["user"]:
+                i.receive_command(data, user)
+
         if (event_type == "update"):
-            self.gamehui.run()
+             # self.gamehui.run()
+            if (data.get('url') in self.games.keys()):
+                self.games[data.get('url')].run()
+            else:
+                self.games[data.get('url')] = HuiGame()
+            if self.games[data.get('url')].user1 == '':
+                self.games[data.get('url')].user1 = self.scope["user"]
+            elif self.games[data.get('url')].user2 == '' and self.games[data.get('url')].user1 != self.scope["user"]:
+                self.games[data.get('url')].user2 = self.scope["user"]
+            # print(self.games.keys(), self.games[data.get('url')].user2, self.games[data.get('url')].user1)
         # print(f"Key pressed: {data}")
 
         # Send circle position to the group
-        await self.send(text_data=json.dumps(
-            self.gamehui.return_command(user)
-        ))
+            await self.send(text_data=json.dumps(
+                self.games[data.get('url')].return_command(user)
+            ))
 
     async def pong_message(self, event):
         message = event['message']

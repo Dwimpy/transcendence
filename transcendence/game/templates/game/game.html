@@ -45,13 +45,26 @@
 
 
             context.clearRect(0, 0, canvas.width, canvas.height);
-            if (data.second_user && !data.running)
-                drawText("please press space to start", canvas.width / 2 - 130, 80, 20)
-            else
-                drawCircle(data.circle_x, data.circle_y);
-            drawBar(data.left_bar_x, data.left_bar_y, 10, canvas.height / 10)
-            drawBar(data.right_bar_x, data.right_bar_y, 10, canvas.height / 10)
+            if ( data.winner != '' ) {
+                drawText(data.winner + " is the winner", canvas.width / 2 - 130, 80, 20);
 
+                setTimeout(function() {
+                    window.location.href = '/lobby';
+                }, 3000);
+
+            }
+            else {
+                if (data.second_user && !data.running)
+                    drawText("please press space to start", canvas.width / 2 - 130, 80, 20)
+                else
+                    drawCircle(data.circle_x, data.circle_y);
+
+                drawBar(data.left_bar_x, data.left_bar_y, 10, canvas.height / 10)
+                drawBar(data.right_bar_x, data.right_bar_y, 10, canvas.height / 10)
+
+
+                drawText(data.score_left + ':' + data.score_right, canvas.width / 2 - 15, 20, 20)
+            }
             
             drawText(data.score_left + ':' + data.score_right, canvas.width / 2 - 15, 20, 20)
 
