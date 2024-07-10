@@ -4,7 +4,7 @@ all:
 down:
 	@docker compose -f ./docker-compose.yml down
 
-re:
+up:
 	@docker compose -f ./docker-compose.yml up -d --build
 
 clean:
@@ -15,7 +15,4 @@ clean:
 	docker network rm $$(docker network ls -q);\
 	docker system prune -af;
 
-
-
-
-.PHONY: all re down clean
+.PHONY: all up down clean

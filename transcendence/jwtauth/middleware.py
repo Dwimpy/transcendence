@@ -33,10 +33,10 @@ class JWTMiddleware(MiddlewareMixin):
                     token = auth_header.split(' ')[1]
                     decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
                     exp = datetime.fromtimestamp(decoded_token['exp'], tz=timezone.utc)
-                    
+
                     if exp < datetime.now(tz=timezone.utc):
                         raise jwt.ExpiredSignatureError("Access token has expired")
-                    
+
                 except jwt.ExpiredSignatureError:
                     print("Access token expired, refreshing token...")
                     refresh_token = request.session.get('jwt_refresh')
@@ -68,3 +68,4 @@ class JWTMiddleware(MiddlewareMixin):
             "refresh": str(refresh),
         }
         return new_tokens
+    

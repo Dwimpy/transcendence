@@ -1,54 +1,43 @@
 version: "3.9"
-
 services:
-  django:
-    container_name: django
+  server:
+    environment:
+      - DJANGO_SETTINGS_MODULE=transcendence.settings
+    container_name: server
     build:
-      context: .
-      dockerfile: transcendence/Dockerfile
+      context: ./transcendence
+      dockerfile: Dockerfile
     env_file: .env
-    ports:
-      - "8000:8000"
-    volumes:
-      - django-files:/Django
     depends_on:
       - db
+    ports:
+      - "443:443"
+    volumes:
+      - django-files:/server
     networks:
       - transcendence
-    restart: on-failure
-
+    restart: unless-stopped
   db:
-    image: postgres
     container_name: db
     build:
-      context: .
-      dockerfile: Database/Dockerfile
+      context: ./database
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+    env_file: .env
+    ports:
+      - "5432:5432"
     volumes:
       - db-files:/var/lib/postgresql/data
     networks:
       - transcendence
-    ports:
-      - "5432:5432"
-    env_file: .env
-
+    restart: unless-stopped
 networks:
   transcendence:
-    name: transcendence
     driver: bridge
-
 volumes:
   django-files:
-    name: django-files
-    driver: local
-    driver_opts:
-      device: /Users/arobu/projects/workdir/trans_container/transcendence/data
-      o: bind
-      type: none
-
   db-files:
-    name: db-files
-    driver: local
-    driver_opts:
-      device: /Users/arobu/projects/workdir/trans_container/Database/data
-      o: bind
-      type: none

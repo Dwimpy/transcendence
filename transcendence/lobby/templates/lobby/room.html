@@ -15,8 +15,8 @@
 
 <script>
 
-    const socket = new WebSocket('ws://' + window.location.host + '/ws/rooms/{{ room_name }}/test');
-
+    {% comment %} const socket = new WebSocket('ws://' + window.location.host + '/ws/rooms/{{ room_name }}/test'); {% endcomment %}
+    const socket = new WebSocket('wss://' + window.location.host + '/ws/rooms/{{ room_name }}/test');
 
    socket.onmessage = function (event) {
        let data = JSON.parse(event.data)

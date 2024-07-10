@@ -23,12 +23,9 @@
 
     let lastTime = performance.now();
 
-    const ws = new WebSocket('ws://' + window.location.host + '/ws/game/{{ game_id }}');
-    let currentUrl = window.location.href;
-    console.log(currentUrl);
-    setInterval(() => {
-        ws.send(JSON.stringify({"type": "update", "url": currentUrl}));
-    }, 5);
+    {% comment %} const ws = new WebSocket('ws://' + window.location.host + '/ws/game/'); {% endcomment %}
+    const ws = new WebSocket('wss://' + window.location.host + '/ws/game/');
+
     function drawText(text, x, y, size) {
 
 

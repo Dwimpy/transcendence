@@ -25,7 +25,7 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 from binascii import unhexlify
 import pyotp
 from jwtauth.views import JWTAuthMixin
-from jwtauth.views import issue_jwt as jwt
+from jwtauth.views import issue_jwt
 from django.core.exceptions import PermissionDenied
 
 @login_required
@@ -160,7 +160,7 @@ class UserLoginView(LoginView):
             pass
         
         # JWT
-        jwt(user, self.request)
+        issue_jwt(user, self.request)
 
         return super().form_valid(form)
 
@@ -176,8 +176,10 @@ class RegistrationView(FormView):
     def form_valid(self, form):
         user = form.save(commit=True)
         login(self.request, user=user)
+        
+        issue_jwt(user, self.request)
+        
         return super().form_valid(form)
-
 
 class FortyTwoAuthView(View):
 
@@ -288,7 +290,7 @@ class FortyTwoAuthCallbackView(View):
                         messages.success(request, f'Welcome, {user.username}')
 
                         # JWT
-                        jwt(user, request)
+                        issue_jwt(user, request)
                     
                         response = redirect('profile', user.username)
                         return response
